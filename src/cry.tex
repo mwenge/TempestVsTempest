@@ -15,10 +15,13 @@ So welcome to our system that has a state-of-the-art 65,536 possible colours. We
 \setlength{\intextsep}{0pt}%
 \setlength{\columnsep}{3pt}%
 \begin{wrapfigure}{l}{0.12\textwidth}
-\includegraphics[width=\linewidth]{src/callout/psych.png} 
+\includegraphics[width=\linewidth]{src/callout/claw.png} 
 \end{wrapfigure}
 \small
-CRY refers to the three components contained in each byte pair: C: color, R: radiance, Y: luminosity.
+\textcolor{white}{
+Good luck figuring out what CRY is an acryonym of. Maybe it refers to the three axes of the 'colour space': cyan, red, and yellow. 
+Maybe it refers to the three components contained in each byte pair: color, radiance, and luminosity?
+}
 \end{definition}
 
 In your innocence dear reader, you may expect that this color scheme is as simple as assigning a color to each of the possible values
@@ -128,7 +131,7 @@ bigger square with ascending values of luminosity starting at 0 and ending at 25
 \caption{A big square with all our little squares in ascending luminosity.}
 \end{figure}
 
-That's a lot of dark.i We better not wear shaded spectactles while playing games on this thing. Is there really 65,536 colors in there,
+That's a lot of dark. We better not wear shaded spectactles while playing games on this thing. Is there really 65,536 colors in there,
 it seems like we have an awful lot of black going on. Let's try something and see what we get if we ignore all color values that appear
 more than once.
 
@@ -143,4 +146,56 @@ more than once.
 There are some strange little fractal shapes in the black stuff there. In the bottom right hand corner we can see that we eventually
 run out of luminosity, our last little sqaure can only muster up 120 or so new colours.
 
+\section*{the tempest files}
+Now that we know what the bytes in a CRY image mean let's take a peek at the 6 image files in the Tempest 2000 sources to 
+see what some of these bytes look like in practice. (Don't worry we'll be looking at all of these files in detail under one pretext
+or another during the course of the rest of this book.) The seven image files are given slightly random, but very Minter-ish names: 
+\icode{beasty3.cry}, \icode{beasty4.cry}, \icode{beasty5.cry}, \icode{beasty6.cry}, \icode{beasty7.cry} and  \icode{beasty8.cry}.
+
+
+\begin{definition}[Claw Says\index{Claw Says}]
+\setlength{\intextsep}{0pt}%
+\setlength{\columnsep}{3pt}%
+\begin{wrapfigure}{l}{0.12\textwidth}
+\includegraphics[width=\linewidth]{src/callout/claw.png} 
+\end{wrapfigure}
+\small
+\textcolor{white}{
+  Oh and let's not forget \icode{beasty8-xtra.cry}. This is a slightly larger version of \icode{beasty8.cry} included with the sources
+  but for some reason is not used. There is also a story to tell about \icode{beasty3.cry} but we will come to that later.
+}
+\end{definition}
+
+Remember there is nothing else in these files but the series of byte-pairs. There's no information about how big the image is or what
+its dimensions are. It really is just a list. To cope with this fact the game hard-codes its own expectation that the
+images are 320 pixels wide (i.e. the pixel width of the Jaguar's screen) and fixes the address that each image at will be loaded at.
+It does this early on in the declaration of constants at the top of the main file containing all the game's code (\icode{yak.s}):
+
+\begin{lstlisting}[escapechar=\%]
+  pic          EQU $820000          ; beasty3.cry
+  pic2         EQU pic+$1f400       ; beasty4.cry
+  pic3         EQU pic2+$1f400      ; beasty5.cry
+  pic4         EQU pic3+$25800      ; beasty6.cry
+  pic5         EQU pic4+(640*128)   ; beasty7.cry
+  pic6         EQU pic5+(640*200)   ; beasty8.cry
+\end{lstlisting}
+
+Each image has been loaded to a specific position in memory and the game is instructed exactly where each one is. While \icode{beasty3.cry}
+is loaded to \icode{\$820000} (and assigned the variable name \icode{pic}), \icode{beasty4.cry} is loaded to the address 128,000 (\icode{\$1f400}) 
+bytes after that and assigned the name \icode{pix2} because 128,000 bytes is how large \icode{beasty3.cry} is. You get the idea hopefully. 
+
+As you can see in the above listing extract some of the images are larger than others so need more memory, but in all cases the assumption of treating every image as 320 pixels wide 
+(640 bytes, since we have 2 bytes per pixel) holds.
+
+Before passing on let's take a look at the contents of \icode{beasty3.cry}. 
+
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \frame{\includegraphics[width=12cm]{src/cry/beasty3.png}}%
+    \end{adjustbox}
+  \caption{\icode{beasty3.cry}, packed with goodness.}
+\end{figure}
+
+Looks great, you have to agree. We're in for some fun.
 
