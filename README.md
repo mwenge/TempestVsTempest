@@ -2,7 +2,7 @@
 
 Taking apart Tempest 2000 piece by piece.
 
-[<img height=360 src="https://github.com/mwenge/t2k-25easypieces/raw/master/src/cover/pdf/cover_front.svg">](https://github.com/mwenge/t2k-25easypieces/releases/download/v0.01/t2k25.pdf) 
+[<img height=360 src="https://github.com/mwenge/t2k-25easypieces/raw/master/src/cover/pdf/cover_front.png">](https://github.com/mwenge/t2k-25easypieces/releases/download/v0.01/t2k25.pdf) 
 
 Work-in-progress is available for free as a [Scrapbook Edition](https://github.com/mwenge/t2k-25easypieces/releases/download/v0.01/t2k25.pdf).
 
