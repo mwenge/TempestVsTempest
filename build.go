@@ -256,7 +256,7 @@ func main() {
 	prepare("illu/img/", prepareImg)
 	prepare("illu/d/", prepareDrawing)
 
-	bin := "pdflatex"
+	bin := "xelatex"
 	arg0 := "-output-directory"
 	arg1 := outputDirName
 	arg2 := `\def\base{` + out + `} ` + compileOptions + ` \input{src/book.tex}`
