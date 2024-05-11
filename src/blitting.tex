@@ -1,4 +1,4 @@
-\chapter{what is blitting} 
+\chapter{what is blitting}
 \label{sec:listing}
 \lstset{style=6502Style}
 
@@ -266,13 +266,110 @@ Now we write \icode{d0} to \icode{d7}:
 \end{figure}
 \vspace{-0.5cm}
  The result is our X and Y values are both successfully stowed in \icode{d7}, which we can now write in its totality to
-\icode{A1\_PIXELS}. This little exercise illustrates the granularity at which our code has to operate.  It is
+\icode{A1\_PIXELS}. This little exercise illustrates the granularity at which our code has to operate. 
 
+After setting up all our registers on the Blitter we finally get to tell it to set to work:
+
+\begin{lstlisting}[escapechar=\%]
+  move.l #SRCEN|UPDA1|UPDA2|DSTA2|LFU_A|LFU_AN,d7
+  move.l d7,BLIT_CMD
+\end{lstlisting}
+
+As with everything else Blitter-related this is achieved above by writing a value to the Blitter command register. The register
+affords up to 30 different commands and here we just use a few of them by populating the register with six different values.
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=12cm,center}
+
+      \begin{tabular}{llll}
+        \toprule
+        Parameter & Bits & Hex & Description\\
+        \midrule
+        \icode{SRCEN}   & \icode{00000000 00000000 00000000 00000001 } & \icode{00000001} & Enable Source Read in Loop\\
+        \icode{UPDA1}   & \icode{00000000 00000000 00000001 00000000 } & \icode{00000100} & Add the A1 value in the outer loop\\
+        \icode{UPDA2}   & \icode{00000000 00000000 00000010 00000000 } & \icode{00002000} & Add the A2 value in the outer loop\\
+        \icode{DSTA2}   & \icode{00000000 00000000 00000100 00000000 } & \icode{00004000} & Reverse role of A1 and A2 registers\\
+        \icode{LFU\_A}   & \icode{00000001 00000000 00000000 00000000 } & \icode{01000000} & AND the bits\\
+        \icode{LFU\_AN}  & \icode{00000000 10000000 00000000 00000000 } & \icode{00800000} & AND NOT the bits\\
+        \midrule
+      \icode{BLIT\_CMD} & \icode{00000000 00000011 01000010 00110000 } & \icode{01804210} & Blitter's Command Register\\
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }\caption*{Combining our parameters into the Blitter's Command Register.}
+\end{figure}
+
+In a nutshell this command is instructing the blitter to read through our source data using an inner loop for the values to write
+along the X co-ordinates and an outer loop for the Y co-ordinates. The implementation details are obviously complex and we won't get
+into them here. Instead we can treat this as a recipe for the blitter when we have a chunk from a source image that we want to 
+position on the screen as we do here.
+
+One last feature is worth pointing out explicitly. The final step in the \icode{CopyBlock} routine is to call the \icode{WaitBlit}
+sub-routine. As the name suggests this piece of code busy-loops until the \icode{BLIT\_CMD} register indicates that the blitter
+has finished:
 
 \begin{lstlisting}[escapechar=\%]
 WaitBlit:
-  move.l B_CMD,d7  ;get Blitter status regs
-  btst #0,d7
-  beq WaitBlit    ;wait until outer loop is idle
+  move.l BLIT_CMD,d7 ;get Blitter status regs
+  btst #0,d7      ;check if d7 is still zero
+  beq WaitBlit    ;loop if d7 is zero
   rts
 \end{lstlisting}
+
+Before rounding up this piece let's take a look at another instance of \icode{CopyBlock} in use. This time we're in the \icode{versionscreen}
+routine which is responsible for painting the title screen that greets us when we launch Tempest 2000.
+
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \frame{\includegraphics[width=12cm]{src/blitting/title.png}}%
+    \end{adjustbox}
+\caption{The title screen of Tempest 2000.}
+\end{figure}
+
+Here we find a slightly different order of business in setting up the blitting copy:
+
+\begin{lstlisting}[escapechar=\%]
+WaitBlit:
+  move #4,d0         ; x position in pic5
+  move #84,d1        ; y position in pic5
+  move #197,d2       ; width to copy
+  move #65,d3        ; height to copy
+  move #92,d4        ; x pos of write to
+  move #120-15,d5    ; y pos to write to
+  tst pal            ; are we PAL or NTSC?
+  beq mypal
+  add #10,d5         ; we're NTSC so offset the y pos by 10 pixels
+mypal:
+  move.l #pic5,a0a   ; file 'images/beasty7.cry' again
+  move.l #screen3,a1 ; destination we're copying to
+  jsr CopyBlock  
+\end{lstlisting}
+
+Can you guess the piece of \icode{beasty7.cry} we're copying here? It's this:
+
+
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=12cm,center}
+      \frame{\includegraphics[width=4cm]{src/cry/beasty7.png}}%
+      \hspace{0.5cm}
+      \begin{tikzpicture}
+        \draw[->,line width=4pt] (0,0) to (1,0);
+      \end{tikzpicture}
+      \hspace{0.5cm}
+      \frame{\includegraphics[width=4cm]{src/blitting/2000.png}}%
+    \end{adjustbox}
+  \caption{Extracting the '2000' chunk from \icode{beasty7.cry}.}
+\end{figure}
+
+There is a little extra twiddling in our code to figure out whether the display we're on is PAL or NTSC. These were slightly conflicting standards for
+analogue television display through the 1960s to the 1990s. NTSC was the standard in the US and PAL the standard in Europe. Most video games of the time 
+needed to account for the slightly different dimensions each standard offered. In the case of our title screen that meant adding an extra offset of 10
+pixels to the Y position of the '2000' when painting it to the screen on an NTSC set in order to ensure that it appeared correctly positioned.
+
+Now that we've got the general idea of how to get at least some pictures on to the screen, let's take a look at how we get some text up there.
+
