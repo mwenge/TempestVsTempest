@@ -1,6 +1,6 @@
 \chapter{character assassination}
 \label{sec:listing}
-\lstset{style=6502Style}
+\lstset{style=68KStyle}
 
 Writing some text to the screen, such as the copyright information on the title screen, is surprisingly convoluted in its detail,
 it will even introduce us to the machinations of the Jaguar's GPU. But although there is a surprising amount of code required from
@@ -227,7 +227,7 @@ are all the bits and piece in the order that they appear in \icode{inbuf} once \
         \icode{\$F0003F78}   & \icode{\$00000000} & Text Shear X axis\\
         \icode{\$F0003F7C}   & \icode{\$00000000} & Text Shear Y axis\\
         \icode{\$F0003F84}   & \icode{\$00B600A7} & Y \& X Co-ordinates to Write Text To\\
-        \icode{\$F0003F80}   & \icode{\$00000000} & Unused\\
+        \icode{\$F0003F80}   & \icode{\$00000000} & Drop Shadow Mode Enabled\\
         \bottomrule
       \end{tabular}
     \end{adjustbox}
@@ -328,8 +328,13 @@ source file for the \icode{texter} routine) tells the possible inspiration for t
 \end{lstlisting}
 
 The 'robotron explosion' is the effect visible below. As you gradually dial up the X and Y scale parameters and call this shader at each
-iteration it can appear as though the text is 'exploding' outwards. We'll take a look at the use of this effect and the operation of the shader in the next
-chapter.
+iteration it can appear as though the text is 'exploding' outwards. There is no real mystery to how the shader writes our characters
+to the screen. It uses the same blitting operation we covered previously but with the difference that the preparation of the blitting command
+and all the special calculations we might want to do if adding shear, scaling and drop shadows in advance of calling the blitter are done from
+within the special purpose processor of the GPU rather than in the CPU. The reason for doing it this way is because the GPU is designed to be fast
+at a small number of arithmetic operations such as adding and multiplying so if we're going to do a lot of them and don't want to slow the
+rest of the game down, the GPU is the man for our job. We'll next take a look at the internals of the \icode{texter} shader, including the 
+relatively trivial task of blitting our characters to the screen, in the next chapter.
 
 \begin{figure}[H]
     \centering
