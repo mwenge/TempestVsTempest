@@ -243,7 +243,7 @@ ring1:
   move #32,d6        ; d6 will track no. of stars per ring (32)
 ring2:
   move d6,d0         ; Put no. of current star in d0 
-  asl #3,d0          ; Multiply by 8 to get to the right row in our sine table
+  asl #3,d0          ; Multiply by 8 to get the row in our sine table
   move.b 0(a1,d0.w),d1  ; Get the sine from position d0 in our sine table
   add.b #$40,d0      ; Add offset to index the cos in our sine table   
   move.b 0(a1,d0.w),d2  ; Get the cos from position d0 in our sine table.
