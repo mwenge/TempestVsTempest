@@ -27,6 +27,36 @@
 
 ZERO_REG EQU $00000000
 
+                jmp     (INIT_SOUND).l
+                jmp     (NT_VBL).L
+                jmp     (PT_MOD_I).l
+                jmp     (START_MOD).L
+                jmp     (STOP_MOD).L
+                jmp     (PLAYFX2).L
+                jmp     (SET_VOLUME).l
+                jmp     (NOFADE).L
+                jmp     (FADEUP).L
+                jmp     (FADEDOWN).L
+                jmp     (ENABLE_FX).L
+                jmp     (DISABLE_FX).l
+                jmp     (DISABLE_FX).l
+                jmp     (DISABLE_FX).l
+                jmp     (RESUME_DSP).l
+
+intmask:        dc.b 0
+
+sub_40a2:
+                rts
+
+sub_40A4:
+                move.w  d0,-(sp)
+                bset    #3,(intmask).l
+                clr.w   d0
+                move.b  (intmask).l,d0
+                move.w  d0,($F000E0).l
+                move.w  (sp)+,d0
+                rts
+
 copyright_info:dc.b 'Copyright (1993) Imagitec Design, Inc '
 ; ---------------------------------------------------------------------------
 ; INITDSP:
@@ -560,9 +590,9 @@ loc_564:
                 rts
 
 ; ---------------------------------------------------------------------------
-; ENABLE_FADE:
+; ENABLE_FX:
 ; ---------------------------------------------------------------------------
-ENABLE_FADE:
+ENABLE_FX:
                 movem.l a6,-(sp)
                 lea     localdata(pc),a6
                 st      FXENA-localdata(a6)
@@ -570,9 +600,9 @@ ENABLE_FADE:
                 rts
 
 ; ---------------------------------------------------------------------------
-; DISABLE_FADE:
+; DISABLE_FX:
 ; ---------------------------------------------------------------------------
-DISABLE_FADE:
+DISABLE_FX:
                 movem.l d7/a6,-(sp)
                 lea     localdata(pc),a6
                 sf      FXENA-localdata(a6)
@@ -638,9 +668,9 @@ loc_62C:
                 rts
 
 ; ---------------------------------------------------------------------------
-; RESUMEDS:
+; RESUME_DSP:
 ; ---------------------------------------------------------------------------
-RESUMEDS:
+RESUME_DSP:
                 movem.l d7/a1/a4,-(sp)
                 lea     localdata(pc),a1
                 moveq   #0,d7
@@ -659,7 +689,7 @@ loc_658:
                 dc.l $74656320, $44657369, $676E2C20, $496E6320
 
 ; ---------------------------------------------------------------------------
-; RESUMEDS:
+; RESUME_DSP:
 ; ---------------------------------------------------------------------------
 init_mod:
                 bsr.s   init_song

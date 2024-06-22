@@ -1,0 +1,2720 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+A65_ABS	rmac/6502.c	/^#define	A65_ABS	/;"	d	file:
+A65_ABSX	rmac/6502.c	/^#define	A65_ABSX	/;"	d	file:
+A65_ABSY	rmac/6502.c	/^#define	A65_ABSY	/;"	d	file:
+A65_IMMED	rmac/6502.c	/^#define	A65_IMMED	/;"	d	file:
+A65_IMMEDH	rmac/6502.c	/^#define A65_IMMEDH /;"	d	file:
+A65_IMMEDL	rmac/6502.c	/^#define A65_IMMEDL /;"	d	file:
+A65_IMPL	rmac/6502.c	/^#define	A65_IMPL	/;"	d	file:
+A65_IND	rmac/6502.c	/^#define	A65_IND	/;"	d	file:
+A65_INDX	rmac/6502.c	/^#define	A65_INDX	/;"	d	file:
+A65_INDY	rmac/6502.c	/^#define	A65_INDY	/;"	d	file:
+A65_REL	rmac/6502.c	/^#define	A65_REL	/;"	d	file:
+A65_ZP	rmac/6502.c	/^#define	A65_ZP	/;"	d	file:
+A65_ZPX	rmac/6502.c	/^#define	A65_ZPX	/;"	d	file:
+A65_ZPY	rmac/6502.c	/^#define	A65_ZPY	/;"	d	file:
+ABASE	rmac/amode.h	/^#define ABASE /;"	d
+ABS	rmac/rmac.h	/^#define ABS /;"	d
+ABSL	rmac/amode.h	/^#define ABSL /;"	d
+ABSW	rmac/amode.h	/^#define ABSW /;"	d
+ACONST	rmac/token.h	/^#define ACONST /;"	d
+ADD	rmac/expr.h	/^#define ADD /;"	d
+ADISP	rmac/amode.h	/^#define ADISP /;"	d
+AIND	rmac/amode.h	/^#define AIND /;"	d
+AINDEXED	rmac/amode.h	/^#define AINDEXED /;"	d
+ALCYON	rmac/rmac.h	/^ALCYON,				\/\/ Alcyon\/DRI C object format$/;"	e	enum:__anon1
+AL_BSS	rmac/object.h	/^#define	AL_BSS	/;"	d
+AL_DATA	rmac/object.h	/^#define	AL_DATA	/;"	d
+AL_DEFINED	rmac/object.h	/^#define	AL_DEFINED	/;"	d
+AL_EQUATED	rmac/object.h	/^#define	AL_EQUATED	/;"	d
+AL_EQUREG	rmac/object.h	/^#define	AL_EQUREG	/;"	d
+AL_EXTERN	rmac/object.h	/^#define	AL_EXTERN	/;"	d
+AL_FILE	rmac/object.h	/^#define	AL_FILE	/;"	d
+AL_GLOBAL	rmac/object.h	/^#define	AL_GLOBAL	/;"	d
+AL_TEXT	rmac/object.h	/^#define	AL_TEXT	/;"	d
+AM_CCR	rmac/amode.h	/^#define AM_CCR /;"	d
+AM_NONE	rmac/amode.h	/^#define AM_NONE /;"	d
+AM_SR	rmac/amode.h	/^#define AM_SR /;"	d
+AM_USP	rmac/amode.h	/^#define AM_USP /;"	d
+AMn	rmac/amode.c	/^	#define AMn /;"	d	file:
+AMn	rmac/parmode.h	/^#undef AMn$/;"	d
+AMn_030	rmac/amode.c	/^	#define AMn_030 /;"	d	file:
+AMn_030	rmac/parmode.h	/^#undef AMn_030$/;"	d
+AMn_IX0	rmac/amode.c	/^	#define AMn_IX0 /;"	d	file:
+AMn_IX0	rmac/parmode.h	/^#undef AMn_IX0$/;"	d
+AMn_IXN	rmac/amode.c	/^	#define AMn_IXN /;"	d	file:
+AMn_IXN	rmac/parmode.h	/^#undef AMn_IXN$/;"	d
+AND	rmac/expr.h	/^#define AND /;"	d
+APOSTINC	rmac/amode.h	/^#define APOSTINC /;"	d
+APREDEC	rmac/amode.h	/^#define APREDEC /;"	d
+AREG	rmac/amode.h	/^#define AREG /;"	d
+AddBSDSymEntry	rmac/object.c	/^uint8_t * AddBSDSymEntry(uint8_t * buf, SYM * sym, int globflag)$/;"	f
+AddELFSymEntry	rmac/object.c	/^uint8_t * AddELFSymEntry(uint8_t * buf, SYM * sym, int globflag)$/;"	f
+AddFixup	rmac/sect.c	/^int AddFixup(uint32_t attr, uint32_t loc, TOKEN * fexpr)$/;"	f
+AddSymEntry	rmac/object.c	/^uint8_t * AddSymEntry(register uint8_t * buf, SYM * sym, int globflag)$/;"	f
+AddToSymbolDeclarationList	rmac/symbol.c	/^void AddToSymbolDeclarationList(SYM * symbol)$/;"	f
+AllocateMark	rmac/mark.c	/^uint32_t AllocateMark(void)$/;"	f
+AnBEXATTR	rmac/amode.c	/^	#define AnBEXATTR /;"	d	file:
+AnBEXATTR	rmac/parmode.h	/^#undef AnBEXATTR$/;"	d
+AnBEXPR	rmac/amode.c	/^	#define AnBEXPR /;"	d	file:
+AnBEXPR	rmac/parmode.h	/^#undef AnBEXPR$/;"	d
+AnBEXVAL	rmac/amode.c	/^	#define AnBEXVAL /;"	d	file:
+AnBEXVAL	rmac/parmode.h	/^#undef AnBEXVAL$/;"	d
+AnBZISE	rmac/amode.c	/^	#define AnBZISE /;"	d	file:
+AnBZISE	rmac/parmode.h	/^#undef AnBZISE$/;"	d
+AnESYM	rmac/amode.c	/^	#define AnESYM /;"	d	file:
+AnESYM	rmac/eagen.c	/^#define AnESYM /;"	d	file:
+AnESYM	rmac/eagen0.c	/^#undef AnESYM$/;"	d	file:
+AnESYM	rmac/parmode.h	/^#undef AnESYM$/;"	d
+AnEXATTR	rmac/amode.c	/^	#define AnEXATTR /;"	d	file:
+AnEXATTR	rmac/parmode.h	/^#undef AnEXATTR$/;"	d
+AnEXPR	rmac/amode.c	/^	#define AnEXPR /;"	d	file:
+AnEXPR	rmac/parmode.h	/^#undef AnEXPR$/;"	d
+AnEXTEN	rmac/amode.c	/^	#define AnEXTEN /;"	d	file:
+AnEXTEN	rmac/parmode.h	/^#undef AnEXTEN$/;"	d
+AnEXVAL	rmac/amode.c	/^	#define AnEXVAL /;"	d	file:
+AnEXVAL	rmac/parmode.h	/^#undef AnEXVAL$/;"	d
+AnIXREG	rmac/amode.c	/^	#define AnIXREG /;"	d	file:
+AnIXREG	rmac/parmode.h	/^#undef AnIXREG$/;"	d
+AnIXSIZ	rmac/amode.c	/^	#define AnIXSIZ /;"	d	file:
+AnIXSIZ	rmac/parmode.h	/^#undef AnIXSIZ$/;"	d
+AnOEXATTR	rmac/parmode.h	/^#undef AnOEXATTR$/;"	d
+AnOEXPR	rmac/parmode.h	/^#undef AnOEXPR$/;"	d
+AnOEXVAL	rmac/parmode.h	/^#undef AnOEXVAL$/;"	d
+AnOK	rmac/amode.c	/^	#define AnOK /;"	d	file:
+AnOK	rmac/parmode.h	/^#undef AnOK$/;"	d
+AnREG	rmac/amode.c	/^	#define AnREG /;"	d	file:
+AnREG	rmac/parmode.h	/^#undef AnREG$/;"	d
+Assemble	rmac/procln.c	/^void Assemble(void)$/;"	f
+B16	rmac/rmac.h	/^#define B16(/;"	d
+B32	rmac/rmac.h	/^#define B32(/;"	d
+B8	rmac/rmac.h	/^#define B8(/;"	d
+B8__	rmac/rmac.h	/^#define B8__(/;"	d
+BANK_0	rmac/rmac.h	/^#define BANK_0 /;"	d
+BANK_1	rmac/rmac.h	/^#define BANK_1 /;"	d
+BANK_N	rmac/rmac.h	/^#define BANK_N /;"	d
+BCC	rmac/tests/6502tester.s	/^BCC label 		;$90  (Branch on Carry Clear)   $/;"	l
+BCS	rmac/tests/6502tester.s	/^BCS label 		;$B0  (Branch on Carry Set)     $/;"	l
+BEQ	rmac/tests/6502tester.s	/^BEQ label 		;$F0  (Branch on EQual)         $/;"	l
+BMI	rmac/tests/6502tester.s	/^BMI label 		;$30  (Branch on MInus)         $/;"	l
+BNE	rmac/tests/6502tester.s	/^BNE label 		;$D0  (Branch on Not Equal)     $/;"	l
+BOT_MAR	rmac/listing.h	/^#define BOT_MAR /;"	d
+BPL	rmac/tests/6502tester.s	/^BPL label 		;$10  (Branch on PLus)          $/;"	l
+BSD	rmac/rmac.h	/^BSD, 				\/\/ BSD object format$/;"	e	enum:__anon1
+BSDHDRSIZE	rmac/object.h	/^#define BSDHDRSIZE /;"	d
+BSS	rmac/rmac.h	/^#define BSS /;"	d
+BUILD	rmac/maketabs.bat	/^:BUILD$/;"	l
+BVC	rmac/tests/6502tester.s	/^BVC label 		;$50  (Branch on oVerflow Clear)$/;"	l
+BVS	rmac/tests/6502tester.s	/^BVS label 		;$70  (Branch on oVerflow Set)  $/;"	l
+BYTE	rmac/rmac.h	/^#define BYTE /;"	d
+BYTESWAP16	rmac/rmac.h	/^#define BYTESWAP16(/;"	d
+BYTESWAP32	rmac/rmac.h	/^#define BYTESWAP32(/;"	d
+BYTESWAP64	rmac/rmac.h	/^#define BYTESWAP64(/;"	d
+CACHES	rmac/amode.h	/^#define CACHES /;"	d
+CC	rmac/makefile	/^CC = $(CROSS)gcc$/;"	m
+CCDEF	rmac/token.h	/^#define CCDEF /;"	d
+CFLAGS	rmac/makefile	/^CFLAGS = -std=$(STD) -D_DEFAULT_SOURCE -g -D__GCCUNIX__ -I. -O2$/;"	m
+CGSPECIAL	rmac/amode.h	/^#define CGSPECIAL /;"	d
+CHECK00	rmac/sect.h	/^#define CHECK00 /;"	d
+CHECK2	rmac/maketabs.bat	/^:CHECK2$/;"	l
+CHECK20	rmac/sect.h	/^#define CHECK20 /;"	d
+CHECK3	rmac/maketabs.bat	/^:CHECK3$/;"	l
+CHECK30	rmac/sect.h	/^#define CHECK30 /;"	d
+CHECK40	rmac/sect.h	/^#define CHECK40 /;"	d
+CHECK60	rmac/sect.h	/^#define CHECK60 /;"	d
+CHECKNO00	rmac/sect.h	/^#define CHECKNO00 /;"	d
+CHECKNO20	rmac/sect.h	/^#define CHECKNO20 /;"	d
+CHECKNO30	rmac/sect.h	/^#define CHECKNO30 /;"	d
+CHECKNO40	rmac/sect.h	/^#define CHECKNO40 /;"	d
+CHECKNO60	rmac/sect.h	/^#define CHECKNO60 /;"	d
+CHECKNOFPU	rmac/sect.h	/^#define CHECKNOFPU /;"	d
+CHECKODn	rmac/amode.c	/^	#define CHECKODn /;"	d	file:
+CHECKODn	rmac/parmode.h	/^#undef CHECKODn$/;"	d
+CHECK_COMMA	rmac/riscasm.h	/^#define CHECK_COMMA /;"	d
+CHECK_EOL	rmac/riscasm.c	/^#define CHECK_EOL /;"	d	file:
+CHECK_OPTS	rmac/token.h	/^#define CHECK_OPTS(/;"	d
+CHK_FOR_DISPn	rmac/amode.c	/^	#define CHK_FOR_DISPn /;"	d	file:
+CHK_FOR_DISPn	rmac/parmode.h	/^#undef CHK_FOR_DISPn$/;"	d
+CHUNK	rmac/sect.h	/^#define CHUNK /;"	d
+CH_CODE_SIZE	rmac/sect.h	/^#define CH_CODE_SIZE /;"	d
+CH_THRESHOLD	rmac/sect.h	/^#define CH_THRESHOLD /;"	d
+CLC	rmac/tests/6502tester.s	/^CLC ;(CLear Carry)              $18$/;"	l
+CLD	rmac/tests/6502tester.s	/^CLD ;(CLear Decimal)            $D8$/;"	l
+CLI	rmac/tests/6502tester.s	/^CLI ;(CLear Interrupt)          $58$/;"	l
+CLV	rmac/tests/6502tester.s	/^CLV ;(CLear oVerflow)           $B8$/;"	l
+COLON	rmac/token.h	/^#define COLON /;"	d
+COMMON	rmac/rmac.h	/^#define COMMON /;"	d
+CONST	rmac/token.h	/^#define CONST /;"	d
+CPAR	rmac/expr.h	/^#define CPAR /;"	d
+CPU_68000	rmac/sect.h	/^#define CPU_68000 /;"	d
+CPU_68020	rmac/sect.h	/^#define CPU_68020 /;"	d
+CPU_68030	rmac/sect.h	/^#define CPU_68030 /;"	d
+CPU_68040	rmac/sect.h	/^#define CPU_68040 /;"	d
+CPU_68060	rmac/sect.h	/^#define CPU_68060 /;"	d
+CREATMASK	rmac/rmac.h	/^#define CREATMASK /;"	d
+CREG	rmac/amode.h	/^#define CREG /;"	d
+CREGlut	rmac/mach.c	/^WORD CREGlut[21] = {$/;"	v
+CR_ABSCOUNT	rmac/token.h	/^#define CR_ABSCOUNT /;"	d
+CR_DATE	rmac/token.h	/^#define CR_DATE /;"	d
+CR_DEFINED	rmac/token.h	/^#define CR_DEFINED /;"	d
+CR_FILESIZE	rmac/token.h	/^#define CR_FILESIZE /;"	d
+CR_MACDEF	rmac/token.h	/^#define CR_MACDEF /;"	d
+CR_REFERENCED	rmac/token.h	/^#define CR_REFERENCED /;"	d
+CR_STREQ	rmac/token.h	/^#define CR_STREQ /;"	d
+CR_TIME	rmac/token.h	/^#define CR_TIME /;"	d
+CTSYM	rmac/token.h	/^#define CTSYM /;"	d
+C_A18	rmac/dsp56k_amode.h	/^#define C_A18 /;"	d
+C_ALL	rmac/amode.h	/^#define C_ALL /;"	d
+C_ALL030	rmac/amode.h	/^#define C_ALL030 /;"	d
+C_ALT	rmac/amode.h	/^#define C_ALT /;"	d
+C_ALT030	rmac/amode.h	/^#define C_ALT030 /;"	d
+C_ALTCTRL	rmac/amode.h	/^#define C_ALTCTRL /;"	d
+C_ALTDATA	rmac/amode.h	/^#define C_ALTDATA /;"	d
+C_ALTMEM	rmac/amode.h	/^#define C_ALTMEM /;"	d
+C_BF1	rmac/amode.h	/^#define C_BF1 /;"	d
+C_BF2	rmac/amode.h	/^#define C_BF2 /;"	d
+C_CREG	rmac/amode.h	/^#define C_CREG /;"	d
+C_CTRL	rmac/amode.h	/^#define C_CTRL /;"	d
+C_CTRL030	rmac/amode.h	/^#define C_CTRL030 /;"	d
+C_DATA	rmac/amode.h	/^#define C_DATA /;"	d
+C_DATA030	rmac/amode.h	/^#define C_DATA030 /;"	d
+C_DD	rmac/dsp56k_amode.h	/^#define C_DD /;"	d
+C_DDD	rmac/dsp56k_amode.h	/^#define C_DDD /;"	d
+C_DSPABS16	rmac/dsp56k_amode.h	/^#define C_DSPABS16 /;"	d
+C_DSPABS24	rmac/dsp56k_amode.h	/^#define C_DSPABS24	/;"	d
+C_DSPABSEA	rmac/dsp56k_amode.h	/^#define C_DSPABSEA	/;"	d
+C_DSPIM	rmac/dsp56k_amode.h	/^#define C_DSPIM	/;"	d
+C_FFF	rmac/dsp56k_amode.h	/^#define C_FFF /;"	d
+C_FPU030	rmac/amode.h	/^#define C_FPU030 /;"	d
+C_GGG	rmac/dsp56k_amode.h	/^#define C_GGG /;"	d
+C_LABEL	rmac/amode.h	/^#define C_LABEL /;"	d
+C_LLL	rmac/dsp56k_amode.h	/^#define C_LLL /;"	d
+C_LUADST	rmac/dsp56k_amode.h	/^#define C_LUADST /;"	d
+C_MEM	rmac/amode.h	/^#define C_MEM /;"	d
+C_MOVEC	rmac/dsp56k_amode.h	/^#define C_MOVEC /;"	d
+C_MOVES	rmac/amode.h	/^#define C_MOVES /;"	d
+C_NNN	rmac/dsp56k_amode.h	/^#define C_NNN /;"	d
+C_NONE	rmac/amode.h	/^#define C_NONE /;"	d
+C_PMOVE	rmac/amode.h	/^#define C_PMOVE /;"	d
+C_TTT	rmac/dsp56k_amode.h	/^#define C_TTT /;"	d
+CantCreateFile	rmac/error.c	/^void CantCreateFile(const char * fn)$/;"	f
+Check030Bitfield	rmac/amode.c	/^int Check030Bitfield(void)$/;"	f
+CheckFlags	rmac/op.c	/^static inline uint64_t CheckFlags(char * s)$/;"	f	file:
+CreateELFRelocationRecord	rmac/mark.c	/^uint32_t CreateELFRelocationRecord(uint8_t * buf, uint8_t * secBuf, uint16_t section)$/;"	f
+DATA	rmac/rmac.h	/^#define DATA /;"	d
+DATA_COL	rmac/listing.h	/^#define DATA_COL /;"	d
+DATA_END	rmac/listing.h	/^#define DATA_END /;"	d
+DCOLON	rmac/token.h	/^#define DCOLON /;"	d
+DEBODGE_REGBANK	rmac/procln.c	/^#define DEBODGE_REGBANK$/;"	d	file:
+DEBUG	rmac/rmac.h	/^#define DEBUG /;"	d
+DECL_DSP	rmac/procln.c	/^#define DECL_DSP	/;"	d	file:
+DECL_KW	rmac/token.c	/^#define DECL_KW	/;"	d	file:
+DECL_MN	rmac/procln.c	/^#define DECL_MN	/;"	d	file:
+DECL_MO	rmac/procln.c	/^#define DECL_MO	/;"	d	file:
+DECL_MP	rmac/procln.c	/^#define DECL_MP	/;"	d	file:
+DECL_MR	rmac/procln.c	/^#define DECL_MR$/;"	d	file:
+DEFINED	rmac/rmac.h	/^#define DEFINED /;"	d
+DEF_DSP	rmac/procln.c	/^#define DEF_DSP	/;"	d	file:
+DEF_KW	rmac/6502.c	/^#define DEF_KW$/;"	d	file:
+DEF_KW	rmac/amode.c	/^#define DEF_KW$/;"	d	file:
+DEF_KW	rmac/direct.c	/^#define DEF_KW$/;"	d	file:
+DEF_KW	rmac/dsp56k_amode.c	/^#define DEF_KW$/;"	d	file:
+DEF_KW	rmac/dsp56k_mach.c	/^#define DEF_KW$/;"	d	file:
+DEF_KW	rmac/expr.c	/^#define DEF_KW	/;"	d	file:
+DEF_KW	rmac/mach.c	/^#define DEF_KW$/;"	d	file:
+DEF_KW	rmac/procln.c	/^#define DEF_KW	/;"	d	file:
+DEF_KW	rmac/riscasm.c	/^#define DEF_KW	/;"	d	file:
+DEF_KW	rmac/token.c	/^#define DEF_KW	/;"	d	file:
+DEF_MN	rmac/amode.c	/^#define DEF_MN$/;"	d	file:
+DEF_MN	rmac/dsp56k_amode.c	/^#define DEF_MN$/;"	d	file:
+DEF_MN	rmac/procln.c	/^#define DEF_MN	/;"	d	file:
+DEF_MO	rmac/op.c	/^#define DEF_MO$/;"	d	file:
+DEF_MO	rmac/procln.c	/^#define DEF_MO	/;"	d	file:
+DEF_MP	rmac/procln.c	/^#define DEF_MP	/;"	d	file:
+DEF_MR	rmac/procln.c	/^#define DEF_MR$/;"	d	file:
+DEF_MR	rmac/riscasm.c	/^#define DEF_MR	/;"	d	file:
+DEPOSIT_EXTRA_FIXUP	rmac/dsp56k_amode.h	/^	DEPOSIT_EXTRA_FIXUP = 2,$/;"	e	enum:__anon3
+DEPOSIT_EXTRA_WORD	rmac/dsp56k_amode.h	/^	DEPOSIT_EXTRA_WORD  = 1,$/;"	e	enum:__anon3
+DEQUALS	rmac/token.h	/^#define DEQUALS /;"	d
+DEX	rmac/tests/6502tester.s	/^DEX ;(DEcrement X)        $CA$/;"	l
+DEY	rmac/tests/6502tester.s	/^DEY ;(DEcrement Y)        $88$/;"	l
+DIGIT	rmac/token.h	/^#define DIGIT /;"	d
+DINDL	rmac/amode.h	/^#define DINDL /;"	d
+DINDW	rmac/amode.h	/^#define DINDW /;"	d
+DOT	rmac/token.h	/^#define DOT /;"	d
+DOTB	rmac/token.h	/^#define DOTB /;"	d
+DOTD	rmac/token.h	/^#define DOTD /;"	d
+DOTI	rmac/token.h	/^#define DOTI /;"	d
+DOTL	rmac/token.h	/^#define DOTL /;"	d
+DOTP	rmac/token.h	/^#define DOTP /;"	d
+DOTQ	rmac/token.h	/^#define DOTQ /;"	d
+DOTS	rmac/token.h	/^#define DOTS /;"	d
+DOTW	rmac/token.h	/^#define DOTW /;"	d
+DOTX	rmac/token.h	/^#define DOTX /;"	d
+DO_PRAGMA	rmac/rmac.h	/^	#define DO_PRAGMA(/;"	d
+DREG	rmac/amode.h	/^#define DREG /;"	d
+DSPONLY	rmac/riscasm.h	/^#define DSPONLY /;"	d
+DSP_ABS	rmac/dsp56kkw.h	/^#define	DSP_ABS	/;"	d
+DSP_ADC	rmac/dsp56kkw.h	/^#define	DSP_ADC	/;"	d
+DSP_ADD	rmac/dsp56kkw.h	/^#define	DSP_ADD	/;"	d
+DSP_ADDL	rmac/dsp56kkw.h	/^#define	DSP_ADDL	/;"	d
+DSP_ADDR	rmac/dsp56kkw.h	/^#define	DSP_ADDR	/;"	d
+DSP_AND	rmac/dsp56kkw.h	/^#define	DSP_AND	/;"	d
+DSP_ANDI	rmac/dsp56kkw.h	/^#define	DSP_ANDI	/;"	d
+DSP_ASL	rmac/dsp56kkw.h	/^#define	DSP_ASL	/;"	d
+DSP_ASR	rmac/dsp56kkw.h	/^#define	DSP_ASR	/;"	d
+DSP_BCHG	rmac/dsp56kkw.h	/^#define	DSP_BCHG	/;"	d
+DSP_BCLR	rmac/dsp56kkw.h	/^#define	DSP_BCLR	/;"	d
+DSP_BSET	rmac/dsp56kkw.h	/^#define	DSP_BSET	/;"	d
+DSP_BTST	rmac/dsp56kkw.h	/^#define	DSP_BTST	/;"	d
+DSP_CLR	rmac/dsp56kkw.h	/^#define	DSP_CLR	/;"	d
+DSP_CMP	rmac/dsp56kkw.h	/^#define	DSP_CMP	/;"	d
+DSP_CMPM	rmac/dsp56kkw.h	/^#define	DSP_CMPM	/;"	d
+DSP_DEBUG	rmac/dsp56kkw.h	/^#define	DSP_DEBUG	/;"	d
+DSP_DEBUGCC	rmac/dsp56kkw.h	/^#define	DSP_DEBUGCC	/;"	d
+DSP_DEBUGCS	rmac/dsp56kkw.h	/^#define	DSP_DEBUGCS	/;"	d
+DSP_DEBUGEC	rmac/dsp56kkw.h	/^#define	DSP_DEBUGEC	/;"	d
+DSP_DEBUGEQ	rmac/dsp56kkw.h	/^#define	DSP_DEBUGEQ	/;"	d
+DSP_DEBUGES	rmac/dsp56kkw.h	/^#define	DSP_DEBUGES	/;"	d
+DSP_DEBUGGE	rmac/dsp56kkw.h	/^#define	DSP_DEBUGGE	/;"	d
+DSP_DEBUGGT	rmac/dsp56kkw.h	/^#define	DSP_DEBUGGT	/;"	d
+DSP_DEBUGHS	rmac/dsp56kkw.h	/^#define	DSP_DEBUGHS	/;"	d
+DSP_DEBUGLC	rmac/dsp56kkw.h	/^#define	DSP_DEBUGLC	/;"	d
+DSP_DEBUGLE	rmac/dsp56kkw.h	/^#define	DSP_DEBUGLE	/;"	d
+DSP_DEBUGLO	rmac/dsp56kkw.h	/^#define	DSP_DEBUGLO	/;"	d
+DSP_DEBUGLS	rmac/dsp56kkw.h	/^#define	DSP_DEBUGLS	/;"	d
+DSP_DEBUGLT	rmac/dsp56kkw.h	/^#define	DSP_DEBUGLT	/;"	d
+DSP_DEBUGMI	rmac/dsp56kkw.h	/^#define	DSP_DEBUGMI	/;"	d
+DSP_DEBUGNE	rmac/dsp56kkw.h	/^#define	DSP_DEBUGNE	/;"	d
+DSP_DEBUGNN	rmac/dsp56kkw.h	/^#define	DSP_DEBUGNN	/;"	d
+DSP_DEBUGNR	rmac/dsp56kkw.h	/^#define	DSP_DEBUGNR	/;"	d
+DSP_DEBUGPL	rmac/dsp56kkw.h	/^#define	DSP_DEBUGPL	/;"	d
+DSP_DIV	rmac/dsp56kkw.h	/^#define	DSP_DIV	/;"	d
+DSP_DO	rmac/dsp56kkw.h	/^#define	DSP_DO	/;"	d
+DSP_EA_ABS	rmac/dsp56k_amode.h	/^#define DSP_EA_ABS /;"	d
+DSP_EA_IMM	rmac/dsp56k_amode.h	/^#define DSP_EA_IMM /;"	d
+DSP_EA_INDEX	rmac/dsp56k_amode.h	/^#define DSP_EA_INDEX /;"	d
+DSP_EA_NOUPD	rmac/dsp56k_amode.h	/^#define DSP_EA_NOUPD /;"	d
+DSP_EA_POSTDEC	rmac/dsp56k_amode.h	/^#define DSP_EA_POSTDEC /;"	d
+DSP_EA_POSTDEC1	rmac/dsp56k_amode.h	/^#define DSP_EA_POSTDEC1 /;"	d
+DSP_EA_POSTINC	rmac/dsp56k_amode.h	/^#define DSP_EA_POSTINC /;"	d
+DSP_EA_POSTINC1	rmac/dsp56k_amode.h	/^#define DSP_EA_POSTINC1 /;"	d
+DSP_EA_PREDEC1	rmac/dsp56k_amode.h	/^#define DSP_EA_PREDEC1 /;"	d
+DSP_ENDDO	rmac/dsp56kkw.h	/^#define	DSP_ENDDO	/;"	d
+DSP_EOR	rmac/dsp56kkw.h	/^#define	DSP_EOR	/;"	d
+DSP_ILLEGAL	rmac/dsp56kkw.h	/^#define	DSP_ILLEGAL	/;"	d
+DSP_JCC	rmac/dsp56kkw.h	/^#define	DSP_JCC	/;"	d
+DSP_JCLR	rmac/dsp56kkw.h	/^#define	DSP_JCLR	/;"	d
+DSP_JCS	rmac/dsp56kkw.h	/^#define	DSP_JCS	/;"	d
+DSP_JEC	rmac/dsp56kkw.h	/^#define	DSP_JEC	/;"	d
+DSP_JEQ	rmac/dsp56kkw.h	/^#define	DSP_JEQ	/;"	d
+DSP_JES	rmac/dsp56kkw.h	/^#define	DSP_JES	/;"	d
+DSP_JGE	rmac/dsp56kkw.h	/^#define	DSP_JGE	/;"	d
+DSP_JGT	rmac/dsp56kkw.h	/^#define	DSP_JGT	/;"	d
+DSP_JHS	rmac/dsp56kkw.h	/^#define	DSP_JHS	/;"	d
+DSP_JLC	rmac/dsp56kkw.h	/^#define	DSP_JLC	/;"	d
+DSP_JLE	rmac/dsp56kkw.h	/^#define	DSP_JLE	/;"	d
+DSP_JLO	rmac/dsp56kkw.h	/^#define	DSP_JLO	/;"	d
+DSP_JLS	rmac/dsp56kkw.h	/^#define	DSP_JLS	/;"	d
+DSP_JLT	rmac/dsp56kkw.h	/^#define	DSP_JLT	/;"	d
+DSP_JMI	rmac/dsp56kkw.h	/^#define	DSP_JMI	/;"	d
+DSP_JMP	rmac/dsp56kkw.h	/^#define	DSP_JMP	/;"	d
+DSP_JNE	rmac/dsp56kkw.h	/^#define	DSP_JNE	/;"	d
+DSP_JNN	rmac/dsp56kkw.h	/^#define	DSP_JNN	/;"	d
+DSP_JNR	rmac/dsp56kkw.h	/^#define	DSP_JNR	/;"	d
+DSP_JPL	rmac/dsp56kkw.h	/^#define	DSP_JPL	/;"	d
+DSP_JSCC	rmac/dsp56kkw.h	/^#define	DSP_JSCC	/;"	d
+DSP_JSCLR	rmac/dsp56kkw.h	/^#define	DSP_JSCLR	/;"	d
+DSP_JSCS	rmac/dsp56kkw.h	/^#define	DSP_JSCS	/;"	d
+DSP_JSEC	rmac/dsp56kkw.h	/^#define	DSP_JSEC	/;"	d
+DSP_JSEQ	rmac/dsp56kkw.h	/^#define	DSP_JSEQ	/;"	d
+DSP_JSES	rmac/dsp56kkw.h	/^#define	DSP_JSES	/;"	d
+DSP_JSET	rmac/dsp56kkw.h	/^#define	DSP_JSET	/;"	d
+DSP_JSGE	rmac/dsp56kkw.h	/^#define	DSP_JSGE	/;"	d
+DSP_JSGT	rmac/dsp56kkw.h	/^#define	DSP_JSGT	/;"	d
+DSP_JSHS	rmac/dsp56kkw.h	/^#define	DSP_JSHS	/;"	d
+DSP_JSLC	rmac/dsp56kkw.h	/^#define	DSP_JSLC	/;"	d
+DSP_JSLE	rmac/dsp56kkw.h	/^#define	DSP_JSLE	/;"	d
+DSP_JSLO	rmac/dsp56kkw.h	/^#define	DSP_JSLO	/;"	d
+DSP_JSLS	rmac/dsp56kkw.h	/^#define	DSP_JSLS	/;"	d
+DSP_JSLT	rmac/dsp56kkw.h	/^#define	DSP_JSLT	/;"	d
+DSP_JSMI	rmac/dsp56kkw.h	/^#define	DSP_JSMI	/;"	d
+DSP_JSNE	rmac/dsp56kkw.h	/^#define	DSP_JSNE	/;"	d
+DSP_JSNN	rmac/dsp56kkw.h	/^#define	DSP_JSNN	/;"	d
+DSP_JSNR	rmac/dsp56kkw.h	/^#define	DSP_JSNR	/;"	d
+DSP_JSPL	rmac/dsp56kkw.h	/^#define	DSP_JSPL	/;"	d
+DSP_JSR	rmac/dsp56kkw.h	/^#define	DSP_JSR	/;"	d
+DSP_JSSET	rmac/dsp56kkw.h	/^#define	DSP_JSSET	/;"	d
+DSP_LSL	rmac/dsp56kkw.h	/^#define	DSP_LSL	/;"	d
+DSP_LSR	rmac/dsp56kkw.h	/^#define	DSP_LSR	/;"	d
+DSP_LUA	rmac/dsp56kkw.h	/^#define	DSP_LUA	/;"	d
+DSP_MAC	rmac/dsp56kkw.h	/^#define	DSP_MAC	/;"	d
+DSP_MACR	rmac/dsp56kkw.h	/^#define	DSP_MACR	/;"	d
+DSP_MAX_RAM	rmac/dsp56k.h	/^#define DSP_MAX_RAM /;"	d
+DSP_MOVE	rmac/dsp56kkw.h	/^#define	DSP_MOVE	/;"	d
+DSP_MOVEC	rmac/dsp56kkw.h	/^#define	DSP_MOVEC	/;"	d
+DSP_MOVEM	rmac/dsp56kkw.h	/^#define	DSP_MOVEM	/;"	d
+DSP_MOVEP	rmac/dsp56kkw.h	/^#define	DSP_MOVEP	/;"	d
+DSP_MPY	rmac/dsp56kkw.h	/^#define	DSP_MPY	/;"	d
+DSP_MPYR	rmac/dsp56kkw.h	/^#define	DSP_MPYR	/;"	d
+DSP_NEG	rmac/dsp56kkw.h	/^#define	DSP_NEG	/;"	d
+DSP_NOP	rmac/dsp56kkw.h	/^#define	DSP_NOP	/;"	d
+DSP_NORM	rmac/dsp56kkw.h	/^#define	DSP_NORM	/;"	d
+DSP_NOT	rmac/dsp56kkw.h	/^#define	DSP_NOT	/;"	d
+DSP_OR	rmac/dsp56kkw.h	/^#define	DSP_OR	/;"	d
+DSP_ORG	rmac/dsp56k.h	/^#define DSP_ORG /;"	d
+DSP_ORI	rmac/dsp56kkw.h	/^#define	DSP_ORI	/;"	d
+DSP_REP	rmac/dsp56kkw.h	/^#define	DSP_REP	/;"	d
+DSP_RESET	rmac/dsp56kkw.h	/^#define	DSP_RESET	/;"	d
+DSP_RND	rmac/dsp56kkw.h	/^#define	DSP_RND	/;"	d
+DSP_ROL	rmac/dsp56kkw.h	/^#define	DSP_ROL	/;"	d
+DSP_ROR	rmac/dsp56kkw.h	/^#define	DSP_ROR	/;"	d
+DSP_RTI	rmac/dsp56kkw.h	/^#define	DSP_RTI	/;"	d
+DSP_RTS	rmac/dsp56kkw.h	/^#define	DSP_RTS	/;"	d
+DSP_SBC	rmac/dsp56kkw.h	/^#define	DSP_SBC	/;"	d
+DSP_STOP	rmac/dsp56kkw.h	/^#define	DSP_STOP	/;"	d
+DSP_SUB	rmac/dsp56kkw.h	/^#define	DSP_SUB	/;"	d
+DSP_SUBL	rmac/dsp56kkw.h	/^#define	DSP_SUBL	/;"	d
+DSP_SUBR	rmac/dsp56kkw.h	/^#define	DSP_SUBR	/;"	d
+DSP_SWI	rmac/dsp56kkw.h	/^#define	DSP_SWI	/;"	d
+DSP_TCC	rmac/dsp56kkw.h	/^#define	DSP_TCC	/;"	d
+DSP_TCS	rmac/dsp56kkw.h	/^#define	DSP_TCS	/;"	d
+DSP_TEC	rmac/dsp56kkw.h	/^#define	DSP_TEC	/;"	d
+DSP_TEQ	rmac/dsp56kkw.h	/^#define	DSP_TEQ	/;"	d
+DSP_TES	rmac/dsp56kkw.h	/^#define	DSP_TES	/;"	d
+DSP_TFR	rmac/dsp56kkw.h	/^#define	DSP_TFR	/;"	d
+DSP_TGE	rmac/dsp56kkw.h	/^#define	DSP_TGE	/;"	d
+DSP_TGT	rmac/dsp56kkw.h	/^#define	DSP_TGT	/;"	d
+DSP_THS	rmac/dsp56kkw.h	/^#define	DSP_THS	/;"	d
+DSP_TLC	rmac/dsp56kkw.h	/^#define	DSP_TLC	/;"	d
+DSP_TLE	rmac/dsp56kkw.h	/^#define	DSP_TLE	/;"	d
+DSP_TLO	rmac/dsp56kkw.h	/^#define	DSP_TLO	/;"	d
+DSP_TLS	rmac/dsp56kkw.h	/^#define	DSP_TLS	/;"	d
+DSP_TLT	rmac/dsp56kkw.h	/^#define	DSP_TLT	/;"	d
+DSP_TMI	rmac/dsp56kkw.h	/^#define	DSP_TMI	/;"	d
+DSP_TNE	rmac/dsp56kkw.h	/^#define	DSP_TNE	/;"	d
+DSP_TNN	rmac/dsp56kkw.h	/^#define	DSP_TNN	/;"	d
+DSP_TNR	rmac/dsp56kkw.h	/^#define	DSP_TNR	/;"	d
+DSP_TPL	rmac/dsp56kkw.h	/^#define	DSP_TPL	/;"	d
+DSP_TST	rmac/dsp56kkw.h	/^#define	DSP_TST	/;"	d
+DSP_WAIT	rmac/dsp56kkw.h	/^#define	DSP_WAIT	/;"	d
+D_ZEROFILL	rmac/sect.h	/^#define D_ZEROFILL(/;"	d
+D_byte	rmac/sect.h	/^#define D_byte(/;"	d
+D_dsp	rmac/sect.h	/^#define D_dsp(/;"	d
+D_extend	rmac/sect.h	/^#define D_extend(/;"	d
+D_long	rmac/sect.h	/^#define D_long(/;"	d
+D_printf	rmac/dsp56k.h	/^#define D_printf(/;"	d
+D_quad	rmac/sect.h	/^#define D_quad(/;"	d
+D_rword	rmac/sect.h	/^#define D_rword(/;"	d
+D_word	rmac/sect.h	/^#define D_word(/;"	d
+DefineMacro	rmac/macro.c	/^int DefineMacro(void)$/;"	f
+DepositELFSHSTEntry	rmac/object.c	/^uint32_t DepositELFSHSTEntry(uint8_t ** pTable, const uint8_t * s)$/;"	f
+DepositELFSectionHeader	rmac/object.c	/^int DepositELFSectionHeader(uint8_t * ptr, uint32_t name, uint32_t type, uint32_t flags, uint32_t addr, uint32_t offset, uint32_t size, uint32_t link, uint32_t info, uint32_t addralign, uint32_t entsize)$/;"	f
+DepositELFSymbol	rmac/object.c	/^uint32_t DepositELFSymbol(uint8_t * ptr, uint32_t name, uint32_t addr, uint32_t size, uint8_t info, uint8_t other, uint16_t shndx)$/;"	f
+DepositRISCInstructionWord	rmac/riscasm.c	/^static void DepositRISCInstructionWord(uint16_t opcode, int reg1, int reg2)$/;"	f	file:
+DisplayHelp	rmac/rmac.c	/^void DisplayHelp(void)$/;"	f
+DisplayVersion	rmac/rmac.c	/^void DisplayVersion(void)$/;"	f
+DoubleToDSPFloat	rmac/fltpoint.c	/^uint32_t DoubleToDSPFloat(double d)$/;"	f
+DoubleToExtended	rmac/fltpoint.c	/^void DoubleToExtended(double d, uint8_t out[])$/;"	f
+DoubleToFixedPoint	rmac/fltpoint.c	/^uint64_t DoubleToFixedPoint(double d, int intBits, int fracBits)$/;"	f
+DoubleToIEEE754	rmac/fltpoint.c	/^uint64_t DoubleToIEEE754(double d)$/;"	f
+DumpLODSymbols	rmac/symbol.c	/^void DumpLODSymbols(void)$/;"	f
+DumpToken	rmac/token.c	/^void DumpToken(TOKEN t)$/;"	f
+DumpTokenBuffer	rmac/token.c	/^void DumpTokenBuffer(void)$/;"	f
+DumpTokens	rmac/debug.c	/^void DumpTokens(TOKEN * tokenBuffer)$/;"	f
+EBUFSIZ	rmac/error.h	/^#define EBUFSIZ /;"	d
+ELF	rmac/rmac.h	/^ELF, 				\/\/ ELF object format$/;"	e	enum:__anon1
+ELFSectionNames	rmac/object.h	/^enum ELFSectionNames$/;"	g
+END	rmac/expr.h	/^#define END /;"	d
+END	rmac/maketabs.bat	/^:END$/;"	l
+END65	rmac/6502.c	/^#define END65	/;"	d	file:
+ENDEXPR	rmac/token.h	/^#define ENDEXPR /;"	d
+EOL	rmac/token.h	/^#define EOL /;"	d
+EOS	rmac/68kgen.c	/^#define	EOS	/;"	d	file:
+EOS	rmac/dsp56kgen.c	/^#define	EOS	/;"	d	file:
+EOS	rmac/kwgen.c	/^#define	EOS	/;"	d	file:
+EOS	rmac/rmac.h	/^#define EOS /;"	d
+EQUATED	rmac/rmac.h	/^#define EQUATED /;"	d
+EQUATEDCC	rmac/rmac.h	/^#define EQUATEDCC /;"	d
+EQUATEDREG	rmac/rmac.h	/^#define EQUATEDREG /;"	d
+EQUREG	rmac/token.h	/^#define EQUREG /;"	d
+ERROR	rmac/rmac.h	/^#define ERROR /;"	d
+ERROUT	rmac/rmac.h	/^#define ERROUT /;"	d
+ES_BSS	rmac/object.h	/^	ES_NULL, ES_TEXT, ES_DATA, ES_BSS, ES_RELATEXT, ES_RELADATA, ES_SHSTRTAB,$/;"	e	enum:ELFSectionNames
+ES_DATA	rmac/object.h	/^	ES_NULL, ES_TEXT, ES_DATA, ES_BSS, ES_RELATEXT, ES_RELADATA, ES_SHSTRTAB,$/;"	e	enum:ELFSectionNames
+ES_NULL	rmac/object.h	/^	ES_NULL, ES_TEXT, ES_DATA, ES_BSS, ES_RELATEXT, ES_RELADATA, ES_SHSTRTAB,$/;"	e	enum:ELFSectionNames
+ES_RELADATA	rmac/object.h	/^	ES_NULL, ES_TEXT, ES_DATA, ES_BSS, ES_RELATEXT, ES_RELADATA, ES_SHSTRTAB,$/;"	e	enum:ELFSectionNames
+ES_RELATEXT	rmac/object.h	/^	ES_NULL, ES_TEXT, ES_DATA, ES_BSS, ES_RELATEXT, ES_RELADATA, ES_SHSTRTAB,$/;"	e	enum:ELFSectionNames
+ES_SHSTRTAB	rmac/object.h	/^	ES_NULL, ES_TEXT, ES_DATA, ES_BSS, ES_RELATEXT, ES_RELADATA, ES_SHSTRTAB,$/;"	e	enum:ELFSectionNames
+ES_STRTAB	rmac/object.h	/^	ES_SYMTAB, ES_STRTAB$/;"	e	enum:ELFSectionNames
+ES_SYMTAB	rmac/object.h	/^	ES_SYMTAB, ES_STRTAB$/;"	e	enum:ELFSectionNames
+ES_TEXT	rmac/object.h	/^	ES_NULL, ES_TEXT, ES_DATA, ES_BSS, ES_RELATEXT, ES_RELADATA, ES_SHSTRTAB,$/;"	e	enum:ELFSectionNames
+EVAL_REG_RETURN_IF_ERROR	rmac/riscasm.c	/^#define EVAL_REG_RETURN_IF_ERROR(/;"	d	file:
+EVAL_REG_RETURN_IF_ERROR_OR_NO_EOL	rmac/riscasm.c	/^#define EVAL_REG_RETURN_IF_ERROR_OR_NO_EOL(/;"	d	file:
+EVSTACKSIZE	rmac/expr.h	/^#define EVSTACKSIZE /;"	d
+EXPRSIZE	rmac/amode.h	/^#define EXPRSIZE /;"	d
+EXT_A	rmac/amode.h	/^#define EXT_A	/;"	d
+EXT_BDSIZE0	rmac/amode.h	/^#define EXT_BDSIZE0 /;"	d
+EXT_BDSIZEL	rmac/amode.h	/^#define EXT_BDSIZEL /;"	d
+EXT_BDSIZEW	rmac/amode.h	/^#define EXT_BDSIZEW /;"	d
+EXT_BS	rmac/amode.h	/^#define EXT_BS	/;"	d
+EXT_D	rmac/amode.h	/^#define EXT_D	/;"	d
+EXT_FULLWORD	rmac/amode.h	/^#define EXT_FULLWORD /;"	d
+EXT_IISNOI0	rmac/amode.h	/^#define EXT_IISNOI0 /;"	d
+EXT_IISNOIL	rmac/amode.h	/^#define EXT_IISNOIL /;"	d
+EXT_IISNOIN	rmac/amode.h	/^#define EXT_IISNOIN /;"	d
+EXT_IISNOIW	rmac/amode.h	/^#define EXT_IISNOIW /;"	d
+EXT_IISPOSL	rmac/amode.h	/^#define EXT_IISPOSL /;"	d
+EXT_IISPOSN	rmac/amode.h	/^#define EXT_IISPOSN /;"	d
+EXT_IISPOSW	rmac/amode.h	/^#define EXT_IISPOSW /;"	d
+EXT_IISPRE0	rmac/amode.h	/^#define EXT_IISPRE0 /;"	d
+EXT_IISPREL	rmac/amode.h	/^#define EXT_IISPREL /;"	d
+EXT_IISPREN	rmac/amode.h	/^#define EXT_IISPREN /;"	d
+EXT_IISPREW	rmac/amode.h	/^#define EXT_IISPREW /;"	d
+EXT_IS	rmac/amode.h	/^#define EXT_IS	/;"	d
+EXT_L	rmac/amode.h	/^#define EXT_L	/;"	d
+EXT_TIMES1	rmac/amode.h	/^#define EXT_TIMES1 /;"	d
+EXT_TIMES2	rmac/amode.h	/^#define EXT_TIMES2 /;"	d
+EXT_TIMES4	rmac/amode.h	/^#define EXT_TIMES4 /;"	d
+EXT_TIMES8	rmac/amode.h	/^#define EXT_TIMES8 /;"	d
+EXT_W	rmac/amode.h	/^#define EXT_W	/;"	d
+ErrorIfNotAtEOL	rmac/error.c	/^int ErrorIfNotAtEOL(void)$/;"	f
+EvaluateRegisterFromTokenStream	rmac/riscasm.c	/^static int EvaluateRegisterFromTokenStream(uint32_t fixup)$/;"	f	file:
+ExitMacro	rmac/macro.c	/^int ExitMacro(void)$/;"	f
+ExpandMacro	rmac/token.c	/^int ExpandMacro(char * src, char * dest, int destsiz)$/;"	f
+ExpressionLength	rmac/expr.c	/^uint16_t ExpressionLength(TOKEN * tk)$/;"	f
+FCONST	rmac/token.h	/^#define FCONST /;"	d
+FILEREC	rmac/token.c	/^#define FILEREC /;"	d	file:
+FIXUP	rmac/sect.h	/^#define FIXUP /;"	d
+FLOAT	rmac/rmac.h	/^#define FLOAT /;"	d
+FNSIZ	rmac/rmac.h	/^#define FNSIZ /;"	d
+FPSCR	rmac/amode.h	/^#define FPSCR /;"	d
+FPU_68040	rmac/sect.h	/^#define FPU_68040 /;"	d
+FPU_68060	rmac/sect.h	/^#define FPU_68060 /;"	d
+FPU_68881	rmac/sect.h	/^#define FPU_68881 /;"	d
+FPU_68882	rmac/sect.h	/^#define FPU_68882 /;"	d
+FPU_FPSP	rmac/mach.c	/^#define FPU_FPSP /;"	d	file:
+FPU_NONE	rmac/sect.h	/^#define FPU_NONE /;"	d
+FPU_NOWARN	rmac/mach.c	/^#define FPU_NOWARN /;"	d	file:
+FREG	rmac/amode.h	/^#define FREG /;"	d
+FUMASK	rmac/sect.h	/^#define FUMASK /;"	d
+FUMASKDSP	rmac/sect.h	/^#define FUMASKDSP /;"	d
+FUMASKRISC	rmac/sect.h	/^#define FUMASKRISC /;"	d
+FU_56001	rmac/sect.h	/^#define FU_56001 /;"	d
+FU_6BRA	rmac/sect.h	/^#define FU_6BRA /;"	d
+FU_BBRA	rmac/sect.h	/^#define FU_BBRA /;"	d
+FU_BYTE	rmac/sect.h	/^#define FU_BYTE /;"	d
+FU_BYTEH	rmac/sect.h	/^#define FU_BYTEH /;"	d
+FU_BYTEL	rmac/sect.h	/^#define FU_BYTEL /;"	d
+FU_DONE	rmac/sect.h	/^#define FU_DONE /;"	d
+FU_DSPADR06	rmac/sect.h	/^#define FU_DSPADR06 /;"	d
+FU_DSPADR12	rmac/sect.h	/^#define FU_DSPADR12 /;"	d
+FU_DSPADR16	rmac/sect.h	/^#define FU_DSPADR16 /;"	d
+FU_DSPADR24	rmac/sect.h	/^#define FU_DSPADR24 /;"	d
+FU_DSPIMM12	rmac/sect.h	/^#define FU_DSPIMM12 /;"	d
+FU_DSPIMM24	rmac/sect.h	/^#define FU_DSPIMM24 /;"	d
+FU_DSPIMM5	rmac/sect.h	/^#define FU_DSPIMM5 /;"	d
+FU_DSPIMM8	rmac/sect.h	/^#define FU_DSPIMM8 /;"	d
+FU_DSPIMMFL16	rmac/sect.h	/^#define FU_DSPIMMFL16 /;"	d
+FU_DSPIMMFL24	rmac/sect.h	/^#define FU_DSPIMMFL24 /;"	d
+FU_DSPIMMFL8	rmac/sect.h	/^#define FU_DSPIMMFL8 /;"	d
+FU_DSPPP06	rmac/sect.h	/^#define FU_DSPPP06 /;"	d
+FU_EXPR	rmac/sect.h	/^#define FU_EXPR /;"	d
+FU_FLOATDOUB	rmac/sect.h	/^#define FU_FLOATDOUB /;"	d
+FU_FLOATEXT	rmac/sect.h	/^#define FU_FLOATEXT /;"	d
+FU_FLOATSING	rmac/sect.h	/^#define FU_FLOATSING /;"	d
+FU_GLOBAL	rmac/sect.h	/^#define FU_GLOBAL /;"	d
+FU_ISBRA	rmac/sect.h	/^#define FU_ISBRA /;"	d
+FU_JR	rmac/sect.h	/^#define FU_JR /;"	d
+FU_LBRA	rmac/sect.h	/^#define FU_LBRA /;"	d
+FU_LONG	rmac/sect.h	/^#define FU_LONG /;"	d
+FU_MOVEI	rmac/sect.h	/^#define FU_MOVEI /;"	d
+FU_NUM15	rmac/sect.h	/^#define FU_NUM15 /;"	d
+FU_NUM31	rmac/sect.h	/^#define FU_NUM31 /;"	d
+FU_NUM32	rmac/sect.h	/^#define FU_NUM32 /;"	d
+FU_OBJDATA	rmac/sect.h	/^#define FU_OBJDATA /;"	d
+FU_OBJLINK	rmac/sect.h	/^#define FU_OBJLINK /;"	d
+FU_PCREL	rmac/sect.h	/^#define FU_PCREL /;"	d
+FU_PCRELX	rmac/sect.h	/^#define FU_PCRELX /;"	d
+FU_QUAD	rmac/sect.h	/^#define FU_QUAD /;"	d
+FU_QUICK	rmac/sect.h	/^#define FU_QUICK /;"	d
+FU_REGONE	rmac/sect.h	/^#define FU_REGONE /;"	d
+FU_REGTWO	rmac/sect.h	/^#define FU_REGTWO /;"	d
+FU_SEXT	rmac/sect.h	/^#define FU_SEXT /;"	d
+FU_SUB32	rmac/sect.h	/^#define FU_SUB32 /;"	d
+FU_WBYTE	rmac/sect.h	/^#define FU_WBYTE /;"	d
+FU_WORD	rmac/sect.h	/^#define FU_WORD /;"	d
+FloatToIEEE754	rmac/fltpoint.c	/^uint32_t FloatToIEEE754(float f)$/;"	f
+ForceUndefinedSymbolsGlobal	rmac/symbol.c	/^void ForceUndefinedSymbolsGlobal(void)$/;"	f
+GE	rmac/token.h	/^#define GE /;"	d
+GETBE16	rmac/rmac.h	/^#define GETBE16(/;"	d
+GETBE32	rmac/rmac.h	/^#define GETBE32(/;"	d
+GETBE64	rmac/rmac.h	/^#define GETBE64(/;"	d
+GLOBAL	rmac/rmac.h	/^#define GLOBAL /;"	d
+GPUONLY	rmac/riscasm.h	/^#define GPUONLY /;"	d
+GenerateOPCode	rmac/op.c	/^int GenerateOPCode(int state)$/;"	f
+GenerateRISCCode	rmac/riscasm.c	/^int GenerateRISCCode(int state)$/;"	f
+GetEndianess	rmac/rmac.c	/^int GetEndianess(void)$/;"	f
+GetNextLine	rmac/token.c	/^char * GetNextLine(void)$/;"	f
+GetNextMacroLine	rmac/token.c	/^char * GetNextMacroLine(void)$/;"	f
+GetNextRepeatLine	rmac/token.c	/^char * GetNextRepeatLine(void)$/;"	f
+GetSymbolNameByUID	rmac/symbol.c	/^uint8_t * GetSymbolNameByUID(uint32_t uid)$/;"	f
+GetSymbolUCFromTokenStream	rmac/op.c	/^static inline void GetSymbolUCFromTokenStream(char * s)$/;"	f	file:
+HDIGIT	rmac/token.h	/^#define HDIGIT /;"	d
+HDRSIZE	rmac/object.h	/^#define HDRSIZE /;"	d
+HEX__	rmac/rmac.h	/^#define HEX__(/;"	d
+HOSTCC	rmac/makefile	/^HOSTCC = gcc$/;"	m
+HandleBitmap	rmac/op.c	/^static int HandleBitmap(void)$/;"	f	file:
+HandleBranch	rmac/op.c	/^static int HandleBranch(void)$/;"	f	file:
+HandleGPUObject	rmac/op.c	/^static int HandleGPUObject(void)$/;"	f	file:
+HandleJump	rmac/op.c	/^static int HandleJump(void)$/;"	f	file:
+HandleLabel	rmac/procln.c	/^int HandleLabel(char * label, int labelType)$/;"	f
+HandleNOP	rmac/op.c	/^static int HandleNOP(void)$/;"	f	file:
+HandleRept	rmac/macro.c	/^int HandleRept(void)$/;"	f
+HandleScaledBitmap	rmac/op.c	/^static int HandleScaledBitmap(void)$/;"	f	file:
+HandleStop	rmac/op.c	/^static int HandleStop(void)$/;"	f	file:
+HashSymbol	rmac/symbol.c	/^int HashSymbol(uint8_t * name, int envno)$/;"	f
+ID	rmac/expr.h	/^#define ID /;"	d
+IFENT	rmac/token.h	/^#define IFENT	/;"	d
+IFILE	rmac/token.h	/^#define IFILE	/;"	d
+ILLEG	rmac/token.h	/^#define ILLEG /;"	d
+ILLEGAL	rmac/6502.c	/^#define	ILLEGAL	/;"	d	file:
+IMACRO	rmac/token.h	/^#define IMACRO	/;"	d
+IMAGESIZ	rmac/listing.h	/^#define IMAGESIZ /;"	d
+IMMED	rmac/amode.h	/^#define IMMED /;"	d
+INOBJ	rmac/token.h	/^#define INOBJ	/;"	d
+INX	rmac/tests/6502tester.s	/^INX ;(INcrement X)        $E8$/;"	l
+INY	rmac/tests/6502tester.s	/^INY ;(INcrement Y)        $C8$/;"	l
+IREPT	rmac/token.h	/^#define IREPT	/;"	d
+IS_SUPPRESSEDn	rmac/amode.c	/^	#define IS_SUPPRESSEDn /;"	d	file:
+IS_SUPPRESSEDn	rmac/parmode.h	/^#undef IS_SUPPRESSEDn$/;"	d
+IUNION	rmac/token.h	/^#define IUNION	/;"	d
+IllegalIndexedRegister	rmac/riscasm.c	/^static inline int IllegalIndexedRegister(int reg)$/;"	f	file:
+IllegalIndexedRegisterEqur	rmac/riscasm.c	/^static inline int IllegalIndexedRegisterEqur(SYM * sy)$/;"	f	file:
+Init6502	rmac/6502.c	/^void Init6502()$/;"	f
+InitExpression	rmac/expr.c	/^void InitExpression(void)$/;"	f
+InitLineProcessor	rmac/procln.c	/^void InitLineProcessor(void)$/;"	f
+InitListing	rmac/listing.c	/^void InitListing(void)$/;"	f
+InitMacro	rmac/macro.c	/^void InitMacro(void)$/;"	f
+InitMark	rmac/mark.c	/^void InitMark(void)$/;"	f
+InitSection	rmac/sect.c	/^void InitSection(void)$/;"	f
+InitSymbolTable	rmac/symbol.c	/^void InitSymbolTable(void)$/;"	f
+InitTokenizer	rmac/token.c	/^void InitTokenizer(void)$/;"	f
+InvokeMacro	rmac/macro.c	/^int InvokeMacro(SYM * mac, WORD siz)$/;"	f
+KWMatch	rmac/macro.c	/^static int KWMatch(char * kw, char * kwlist)$/;"	f	file:
+KWSIZE	rmac/token.h	/^#define KWSIZE /;"	d
+KW_A	rmac/kwtab.h	/^#define	KW_A	/;"	d
+KW_A0	rmac/kwtab.h	/^#define	KW_A0	/;"	d
+KW_A1	rmac/kwtab.h	/^#define	KW_A1	/;"	d
+KW_A10	rmac/kwtab.h	/^#define	KW_A10	/;"	d
+KW_A2	rmac/kwtab.h	/^#define	KW_A2	/;"	d
+KW_A3	rmac/kwtab.h	/^#define	KW_A3	/;"	d
+KW_A4	rmac/kwtab.h	/^#define	KW_A4	/;"	d
+KW_A5	rmac/kwtab.h	/^#define	KW_A5	/;"	d
+KW_A6	rmac/kwtab.h	/^#define	KW_A6	/;"	d
+KW_A7	rmac/kwtab.h	/^#define	KW_A7	/;"	d
+KW_AB	rmac/kwtab.h	/^#define	KW_AB	/;"	d
+KW_ABSCOUNT	rmac/kwtab.h	/^#define	KW_ABSCOUNT	/;"	d
+KW_B	rmac/kwtab.h	/^#define	KW_B	/;"	d
+KW_B0	rmac/kwtab.h	/^#define	KW_B0	/;"	d
+KW_B1	rmac/kwtab.h	/^#define	KW_B1	/;"	d
+KW_B10	rmac/kwtab.h	/^#define	KW_B10	/;"	d
+KW_B2	rmac/kwtab.h	/^#define	KW_B2	/;"	d
+KW_BA	rmac/kwtab.h	/^#define	KW_BA	/;"	d
+KW_BC40	rmac/kwtab.h	/^#define	KW_BC40	/;"	d
+KW_CAAR	rmac/kwtab.h	/^#define	KW_CAAR	/;"	d
+KW_CACR	rmac/kwtab.h	/^#define	KW_CACR	/;"	d
+KW_CCDEF	rmac/kwtab.h	/^#define	KW_CCDEF	/;"	d
+KW_CCR	rmac/kwtab.h	/^#define	KW_CCR	/;"	d
+KW_CRP	rmac/kwtab.h	/^#define	KW_CRP	/;"	d
+KW_D0	rmac/kwtab.h	/^#define	KW_D0	/;"	d
+KW_D1	rmac/kwtab.h	/^#define	KW_D1	/;"	d
+KW_D2	rmac/kwtab.h	/^#define	KW_D2	/;"	d
+KW_D3	rmac/kwtab.h	/^#define	KW_D3	/;"	d
+KW_D4	rmac/kwtab.h	/^#define	KW_D4	/;"	d
+KW_D5	rmac/kwtab.h	/^#define	KW_D5	/;"	d
+KW_D6	rmac/kwtab.h	/^#define	KW_D6	/;"	d
+KW_D7	rmac/kwtab.h	/^#define	KW_D7	/;"	d
+KW_DACR0	rmac/kwtab.h	/^#define	KW_DACR0	/;"	d
+KW_DACR1	rmac/kwtab.h	/^#define	KW_DACR1	/;"	d
+KW_DATE	rmac/kwtab.h	/^#define	KW_DATE	/;"	d
+KW_DC40	rmac/kwtab.h	/^#define	KW_DC40	/;"	d
+KW_DEFINED	rmac/kwtab.h	/^#define	KW_DEFINED	/;"	d
+KW_DFC	rmac/kwtab.h	/^#define	KW_DFC	/;"	d
+KW_DTT0	rmac/kwtab.h	/^#define	KW_DTT0	/;"	d
+KW_DTT1	rmac/kwtab.h	/^#define	KW_DTT1	/;"	d
+KW_EQU	rmac/kwtab.h	/^#define	KW_EQU	/;"	d
+KW_EQUR	rmac/kwtab.h	/^#define	KW_EQUR	/;"	d
+KW_FILESIZE	rmac/kwtab.h	/^#define	KW_FILESIZE	/;"	d
+KW_FP0	rmac/kwtab.h	/^#define	KW_FP0	/;"	d
+KW_FP1	rmac/kwtab.h	/^#define	KW_FP1	/;"	d
+KW_FP2	rmac/kwtab.h	/^#define	KW_FP2	/;"	d
+KW_FP3	rmac/kwtab.h	/^#define	KW_FP3	/;"	d
+KW_FP4	rmac/kwtab.h	/^#define	KW_FP4	/;"	d
+KW_FP5	rmac/kwtab.h	/^#define	KW_FP5	/;"	d
+KW_FP6	rmac/kwtab.h	/^#define	KW_FP6	/;"	d
+KW_FP7	rmac/kwtab.h	/^#define	KW_FP7	/;"	d
+KW_FPCR	rmac/kwtab.h	/^#define	KW_FPCR	/;"	d
+KW_FPIAR	rmac/kwtab.h	/^#define	KW_FPIAR	/;"	d
+KW_FPSR	rmac/kwtab.h	/^#define	KW_FPSR	/;"	d
+KW_IACR0	rmac/kwtab.h	/^#define	KW_IACR0	/;"	d
+KW_IACR1	rmac/kwtab.h	/^#define	KW_IACR1	/;"	d
+KW_IC40	rmac/kwtab.h	/^#define	KW_IC40	/;"	d
+KW_ISP	rmac/kwtab.h	/^#define	KW_ISP	/;"	d
+KW_ITT0	rmac/kwtab.h	/^#define	KW_ITT0	/;"	d
+KW_ITT1	rmac/kwtab.h	/^#define	KW_ITT1	/;"	d
+KW_L	rmac/kwtab.h	/^#define	KW_L	/;"	d
+KW_LA	rmac/kwtab.h	/^#define	KW_LA	/;"	d
+KW_LC	rmac/kwtab.h	/^#define	KW_LC	/;"	d
+KW_M0	rmac/kwtab.h	/^#define	KW_M0	/;"	d
+KW_M1	rmac/kwtab.h	/^#define	KW_M1	/;"	d
+KW_M2	rmac/kwtab.h	/^#define	KW_M2	/;"	d
+KW_M3	rmac/kwtab.h	/^#define	KW_M3	/;"	d
+KW_M4	rmac/kwtab.h	/^#define	KW_M4	/;"	d
+KW_M5	rmac/kwtab.h	/^#define	KW_M5	/;"	d
+KW_M6	rmac/kwtab.h	/^#define	KW_M6	/;"	d
+KW_M7	rmac/kwtab.h	/^#define	KW_M7	/;"	d
+KW_MACDEF	rmac/kwtab.h	/^#define	KW_MACDEF	/;"	d
+KW_MMUSR	rmac/kwtab.h	/^#define	KW_MMUSR	/;"	d
+KW_MR	rmac/kwtab.h	/^#define	KW_MR	/;"	d
+KW_MSP	rmac/kwtab.h	/^#define	KW_MSP	/;"	d
+KW_N0	rmac/kwtab.h	/^#define	KW_N0	/;"	d
+KW_N1	rmac/kwtab.h	/^#define	KW_N1	/;"	d
+KW_N2	rmac/kwtab.h	/^#define	KW_N2	/;"	d
+KW_N3	rmac/kwtab.h	/^#define	KW_N3	/;"	d
+KW_N4	rmac/kwtab.h	/^#define	KW_N4	/;"	d
+KW_N5	rmac/kwtab.h	/^#define	KW_N5	/;"	d
+KW_N6	rmac/kwtab.h	/^#define	KW_N6	/;"	d
+KW_N7	rmac/kwtab.h	/^#define	KW_N7	/;"	d
+KW_OMR	rmac/kwtab.h	/^#define	KW_OMR	/;"	d
+KW_P	rmac/kwtab.h	/^#define	KW_P	/;"	d
+KW_PC	rmac/kwtab.h	/^#define	KW_PC	/;"	d
+KW_PSR	rmac/kwtab.h	/^#define	KW_PSR	/;"	d
+KW_R0	rmac/kwtab.h	/^#define	KW_R0	/;"	d
+KW_R1	rmac/kwtab.h	/^#define	KW_R1	/;"	d
+KW_R10	rmac/kwtab.h	/^#define	KW_R10	/;"	d
+KW_R11	rmac/kwtab.h	/^#define	KW_R11	/;"	d
+KW_R12	rmac/kwtab.h	/^#define	KW_R12	/;"	d
+KW_R13	rmac/kwtab.h	/^#define	KW_R13	/;"	d
+KW_R14	rmac/kwtab.h	/^#define	KW_R14	/;"	d
+KW_R15	rmac/kwtab.h	/^#define	KW_R15	/;"	d
+KW_R16	rmac/kwtab.h	/^#define	KW_R16	/;"	d
+KW_R17	rmac/kwtab.h	/^#define	KW_R17	/;"	d
+KW_R18	rmac/kwtab.h	/^#define	KW_R18	/;"	d
+KW_R19	rmac/kwtab.h	/^#define	KW_R19	/;"	d
+KW_R2	rmac/kwtab.h	/^#define	KW_R2	/;"	d
+KW_R20	rmac/kwtab.h	/^#define	KW_R20	/;"	d
+KW_R21	rmac/kwtab.h	/^#define	KW_R21	/;"	d
+KW_R22	rmac/kwtab.h	/^#define	KW_R22	/;"	d
+KW_R23	rmac/kwtab.h	/^#define	KW_R23	/;"	d
+KW_R24	rmac/kwtab.h	/^#define	KW_R24	/;"	d
+KW_R25	rmac/kwtab.h	/^#define	KW_R25	/;"	d
+KW_R26	rmac/kwtab.h	/^#define	KW_R26	/;"	d
+KW_R27	rmac/kwtab.h	/^#define	KW_R27	/;"	d
+KW_R28	rmac/kwtab.h	/^#define	KW_R28	/;"	d
+KW_R29	rmac/kwtab.h	/^#define	KW_R29	/;"	d
+KW_R3	rmac/kwtab.h	/^#define	KW_R3	/;"	d
+KW_R30	rmac/kwtab.h	/^#define	KW_R30	/;"	d
+KW_R31	rmac/kwtab.h	/^#define	KW_R31	/;"	d
+KW_R4	rmac/kwtab.h	/^#define	KW_R4	/;"	d
+KW_R5	rmac/kwtab.h	/^#define	KW_R5	/;"	d
+KW_R6	rmac/kwtab.h	/^#define	KW_R6	/;"	d
+KW_R7	rmac/kwtab.h	/^#define	KW_R7	/;"	d
+KW_R8	rmac/kwtab.h	/^#define	KW_R8	/;"	d
+KW_R9	rmac/kwtab.h	/^#define	KW_R9	/;"	d
+KW_REFERENCED	rmac/kwtab.h	/^#define	KW_REFERENCED	/;"	d
+KW_REG	rmac/kwtab.h	/^#define	KW_REG	/;"	d
+KW_REGEQU	rmac/kwtab.h	/^#define	KW_REGEQU	/;"	d
+KW_SET	rmac/kwtab.h	/^#define	KW_SET	/;"	d
+KW_SFC	rmac/kwtab.h	/^#define	KW_SFC	/;"	d
+KW_SP	rmac/kwtab.h	/^#define	KW_SP	/;"	d
+KW_SR	rmac/kwtab.h	/^#define	KW_SR	/;"	d
+KW_SRP	rmac/kwtab.h	/^#define	KW_SRP	/;"	d
+KW_SS	rmac/kwtab.h	/^#define	KW_SS	/;"	d
+KW_SSH	rmac/kwtab.h	/^#define	KW_SSH	/;"	d
+KW_SSL	rmac/kwtab.h	/^#define	KW_SSL	/;"	d
+KW_SSP	rmac/kwtab.h	/^#define	KW_SSP	/;"	d
+KW_STREQ	rmac/kwtab.h	/^#define	KW_STREQ	/;"	d
+KW_TC	rmac/kwtab.h	/^#define	KW_TC	/;"	d
+KW_TIME	rmac/kwtab.h	/^#define	KW_TIME	/;"	d
+KW_TT0	rmac/kwtab.h	/^#define	KW_TT0	/;"	d
+KW_TT1	rmac/kwtab.h	/^#define	KW_TT1	/;"	d
+KW_URP	rmac/kwtab.h	/^#define	KW_URP	/;"	d
+KW_USP	rmac/kwtab.h	/^#define	KW_USP	/;"	d
+KW_VBR	rmac/kwtab.h	/^#define	KW_VBR	/;"	d
+KW_X	rmac/kwtab.h	/^#define	KW_X	/;"	d
+KW_X0	rmac/kwtab.h	/^#define	KW_X0	/;"	d
+KW_X1	rmac/kwtab.h	/^#define	KW_X1	/;"	d
+KW_Y	rmac/kwtab.h	/^#define	KW_Y	/;"	d
+KW_Y0	rmac/kwtab.h	/^#define	KW_Y0	/;"	d
+KW_Y1	rmac/kwtab.h	/^#define	KW_Y1	/;"	d
+KW__CCDEF	rmac/kwtab.h	/^#define	KW__CCDEF	/;"	d
+KW__EQU	rmac/kwtab.h	/^#define	KW__EQU	/;"	d
+KW__EQUR	rmac/kwtab.h	/^#define	KW__EQUR	/;"	d
+KW__REG	rmac/kwtab.h	/^#define	KW__REG	/;"	d
+KW__REGEQU	rmac/kwtab.h	/^#define	KW__REGEQU	/;"	d
+LABEL	rmac/rmac.h	/^#define LABEL /;"	d
+LE	rmac/token.h	/^#define LE /;"	d
+LLIST	rmac/symbol.h	/^#define LLIST /;"	d
+LNBUFSIZ	rmac/token.h	/^#define LNBUFSIZ /;"	d
+LNCatch	rmac/macro.c	/^static int LNCatch(int (* lnfunc)(), char * dirlist)$/;"	f	file:
+LNSIZ	rmac/token.h	/^#define LNSIZ /;"	d
+LN_COL	rmac/listing.h	/^#define LN_COL /;"	d
+LOC_COL	rmac/listing.h	/^#define LOC_COL /;"	d
+LOD	rmac/rmac.h	/^LOD,				\/\/ DSP 56001 object format$/;"	e	enum:__anon1
+LONG	rmac/rmac.h	/^#define LONG /;"	d
+L_ERRORS	rmac/dsp56k_amode.c	/^#define L_ERRORS /;"	d	file:
+M56001L	rmac/rmac.h	/^#define M56001L /;"	d
+M56001P	rmac/rmac.h	/^#define M56001P /;"	d
+M56001X	rmac/rmac.h	/^#define M56001X /;"	d
+M56001Y	rmac/rmac.h	/^#define M56001Y /;"	d
+M56KPXYL	rmac/rmac.h	/^#define M56KPXYL /;"	d
+M6502	rmac/rmac.h	/^#define M6502 /;"	d
+MACARG	rmac/rmac.h	/^#define MACARG /;"	d
+MACRO	rmac/rmac.h	/^#define MACRO /;"	d
+MAJOR	rmac/version.h	/^#define MAJOR /;"	d
+MALF_EXPR	rmac/riscasm.c	/^#define MALF_EXPR	/;"	d	file:
+MALF_LPAREN	rmac/riscasm.c	/^#define MALF_LPAREN	/;"	d	file:
+MALF_NUM	rmac/riscasm.c	/^#define MALF_NUM	/;"	d	file:
+MALF_RPAREN	rmac/riscasm.c	/^#define MALF_RPAREN	/;"	d	file:
+MARKED	rmac/kwgen.c	/^#define MARKED	/;"	d	file:
+MARK_ALLOC_INCR	rmac/mark.c	/^#define MARK_ALLOC_INCR /;"	d	file:
+MAXARGV	rmac/rmac.h	/^#define MAXARGV /;"	d
+MAXINTERNCC	rmac/riscasm.c	/^#define MAXINTERNCC /;"	d	file:
+MCHEND	rmac/mark.h	/^#define MCHEND /;"	d
+MCHFROM	rmac/mark.h	/^#define MCHFROM /;"	d
+MCHUNK	rmac/mark.h	/^#define MCHUNK /;"	d
+MEMPOST	rmac/amode.h	/^#define MEMPOST /;"	d
+MEMPRE	rmac/amode.h	/^#define MEMPRE /;"	d
+MEMTYPES	rmac/dsp56k.h	/^enum MEMTYPES$/;"	g
+MGLOBAL	rmac/mark.h	/^#define MGLOBAL /;"	d
+MINOR	rmac/version.h	/^#define MINOR /;"	d
+MIN_MARK_MEM	rmac/mark.c	/^#define MIN_MARK_MEM /;"	d	file:
+MLONG	rmac/mark.h	/^#define MLONG /;"	d
+MMOVEI	rmac/mark.h	/^#define MMOVEI /;"	d
+MNTAB	rmac/mach.h	/^#define MNTAB /;"	d
+MNTABDSP	rmac/dsp56k_amode.h	/^#define MNTABDSP /;"	d
+MN_ABCD	rmac/mntab.h	/^#define	MN_ABCD	/;"	d
+MN_ADD	rmac/mntab.h	/^#define	MN_ADD	/;"	d
+MN_ADDA	rmac/mntab.h	/^#define	MN_ADDA	/;"	d
+MN_ADDI	rmac/mntab.h	/^#define	MN_ADDI	/;"	d
+MN_ADDQ	rmac/mntab.h	/^#define	MN_ADDQ	/;"	d
+MN_ADDX	rmac/mntab.h	/^#define	MN_ADDX	/;"	d
+MN_AND	rmac/mntab.h	/^#define	MN_AND	/;"	d
+MN_ANDI	rmac/mntab.h	/^#define	MN_ANDI	/;"	d
+MN_ASL	rmac/mntab.h	/^#define	MN_ASL	/;"	d
+MN_ASR	rmac/mntab.h	/^#define	MN_ASR	/;"	d
+MN_ASSERT	rmac/mntab.h	/^#define	MN_ASSERT	/;"	d
+MN_BCC	rmac/mntab.h	/^#define	MN_BCC	/;"	d
+MN_BCHG	rmac/mntab.h	/^#define	MN_BCHG	/;"	d
+MN_BCLR	rmac/mntab.h	/^#define	MN_BCLR	/;"	d
+MN_BCS	rmac/mntab.h	/^#define	MN_BCS	/;"	d
+MN_BEQ	rmac/mntab.h	/^#define	MN_BEQ	/;"	d
+MN_BFCHG	rmac/mntab.h	/^#define	MN_BFCHG	/;"	d
+MN_BFCLR	rmac/mntab.h	/^#define	MN_BFCLR	/;"	d
+MN_BFEXTS	rmac/mntab.h	/^#define	MN_BFEXTS	/;"	d
+MN_BFEXTU	rmac/mntab.h	/^#define	MN_BFEXTU	/;"	d
+MN_BFFFO	rmac/mntab.h	/^#define	MN_BFFFO	/;"	d
+MN_BFINS	rmac/mntab.h	/^#define	MN_BFINS	/;"	d
+MN_BFSET	rmac/mntab.h	/^#define	MN_BFSET	/;"	d
+MN_BFTST	rmac/mntab.h	/^#define	MN_BFTST	/;"	d
+MN_BGE	rmac/mntab.h	/^#define	MN_BGE	/;"	d
+MN_BGT	rmac/mntab.h	/^#define	MN_BGT	/;"	d
+MN_BHI	rmac/mntab.h	/^#define	MN_BHI	/;"	d
+MN_BHS	rmac/mntab.h	/^#define	MN_BHS	/;"	d
+MN_BKPT	rmac/mntab.h	/^#define	MN_BKPT	/;"	d
+MN_BLE	rmac/mntab.h	/^#define	MN_BLE	/;"	d
+MN_BLO	rmac/mntab.h	/^#define	MN_BLO	/;"	d
+MN_BLS	rmac/mntab.h	/^#define	MN_BLS	/;"	d
+MN_BLT	rmac/mntab.h	/^#define	MN_BLT	/;"	d
+MN_BMI	rmac/mntab.h	/^#define	MN_BMI	/;"	d
+MN_BNE	rmac/mntab.h	/^#define	MN_BNE	/;"	d
+MN_BNZ	rmac/mntab.h	/^#define	MN_BNZ	/;"	d
+MN_BPL	rmac/mntab.h	/^#define	MN_BPL	/;"	d
+MN_BRA	rmac/mntab.h	/^#define	MN_BRA	/;"	d
+MN_BSET	rmac/mntab.h	/^#define	MN_BSET	/;"	d
+MN_BSR	rmac/mntab.h	/^#define	MN_BSR	/;"	d
+MN_BSS	rmac/mntab.h	/^#define	MN_BSS	/;"	d
+MN_BT	rmac/mntab.h	/^#define	MN_BT	/;"	d
+MN_BTST	rmac/mntab.h	/^#define	MN_BTST	/;"	d
+MN_BVC	rmac/mntab.h	/^#define	MN_BVC	/;"	d
+MN_BVS	rmac/mntab.h	/^#define	MN_BVS	/;"	d
+MN_BZ	rmac/mntab.h	/^#define	MN_BZ	/;"	d
+MN_BZE	rmac/mntab.h	/^#define	MN_BZE	/;"	d
+MN_CALLM	rmac/mntab.h	/^#define	MN_CALLM	/;"	d
+MN_CARGS	rmac/mntab.h	/^#define	MN_CARGS	/;"	d
+MN_CAS	rmac/mntab.h	/^#define	MN_CAS	/;"	d
+MN_CAS2	rmac/mntab.h	/^#define	MN_CAS2	/;"	d
+MN_CCUNDEF	rmac/mntab.h	/^#define	MN_CCUNDEF	/;"	d
+MN_CHK	rmac/mntab.h	/^#define	MN_CHK	/;"	d
+MN_CHK2	rmac/mntab.h	/^#define	MN_CHK2	/;"	d
+MN_CINVA	rmac/mntab.h	/^#define	MN_CINVA	/;"	d
+MN_CINVL	rmac/mntab.h	/^#define	MN_CINVL	/;"	d
+MN_CINVP	rmac/mntab.h	/^#define	MN_CINVP	/;"	d
+MN_CLR	rmac/mntab.h	/^#define	MN_CLR	/;"	d
+MN_CMP	rmac/mntab.h	/^#define	MN_CMP	/;"	d
+MN_CMP2	rmac/mntab.h	/^#define	MN_CMP2	/;"	d
+MN_CMPA	rmac/mntab.h	/^#define	MN_CMPA	/;"	d
+MN_CMPI	rmac/mntab.h	/^#define	MN_CMPI	/;"	d
+MN_CMPM	rmac/mntab.h	/^#define	MN_CMPM	/;"	d
+MN_COMM	rmac/mntab.h	/^#define	MN_COMM	/;"	d
+MN_CPBEQ	rmac/mntab.h	/^#define	MN_CPBEQ	/;"	d
+MN_CPBF	rmac/mntab.h	/^#define	MN_CPBF	/;"	d
+MN_CPBGE	rmac/mntab.h	/^#define	MN_CPBGE	/;"	d
+MN_CPBGL	rmac/mntab.h	/^#define	MN_CPBGL	/;"	d
+MN_CPBGLE	rmac/mntab.h	/^#define	MN_CPBGLE	/;"	d
+MN_CPBGT	rmac/mntab.h	/^#define	MN_CPBGT	/;"	d
+MN_CPBLE	rmac/mntab.h	/^#define	MN_CPBLE	/;"	d
+MN_CPBLT	rmac/mntab.h	/^#define	MN_CPBLT	/;"	d
+MN_CPBNE	rmac/mntab.h	/^#define	MN_CPBNE	/;"	d
+MN_CPBNGE	rmac/mntab.h	/^#define	MN_CPBNGE	/;"	d
+MN_CPBNGL	rmac/mntab.h	/^#define	MN_CPBNGL	/;"	d
+MN_CPBNGLE	rmac/mntab.h	/^#define	MN_CPBNGLE	/;"	d
+MN_CPBNGT	rmac/mntab.h	/^#define	MN_CPBNGT	/;"	d
+MN_CPBNLE	rmac/mntab.h	/^#define	MN_CPBNLE	/;"	d
+MN_CPBNZ	rmac/mntab.h	/^#define	MN_CPBNZ	/;"	d
+MN_CPBOGE	rmac/mntab.h	/^#define	MN_CPBOGE	/;"	d
+MN_CPBOGL	rmac/mntab.h	/^#define	MN_CPBOGL	/;"	d
+MN_CPBOGT	rmac/mntab.h	/^#define	MN_CPBOGT	/;"	d
+MN_CPBOLE	rmac/mntab.h	/^#define	MN_CPBOLE	/;"	d
+MN_CPBOLT	rmac/mntab.h	/^#define	MN_CPBOLT	/;"	d
+MN_CPBOR	rmac/mntab.h	/^#define	MN_CPBOR	/;"	d
+MN_CPBRA	rmac/mntab.h	/^#define	MN_CPBRA	/;"	d
+MN_CPBSEQ	rmac/mntab.h	/^#define	MN_CPBSEQ	/;"	d
+MN_CPBSF	rmac/mntab.h	/^#define	MN_CPBSF	/;"	d
+MN_CPBSNE	rmac/mntab.h	/^#define	MN_CPBSNE	/;"	d
+MN_CPBST	rmac/mntab.h	/^#define	MN_CPBST	/;"	d
+MN_CPBT	rmac/mntab.h	/^#define	MN_CPBT	/;"	d
+MN_CPBUEQ	rmac/mntab.h	/^#define	MN_CPBUEQ	/;"	d
+MN_CPBUGE	rmac/mntab.h	/^#define	MN_CPBUGE	/;"	d
+MN_CPBUGT	rmac/mntab.h	/^#define	MN_CPBUGT	/;"	d
+MN_CPBULE	rmac/mntab.h	/^#define	MN_CPBULE	/;"	d
+MN_CPBULT	rmac/mntab.h	/^#define	MN_CPBULT	/;"	d
+MN_CPBUN	rmac/mntab.h	/^#define	MN_CPBUN	/;"	d
+MN_CPBZ	rmac/mntab.h	/^#define	MN_CPBZ	/;"	d
+MN_CPBZE	rmac/mntab.h	/^#define	MN_CPBZE	/;"	d
+MN_CPDBEQ	rmac/mntab.h	/^#define	MN_CPDBEQ	/;"	d
+MN_CPDBF	rmac/mntab.h	/^#define	MN_CPDBF	/;"	d
+MN_CPDBGE	rmac/mntab.h	/^#define	MN_CPDBGE	/;"	d
+MN_CPDBGL	rmac/mntab.h	/^#define	MN_CPDBGL	/;"	d
+MN_CPDBGLE	rmac/mntab.h	/^#define	MN_CPDBGLE	/;"	d
+MN_CPDBGT	rmac/mntab.h	/^#define	MN_CPDBGT	/;"	d
+MN_CPDBLE	rmac/mntab.h	/^#define	MN_CPDBLE	/;"	d
+MN_CPDBLT	rmac/mntab.h	/^#define	MN_CPDBLT	/;"	d
+MN_CPDBNE	rmac/mntab.h	/^#define	MN_CPDBNE	/;"	d
+MN_CPDBNGE	rmac/mntab.h	/^#define	MN_CPDBNGE	/;"	d
+MN_CPDBNGL	rmac/mntab.h	/^#define	MN_CPDBNGL	/;"	d
+MN_CPDBNGLE	rmac/mntab.h	/^#define	MN_CPDBNGLE	/;"	d
+MN_CPDBNGT	rmac/mntab.h	/^#define	MN_CPDBNGT	/;"	d
+MN_CPDBNLE	rmac/mntab.h	/^#define	MN_CPDBNLE	/;"	d
+MN_CPDBNZ	rmac/mntab.h	/^#define	MN_CPDBNZ	/;"	d
+MN_CPDBOGE	rmac/mntab.h	/^#define	MN_CPDBOGE	/;"	d
+MN_CPDBOGL	rmac/mntab.h	/^#define	MN_CPDBOGL	/;"	d
+MN_CPDBOGT	rmac/mntab.h	/^#define	MN_CPDBOGT	/;"	d
+MN_CPDBOLE	rmac/mntab.h	/^#define	MN_CPDBOLE	/;"	d
+MN_CPDBOLT	rmac/mntab.h	/^#define	MN_CPDBOLT	/;"	d
+MN_CPDBOR	rmac/mntab.h	/^#define	MN_CPDBOR	/;"	d
+MN_CPDBRA	rmac/mntab.h	/^#define	MN_CPDBRA	/;"	d
+MN_CPDBSEQ	rmac/mntab.h	/^#define	MN_CPDBSEQ	/;"	d
+MN_CPDBSF	rmac/mntab.h	/^#define	MN_CPDBSF	/;"	d
+MN_CPDBSNE	rmac/mntab.h	/^#define	MN_CPDBSNE	/;"	d
+MN_CPDBST	rmac/mntab.h	/^#define	MN_CPDBST	/;"	d
+MN_CPDBT	rmac/mntab.h	/^#define	MN_CPDBT	/;"	d
+MN_CPDBUEQ	rmac/mntab.h	/^#define	MN_CPDBUEQ	/;"	d
+MN_CPDBUGE	rmac/mntab.h	/^#define	MN_CPDBUGE	/;"	d
+MN_CPDBUGT	rmac/mntab.h	/^#define	MN_CPDBUGT	/;"	d
+MN_CPDBULE	rmac/mntab.h	/^#define	MN_CPDBULE	/;"	d
+MN_CPDBULT	rmac/mntab.h	/^#define	MN_CPDBULT	/;"	d
+MN_CPDBUN	rmac/mntab.h	/^#define	MN_CPDBUN	/;"	d
+MN_CPDBZ	rmac/mntab.h	/^#define	MN_CPDBZ	/;"	d
+MN_CPDBZE	rmac/mntab.h	/^#define	MN_CPDBZE	/;"	d
+MN_CPRESTORE	rmac/mntab.h	/^#define	MN_CPRESTORE	/;"	d
+MN_CPSAC	rmac/mntab.h	/^#define	MN_CPSAC	/;"	d
+MN_CPSAS	rmac/mntab.h	/^#define	MN_CPSAS	/;"	d
+MN_CPSAVE	rmac/mntab.h	/^#define	MN_CPSAVE	/;"	d
+MN_CPSBC	rmac/mntab.h	/^#define	MN_CPSBC	/;"	d
+MN_CPSBS	rmac/mntab.h	/^#define	MN_CPSBS	/;"	d
+MN_CPSCC	rmac/mntab.h	/^#define	MN_CPSCC	/;"	d
+MN_CPSCS	rmac/mntab.h	/^#define	MN_CPSCS	/;"	d
+MN_CPSGC	rmac/mntab.h	/^#define	MN_CPSGC	/;"	d
+MN_CPSGS	rmac/mntab.h	/^#define	MN_CPSGS	/;"	d
+MN_CPSIC	rmac/mntab.h	/^#define	MN_CPSIC	/;"	d
+MN_CPSIS	rmac/mntab.h	/^#define	MN_CPSIS	/;"	d
+MN_CPSLC	rmac/mntab.h	/^#define	MN_CPSLC	/;"	d
+MN_CPSLS	rmac/mntab.h	/^#define	MN_CPSLS	/;"	d
+MN_CPSSC	rmac/mntab.h	/^#define	MN_CPSSC	/;"	d
+MN_CPSSS	rmac/mntab.h	/^#define	MN_CPSSS	/;"	d
+MN_CPSWC	rmac/mntab.h	/^#define	MN_CPSWC	/;"	d
+MN_CPSWS	rmac/mntab.h	/^#define	MN_CPSWS	/;"	d
+MN_CPUSHA	rmac/mntab.h	/^#define	MN_CPUSHA	/;"	d
+MN_CPUSHL	rmac/mntab.h	/^#define	MN_CPUSHL	/;"	d
+MN_CPUSHP	rmac/mntab.h	/^#define	MN_CPUSHP	/;"	d
+MN_CSTRUCT	rmac/mntab.h	/^#define	MN_CSTRUCT	/;"	d
+MN_DATA	rmac/mntab.h	/^#define	MN_DATA	/;"	d
+MN_DBCC	rmac/mntab.h	/^#define	MN_DBCC	/;"	d
+MN_DBCS	rmac/mntab.h	/^#define	MN_DBCS	/;"	d
+MN_DBEQ	rmac/mntab.h	/^#define	MN_DBEQ	/;"	d
+MN_DBF	rmac/mntab.h	/^#define	MN_DBF	/;"	d
+MN_DBGE	rmac/mntab.h	/^#define	MN_DBGE	/;"	d
+MN_DBGT	rmac/mntab.h	/^#define	MN_DBGT	/;"	d
+MN_DBHI	rmac/mntab.h	/^#define	MN_DBHI	/;"	d
+MN_DBHS	rmac/mntab.h	/^#define	MN_DBHS	/;"	d
+MN_DBLE	rmac/mntab.h	/^#define	MN_DBLE	/;"	d
+MN_DBLO	rmac/mntab.h	/^#define	MN_DBLO	/;"	d
+MN_DBLS	rmac/mntab.h	/^#define	MN_DBLS	/;"	d
+MN_DBLT	rmac/mntab.h	/^#define	MN_DBLT	/;"	d
+MN_DBMI	rmac/mntab.h	/^#define	MN_DBMI	/;"	d
+MN_DBNE	rmac/mntab.h	/^#define	MN_DBNE	/;"	d
+MN_DBNZ	rmac/mntab.h	/^#define	MN_DBNZ	/;"	d
+MN_DBPL	rmac/mntab.h	/^#define	MN_DBPL	/;"	d
+MN_DBRA	rmac/mntab.h	/^#define	MN_DBRA	/;"	d
+MN_DBT	rmac/mntab.h	/^#define	MN_DBT	/;"	d
+MN_DBVC	rmac/mntab.h	/^#define	MN_DBVC	/;"	d
+MN_DBVS	rmac/mntab.h	/^#define	MN_DBVS	/;"	d
+MN_DBZE	rmac/mntab.h	/^#define	MN_DBZE	/;"	d
+MN_DC	rmac/mntab.h	/^#define	MN_DC	/;"	d
+MN_DCB	rmac/mntab.h	/^#define	MN_DCB	/;"	d
+MN_DISABLE	rmac/mntab.h	/^#define	MN_DISABLE	/;"	d
+MN_DIVS	rmac/mntab.h	/^#define	MN_DIVS	/;"	d
+MN_DIVSL	rmac/mntab.h	/^#define	MN_DIVSL	/;"	d
+MN_DIVU	rmac/mntab.h	/^#define	MN_DIVU	/;"	d
+MN_DIVUL	rmac/mntab.h	/^#define	MN_DIVUL	/;"	d
+MN_DPHRASE	rmac/mntab.h	/^#define	MN_DPHRASE	/;"	d
+MN_DS	rmac/mntab.h	/^#define	MN_DS	/;"	d
+MN_DSM	rmac/mntab.h	/^#define	MN_DSM	/;"	d
+MN_DUMP	rmac/mntab.h	/^#define	MN_DUMP	/;"	d
+MN_EJECT	rmac/mntab.h	/^#define	MN_EJECT	/;"	d
+MN_ELSE	rmac/mntab.h	/^#define	MN_ELSE	/;"	d
+MN_ENABLE	rmac/mntab.h	/^#define	MN_ENABLE	/;"	d
+MN_END	rmac/mntab.h	/^#define	MN_END	/;"	d
+MN_ENDC	rmac/mntab.h	/^#define	MN_ENDC	/;"	d
+MN_ENDIF	rmac/mntab.h	/^#define	MN_ENDIF	/;"	d
+MN_ENDM	rmac/mntab.h	/^#define	MN_ENDM	/;"	d
+MN_ENDR	rmac/mntab.h	/^#define	MN_ENDR	/;"	d
+MN_EOR	rmac/mntab.h	/^#define	MN_EOR	/;"	d
+MN_EORI	rmac/mntab.h	/^#define	MN_EORI	/;"	d
+MN_EQU	rmac/mntab.h	/^#define	MN_EQU	/;"	d
+MN_EQURUNDEF	rmac/mntab.h	/^#define	MN_EQURUNDEF	/;"	d
+MN_ERROR	rmac/mntab.h	/^#define	MN_ERROR	/;"	d
+MN_EVEN	rmac/mntab.h	/^#define	MN_EVEN	/;"	d
+MN_EXG	rmac/mntab.h	/^#define	MN_EXG	/;"	d
+MN_EXITM	rmac/mntab.h	/^#define	MN_EXITM	/;"	d
+MN_EXT	rmac/mntab.h	/^#define	MN_EXT	/;"	d
+MN_EXTB	rmac/mntab.h	/^#define	MN_EXTB	/;"	d
+MN_EXTERN	rmac/mntab.h	/^#define	MN_EXTERN	/;"	d
+MN_FABS	rmac/mntab.h	/^#define	MN_FABS	/;"	d
+MN_FACOS	rmac/mntab.h	/^#define	MN_FACOS	/;"	d
+MN_FADD	rmac/mntab.h	/^#define	MN_FADD	/;"	d
+MN_FASIN	rmac/mntab.h	/^#define	MN_FASIN	/;"	d
+MN_FATAN	rmac/mntab.h	/^#define	MN_FATAN	/;"	d
+MN_FATANH	rmac/mntab.h	/^#define	MN_FATANH	/;"	d
+MN_FBEQ	rmac/mntab.h	/^#define	MN_FBEQ	/;"	d
+MN_FBF	rmac/mntab.h	/^#define	MN_FBF	/;"	d
+MN_FBGE	rmac/mntab.h	/^#define	MN_FBGE	/;"	d
+MN_FBGL	rmac/mntab.h	/^#define	MN_FBGL	/;"	d
+MN_FBGLE	rmac/mntab.h	/^#define	MN_FBGLE	/;"	d
+MN_FBGT	rmac/mntab.h	/^#define	MN_FBGT	/;"	d
+MN_FBLE	rmac/mntab.h	/^#define	MN_FBLE	/;"	d
+MN_FBLT	rmac/mntab.h	/^#define	MN_FBLT	/;"	d
+MN_FBNE	rmac/mntab.h	/^#define	MN_FBNE	/;"	d
+MN_FBNGE	rmac/mntab.h	/^#define	MN_FBNGE	/;"	d
+MN_FBNGL	rmac/mntab.h	/^#define	MN_FBNGL	/;"	d
+MN_FBNGLE	rmac/mntab.h	/^#define	MN_FBNGLE	/;"	d
+MN_FBNGT	rmac/mntab.h	/^#define	MN_FBNGT	/;"	d
+MN_FBNLE	rmac/mntab.h	/^#define	MN_FBNLE	/;"	d
+MN_FBNLT	rmac/mntab.h	/^#define	MN_FBNLT	/;"	d
+MN_FBNZ	rmac/mntab.h	/^#define	MN_FBNZ	/;"	d
+MN_FBOGE	rmac/mntab.h	/^#define	MN_FBOGE	/;"	d
+MN_FBOGL	rmac/mntab.h	/^#define	MN_FBOGL	/;"	d
+MN_FBOGT	rmac/mntab.h	/^#define	MN_FBOGT	/;"	d
+MN_FBOLE	rmac/mntab.h	/^#define	MN_FBOLE	/;"	d
+MN_FBOLT	rmac/mntab.h	/^#define	MN_FBOLT	/;"	d
+MN_FBOR	rmac/mntab.h	/^#define	MN_FBOR	/;"	d
+MN_FBRA	rmac/mntab.h	/^#define	MN_FBRA	/;"	d
+MN_FBSEQ	rmac/mntab.h	/^#define	MN_FBSEQ	/;"	d
+MN_FBSF	rmac/mntab.h	/^#define	MN_FBSF	/;"	d
+MN_FBSNE	rmac/mntab.h	/^#define	MN_FBSNE	/;"	d
+MN_FBST	rmac/mntab.h	/^#define	MN_FBST	/;"	d
+MN_FBT	rmac/mntab.h	/^#define	MN_FBT	/;"	d
+MN_FBUEQ	rmac/mntab.h	/^#define	MN_FBUEQ	/;"	d
+MN_FBUGE	rmac/mntab.h	/^#define	MN_FBUGE	/;"	d
+MN_FBUGT	rmac/mntab.h	/^#define	MN_FBUGT	/;"	d
+MN_FBULE	rmac/mntab.h	/^#define	MN_FBULE	/;"	d
+MN_FBULT	rmac/mntab.h	/^#define	MN_FBULT	/;"	d
+MN_FBUN	rmac/mntab.h	/^#define	MN_FBUN	/;"	d
+MN_FBZ	rmac/mntab.h	/^#define	MN_FBZ	/;"	d
+MN_FBZE	rmac/mntab.h	/^#define	MN_FBZE	/;"	d
+MN_FCMP	rmac/mntab.h	/^#define	MN_FCMP	/;"	d
+MN_FCOS	rmac/mntab.h	/^#define	MN_FCOS	/;"	d
+MN_FCOSH	rmac/mntab.h	/^#define	MN_FCOSH	/;"	d
+MN_FDABS	rmac/mntab.h	/^#define	MN_FDABS	/;"	d
+MN_FDADD	rmac/mntab.h	/^#define	MN_FDADD	/;"	d
+MN_FDBEQ	rmac/mntab.h	/^#define	MN_FDBEQ	/;"	d
+MN_FDBF	rmac/mntab.h	/^#define	MN_FDBF	/;"	d
+MN_FDBGE	rmac/mntab.h	/^#define	MN_FDBGE	/;"	d
+MN_FDBGL	rmac/mntab.h	/^#define	MN_FDBGL	/;"	d
+MN_FDBGLE	rmac/mntab.h	/^#define	MN_FDBGLE	/;"	d
+MN_FDBGT	rmac/mntab.h	/^#define	MN_FDBGT	/;"	d
+MN_FDBLE	rmac/mntab.h	/^#define	MN_FDBLE	/;"	d
+MN_FDBLT	rmac/mntab.h	/^#define	MN_FDBLT	/;"	d
+MN_FDBNE	rmac/mntab.h	/^#define	MN_FDBNE	/;"	d
+MN_FDBNGE	rmac/mntab.h	/^#define	MN_FDBNGE	/;"	d
+MN_FDBNGL	rmac/mntab.h	/^#define	MN_FDBNGL	/;"	d
+MN_FDBNGLE	rmac/mntab.h	/^#define	MN_FDBNGLE	/;"	d
+MN_FDBNGT	rmac/mntab.h	/^#define	MN_FDBNGT	/;"	d
+MN_FDBNLE	rmac/mntab.h	/^#define	MN_FDBNLE	/;"	d
+MN_FDBNLT	rmac/mntab.h	/^#define	MN_FDBNLT	/;"	d
+MN_FDBNZ	rmac/mntab.h	/^#define	MN_FDBNZ	/;"	d
+MN_FDBOGE	rmac/mntab.h	/^#define	MN_FDBOGE	/;"	d
+MN_FDBOGL	rmac/mntab.h	/^#define	MN_FDBOGL	/;"	d
+MN_FDBOGT	rmac/mntab.h	/^#define	MN_FDBOGT	/;"	d
+MN_FDBOLE	rmac/mntab.h	/^#define	MN_FDBOLE	/;"	d
+MN_FDBOLT	rmac/mntab.h	/^#define	MN_FDBOLT	/;"	d
+MN_FDBOR	rmac/mntab.h	/^#define	MN_FDBOR	/;"	d
+MN_FDBRA	rmac/mntab.h	/^#define	MN_FDBRA	/;"	d
+MN_FDBSEQ	rmac/mntab.h	/^#define	MN_FDBSEQ	/;"	d
+MN_FDBSF	rmac/mntab.h	/^#define	MN_FDBSF	/;"	d
+MN_FDBSNE	rmac/mntab.h	/^#define	MN_FDBSNE	/;"	d
+MN_FDBST	rmac/mntab.h	/^#define	MN_FDBST	/;"	d
+MN_FDBT	rmac/mntab.h	/^#define	MN_FDBT	/;"	d
+MN_FDBUEQ	rmac/mntab.h	/^#define	MN_FDBUEQ	/;"	d
+MN_FDBUGE	rmac/mntab.h	/^#define	MN_FDBUGE	/;"	d
+MN_FDBUGT	rmac/mntab.h	/^#define	MN_FDBUGT	/;"	d
+MN_FDBULE	rmac/mntab.h	/^#define	MN_FDBULE	/;"	d
+MN_FDBULT	rmac/mntab.h	/^#define	MN_FDBULT	/;"	d
+MN_FDBUN	rmac/mntab.h	/^#define	MN_FDBUN	/;"	d
+MN_FDBZ	rmac/mntab.h	/^#define	MN_FDBZ	/;"	d
+MN_FDBZE	rmac/mntab.h	/^#define	MN_FDBZE	/;"	d
+MN_FDDIV	rmac/mntab.h	/^#define	MN_FDDIV	/;"	d
+MN_FDIV	rmac/mntab.h	/^#define	MN_FDIV	/;"	d
+MN_FDMOVE	rmac/mntab.h	/^#define	MN_FDMOVE	/;"	d
+MN_FDMUL	rmac/mntab.h	/^#define	MN_FDMUL	/;"	d
+MN_FDNEG	rmac/mntab.h	/^#define	MN_FDNEG	/;"	d
+MN_FDSQRT	rmac/mntab.h	/^#define	MN_FDSQRT	/;"	d
+MN_FDSUB	rmac/mntab.h	/^#define	MN_FDSUB	/;"	d
+MN_FETOX	rmac/mntab.h	/^#define	MN_FETOX	/;"	d
+MN_FETOXM1	rmac/mntab.h	/^#define	MN_FETOXM1	/;"	d
+MN_FGETEXP	rmac/mntab.h	/^#define	MN_FGETEXP	/;"	d
+MN_FGETMAN	rmac/mntab.h	/^#define	MN_FGETMAN	/;"	d
+MN_FINT	rmac/mntab.h	/^#define	MN_FINT	/;"	d
+MN_FINTRZ	rmac/mntab.h	/^#define	MN_FINTRZ	/;"	d
+MN_FLOG10	rmac/mntab.h	/^#define	MN_FLOG10	/;"	d
+MN_FLOG2	rmac/mntab.h	/^#define	MN_FLOG2	/;"	d
+MN_FLOGN	rmac/mntab.h	/^#define	MN_FLOGN	/;"	d
+MN_FLOGNP1	rmac/mntab.h	/^#define	MN_FLOGNP1	/;"	d
+MN_FMOD	rmac/mntab.h	/^#define	MN_FMOD	/;"	d
+MN_FMOVE	rmac/mntab.h	/^#define	MN_FMOVE	/;"	d
+MN_FMOVECR	rmac/mntab.h	/^#define	MN_FMOVECR	/;"	d
+MN_FMOVEM	rmac/mntab.h	/^#define	MN_FMOVEM	/;"	d
+MN_FMUL	rmac/mntab.h	/^#define	MN_FMUL	/;"	d
+MN_FNEG	rmac/mntab.h	/^#define	MN_FNEG	/;"	d
+MN_FNOP	rmac/mntab.h	/^#define	MN_FNOP	/;"	d
+MN_FREM	rmac/mntab.h	/^#define	MN_FREM	/;"	d
+MN_FRESTORE	rmac/mntab.h	/^#define	MN_FRESTORE	/;"	d
+MN_FSABS	rmac/mntab.h	/^#define	MN_FSABS	/;"	d
+MN_FSADD	rmac/mntab.h	/^#define	MN_FSADD	/;"	d
+MN_FSAVE	rmac/mntab.h	/^#define	MN_FSAVE	/;"	d
+MN_FSCALE	rmac/mntab.h	/^#define	MN_FSCALE	/;"	d
+MN_FSDIV	rmac/mntab.h	/^#define	MN_FSDIV	/;"	d
+MN_FSEQ	rmac/mntab.h	/^#define	MN_FSEQ	/;"	d
+MN_FSF	rmac/mntab.h	/^#define	MN_FSF	/;"	d
+MN_FSGE	rmac/mntab.h	/^#define	MN_FSGE	/;"	d
+MN_FSGL	rmac/mntab.h	/^#define	MN_FSGL	/;"	d
+MN_FSGLDIV	rmac/mntab.h	/^#define	MN_FSGLDIV	/;"	d
+MN_FSGLE	rmac/mntab.h	/^#define	MN_FSGLE	/;"	d
+MN_FSGLMUL	rmac/mntab.h	/^#define	MN_FSGLMUL	/;"	d
+MN_FSGT	rmac/mntab.h	/^#define	MN_FSGT	/;"	d
+MN_FSIN	rmac/mntab.h	/^#define	MN_FSIN	/;"	d
+MN_FSINCOS	rmac/mntab.h	/^#define	MN_FSINCOS	/;"	d
+MN_FSINH	rmac/mntab.h	/^#define	MN_FSINH	/;"	d
+MN_FSLE	rmac/mntab.h	/^#define	MN_FSLE	/;"	d
+MN_FSLT	rmac/mntab.h	/^#define	MN_FSLT	/;"	d
+MN_FSMOVE	rmac/mntab.h	/^#define	MN_FSMOVE	/;"	d
+MN_FSMUL	rmac/mntab.h	/^#define	MN_FSMUL	/;"	d
+MN_FSNE	rmac/mntab.h	/^#define	MN_FSNE	/;"	d
+MN_FSNEG	rmac/mntab.h	/^#define	MN_FSNEG	/;"	d
+MN_FSNGE	rmac/mntab.h	/^#define	MN_FSNGE	/;"	d
+MN_FSNGL	rmac/mntab.h	/^#define	MN_FSNGL	/;"	d
+MN_FSNGLE	rmac/mntab.h	/^#define	MN_FSNGLE	/;"	d
+MN_FSNGT	rmac/mntab.h	/^#define	MN_FSNGT	/;"	d
+MN_FSNLE	rmac/mntab.h	/^#define	MN_FSNLE	/;"	d
+MN_FSNLT	rmac/mntab.h	/^#define	MN_FSNLT	/;"	d
+MN_FSOGE	rmac/mntab.h	/^#define	MN_FSOGE	/;"	d
+MN_FSOGL	rmac/mntab.h	/^#define	MN_FSOGL	/;"	d
+MN_FSOGT	rmac/mntab.h	/^#define	MN_FSOGT	/;"	d
+MN_FSOLE	rmac/mntab.h	/^#define	MN_FSOLE	/;"	d
+MN_FSOLT	rmac/mntab.h	/^#define	MN_FSOLT	/;"	d
+MN_FSOR	rmac/mntab.h	/^#define	MN_FSOR	/;"	d
+MN_FSQRT	rmac/mntab.h	/^#define	MN_FSQRT	/;"	d
+MN_FSSEQ	rmac/mntab.h	/^#define	MN_FSSEQ	/;"	d
+MN_FSSF	rmac/mntab.h	/^#define	MN_FSSF	/;"	d
+MN_FSSNE	rmac/mntab.h	/^#define	MN_FSSNE	/;"	d
+MN_FSSQRT	rmac/mntab.h	/^#define	MN_FSSQRT	/;"	d
+MN_FSST	rmac/mntab.h	/^#define	MN_FSST	/;"	d
+MN_FSSUB	rmac/mntab.h	/^#define	MN_FSSUB	/;"	d
+MN_FST	rmac/mntab.h	/^#define	MN_FST	/;"	d
+MN_FSUB	rmac/mntab.h	/^#define	MN_FSUB	/;"	d
+MN_FSUEQ	rmac/mntab.h	/^#define	MN_FSUEQ	/;"	d
+MN_FSUGE	rmac/mntab.h	/^#define	MN_FSUGE	/;"	d
+MN_FSUGT	rmac/mntab.h	/^#define	MN_FSUGT	/;"	d
+MN_FSULE	rmac/mntab.h	/^#define	MN_FSULE	/;"	d
+MN_FSULT	rmac/mntab.h	/^#define	MN_FSULT	/;"	d
+MN_FSUN	rmac/mntab.h	/^#define	MN_FSUN	/;"	d
+MN_FSZ	rmac/mntab.h	/^#define	MN_FSZ	/;"	d
+MN_FSZE	rmac/mntab.h	/^#define	MN_FSZE	/;"	d
+MN_FTAN	rmac/mntab.h	/^#define	MN_FTAN	/;"	d
+MN_FTANH	rmac/mntab.h	/^#define	MN_FTANH	/;"	d
+MN_FTENTOX	rmac/mntab.h	/^#define	MN_FTENTOX	/;"	d
+MN_FTRAPEQ	rmac/mntab.h	/^#define	MN_FTRAPEQ	/;"	d
+MN_FTRAPF	rmac/mntab.h	/^#define	MN_FTRAPF	/;"	d
+MN_FTRAPGE	rmac/mntab.h	/^#define	MN_FTRAPGE	/;"	d
+MN_FTRAPGL	rmac/mntab.h	/^#define	MN_FTRAPGL	/;"	d
+MN_FTRAPGLE	rmac/mntab.h	/^#define	MN_FTRAPGLE	/;"	d
+MN_FTRAPGT	rmac/mntab.h	/^#define	MN_FTRAPGT	/;"	d
+MN_FTRAPLE	rmac/mntab.h	/^#define	MN_FTRAPLE	/;"	d
+MN_FTRAPLT	rmac/mntab.h	/^#define	MN_FTRAPLT	/;"	d
+MN_FTRAPNE	rmac/mntab.h	/^#define	MN_FTRAPNE	/;"	d
+MN_FTRAPNGE	rmac/mntab.h	/^#define	MN_FTRAPNGE	/;"	d
+MN_FTRAPNGL	rmac/mntab.h	/^#define	MN_FTRAPNGL	/;"	d
+MN_FTRAPNGLE	rmac/mntab.h	/^#define	MN_FTRAPNGLE	/;"	d
+MN_FTRAPNGT	rmac/mntab.h	/^#define	MN_FTRAPNGT	/;"	d
+MN_FTRAPNLE	rmac/mntab.h	/^#define	MN_FTRAPNLE	/;"	d
+MN_FTRAPNLT	rmac/mntab.h	/^#define	MN_FTRAPNLT	/;"	d
+MN_FTRAPOGE	rmac/mntab.h	/^#define	MN_FTRAPOGE	/;"	d
+MN_FTRAPOGL	rmac/mntab.h	/^#define	MN_FTRAPOGL	/;"	d
+MN_FTRAPOGT	rmac/mntab.h	/^#define	MN_FTRAPOGT	/;"	d
+MN_FTRAPOLE	rmac/mntab.h	/^#define	MN_FTRAPOLE	/;"	d
+MN_FTRAPOLT	rmac/mntab.h	/^#define	MN_FTRAPOLT	/;"	d
+MN_FTRAPOR	rmac/mntab.h	/^#define	MN_FTRAPOR	/;"	d
+MN_FTRAPSEQ	rmac/mntab.h	/^#define	MN_FTRAPSEQ	/;"	d
+MN_FTRAPSF	rmac/mntab.h	/^#define	MN_FTRAPSF	/;"	d
+MN_FTRAPSNE	rmac/mntab.h	/^#define	MN_FTRAPSNE	/;"	d
+MN_FTRAPST	rmac/mntab.h	/^#define	MN_FTRAPST	/;"	d
+MN_FTRAPT	rmac/mntab.h	/^#define	MN_FTRAPT	/;"	d
+MN_FTRAPUEQ	rmac/mntab.h	/^#define	MN_FTRAPUEQ	/;"	d
+MN_FTRAPUGE	rmac/mntab.h	/^#define	MN_FTRAPUGE	/;"	d
+MN_FTRAPUGT	rmac/mntab.h	/^#define	MN_FTRAPUGT	/;"	d
+MN_FTRAPULE	rmac/mntab.h	/^#define	MN_FTRAPULE	/;"	d
+MN_FTRAPULT	rmac/mntab.h	/^#define	MN_FTRAPULT	/;"	d
+MN_FTRAPUN	rmac/mntab.h	/^#define	MN_FTRAPUN	/;"	d
+MN_FTRAPZ	rmac/mntab.h	/^#define	MN_FTRAPZ	/;"	d
+MN_FTRAPZE	rmac/mntab.h	/^#define	MN_FTRAPZE	/;"	d
+MN_FTST	rmac/mntab.h	/^#define	MN_FTST	/;"	d
+MN_FTWOTOX	rmac/mntab.h	/^#define	MN_FTWOTOX	/;"	d
+MN_GLOBL	rmac/mntab.h	/^#define	MN_GLOBL	/;"	d
+MN_GOTO	rmac/mntab.h	/^#define	MN_GOTO	/;"	d
+MN_GPUMAIN	rmac/mntab.h	/^#define	MN_GPUMAIN	/;"	d
+MN_IF	rmac/mntab.h	/^#define	MN_IF	/;"	d
+MN_IIF	rmac/mntab.h	/^#define	MN_IIF	/;"	d
+MN_ILLEGAL	rmac/mntab.h	/^#define	MN_ILLEGAL	/;"	d
+MN_INCBIN	rmac/mntab.h	/^#define	MN_INCBIN	/;"	d
+MN_INCLUDE	rmac/mntab.h	/^#define	MN_INCLUDE	/;"	d
+MN_INIT	rmac/mntab.h	/^#define	MN_INIT	/;"	d
+MN_JMP	rmac/mntab.h	/^#define	MN_JMP	/;"	d
+MN_JPAD	rmac/mntab.h	/^#define	MN_JPAD	/;"	d
+MN_JSR	rmac/mntab.h	/^#define	MN_JSR	/;"	d
+MN_LEA	rmac/mntab.h	/^#define	MN_LEA	/;"	d
+MN_LINK	rmac/mntab.h	/^#define	MN_LINK	/;"	d
+MN_LIST	rmac/mntab.h	/^#define	MN_LIST	/;"	d
+MN_LONG	rmac/mntab.h	/^#define	MN_LONG	/;"	d
+MN_LPSTOP	rmac/mntab.h	/^#define	MN_LPSTOP	/;"	d
+MN_LSL	rmac/mntab.h	/^#define	MN_LSL	/;"	d
+MN_LSR	rmac/mntab.h	/^#define	MN_LSR	/;"	d
+MN_MACRO	rmac/mntab.h	/^#define	MN_MACRO	/;"	d
+MN_MACUNDEF	rmac/mntab.h	/^#define	MN_MACUNDEF	/;"	d
+MN_MOVE	rmac/mntab.h	/^#define	MN_MOVE	/;"	d
+MN_MOVE16	rmac/mntab.h	/^#define	MN_MOVE16	/;"	d
+MN_MOVEA	rmac/mntab.h	/^#define	MN_MOVEA	/;"	d
+MN_MOVEC	rmac/mntab.h	/^#define	MN_MOVEC	/;"	d
+MN_MOVEM	rmac/mntab.h	/^#define	MN_MOVEM	/;"	d
+MN_MOVEP	rmac/mntab.h	/^#define	MN_MOVEP	/;"	d
+MN_MOVEQ	rmac/mntab.h	/^#define	MN_MOVEQ	/;"	d
+MN_MOVES	rmac/mntab.h	/^#define	MN_MOVES	/;"	d
+MN_MULS	rmac/mntab.h	/^#define	MN_MULS	/;"	d
+MN_MULU	rmac/mntab.h	/^#define	MN_MULU	/;"	d
+MN_NBCD	rmac/mntab.h	/^#define	MN_NBCD	/;"	d
+MN_NEG	rmac/mntab.h	/^#define	MN_NEG	/;"	d
+MN_NEGX	rmac/mntab.h	/^#define	MN_NEGX	/;"	d
+MN_NLIST	rmac/mntab.h	/^#define	MN_NLIST	/;"	d
+MN_NOCLEAR	rmac/mntab.h	/^#define	MN_NOCLEAR	/;"	d
+MN_NOFPU	rmac/mntab.h	/^#define	MN_NOFPU	/;"	d
+MN_NOJPAD	rmac/mntab.h	/^#define	MN_NOJPAD	/;"	d
+MN_NOLIST	rmac/mntab.h	/^#define	MN_NOLIST	/;"	d
+MN_NOP	rmac/mntab.h	/^#define	MN_NOP	/;"	d
+MN_NOT	rmac/mntab.h	/^#define	MN_NOT	/;"	d
+MN_OFFSET	rmac/mntab.h	/^#define	MN_OFFSET	/;"	d
+MN_OPT	rmac/mntab.h	/^#define	MN_OPT	/;"	d
+MN_OR	rmac/mntab.h	/^#define	MN_OR	/;"	d
+MN_ORG	rmac/mntab.h	/^#define	MN_ORG	/;"	d
+MN_ORI	rmac/mntab.h	/^#define	MN_ORI	/;"	d
+MN_PACK	rmac/mntab.h	/^#define	MN_PACK	/;"	d
+MN_PBAC	rmac/mntab.h	/^#define	MN_PBAC	/;"	d
+MN_PBAS	rmac/mntab.h	/^#define	MN_PBAS	/;"	d
+MN_PBBC	rmac/mntab.h	/^#define	MN_PBBC	/;"	d
+MN_PBBS	rmac/mntab.h	/^#define	MN_PBBS	/;"	d
+MN_PBCC	rmac/mntab.h	/^#define	MN_PBCC	/;"	d
+MN_PBCS	rmac/mntab.h	/^#define	MN_PBCS	/;"	d
+MN_PBGC	rmac/mntab.h	/^#define	MN_PBGC	/;"	d
+MN_PBGS	rmac/mntab.h	/^#define	MN_PBGS	/;"	d
+MN_PBIC	rmac/mntab.h	/^#define	MN_PBIC	/;"	d
+MN_PBIS	rmac/mntab.h	/^#define	MN_PBIS	/;"	d
+MN_PBLC	rmac/mntab.h	/^#define	MN_PBLC	/;"	d
+MN_PBLS	rmac/mntab.h	/^#define	MN_PBLS	/;"	d
+MN_PBSC	rmac/mntab.h	/^#define	MN_PBSC	/;"	d
+MN_PBSS	rmac/mntab.h	/^#define	MN_PBSS	/;"	d
+MN_PBWC	rmac/mntab.h	/^#define	MN_PBWC	/;"	d
+MN_PBWS	rmac/mntab.h	/^#define	MN_PBWS	/;"	d
+MN_PDBAC	rmac/mntab.h	/^#define	MN_PDBAC	/;"	d
+MN_PDBAS	rmac/mntab.h	/^#define	MN_PDBAS	/;"	d
+MN_PDBBC	rmac/mntab.h	/^#define	MN_PDBBC	/;"	d
+MN_PDBBS	rmac/mntab.h	/^#define	MN_PDBBS	/;"	d
+MN_PDBCC	rmac/mntab.h	/^#define	MN_PDBCC	/;"	d
+MN_PDBCS	rmac/mntab.h	/^#define	MN_PDBCS	/;"	d
+MN_PDBGC	rmac/mntab.h	/^#define	MN_PDBGC	/;"	d
+MN_PDBGS	rmac/mntab.h	/^#define	MN_PDBGS	/;"	d
+MN_PDBIC	rmac/mntab.h	/^#define	MN_PDBIC	/;"	d
+MN_PDBIS	rmac/mntab.h	/^#define	MN_PDBIS	/;"	d
+MN_PDBLC	rmac/mntab.h	/^#define	MN_PDBLC	/;"	d
+MN_PDBLS	rmac/mntab.h	/^#define	MN_PDBLS	/;"	d
+MN_PDBSC	rmac/mntab.h	/^#define	MN_PDBSC	/;"	d
+MN_PDBSS	rmac/mntab.h	/^#define	MN_PDBSS	/;"	d
+MN_PDBWC	rmac/mntab.h	/^#define	MN_PDBWC	/;"	d
+MN_PDBWS	rmac/mntab.h	/^#define	MN_PDBWS	/;"	d
+MN_PEA	rmac/mntab.h	/^#define	MN_PEA	/;"	d
+MN_PFLUSH	rmac/mntab.h	/^#define	MN_PFLUSH	/;"	d
+MN_PFLUSHA	rmac/mntab.h	/^#define	MN_PFLUSHA	/;"	d
+MN_PFLUSHAN	rmac/mntab.h	/^#define	MN_PFLUSHAN	/;"	d
+MN_PFLUSHN	rmac/mntab.h	/^#define	MN_PFLUSHN	/;"	d
+MN_PFLUSHR	rmac/mntab.h	/^#define	MN_PFLUSHR	/;"	d
+MN_PHRASE	rmac/mntab.h	/^#define	MN_PHRASE	/;"	d
+MN_PLOADR	rmac/mntab.h	/^#define	MN_PLOADR	/;"	d
+MN_PLOADW	rmac/mntab.h	/^#define	MN_PLOADW	/;"	d
+MN_PLPA	rmac/mntab.h	/^#define	MN_PLPA	/;"	d
+MN_PMOVE	rmac/mntab.h	/^#define	MN_PMOVE	/;"	d
+MN_PMOVEFD	rmac/mntab.h	/^#define	MN_PMOVEFD	/;"	d
+MN_PRESTORE	rmac/mntab.h	/^#define	MN_PRESTORE	/;"	d
+MN_PRGFLAGS	rmac/mntab.h	/^#define	MN_PRGFLAGS	/;"	d
+MN_PRINT	rmac/mntab.h	/^#define	MN_PRINT	/;"	d
+MN_PSAC	rmac/mntab.h	/^#define	MN_PSAC	/;"	d
+MN_PSAS	rmac/mntab.h	/^#define	MN_PSAS	/;"	d
+MN_PSAVE	rmac/mntab.h	/^#define	MN_PSAVE	/;"	d
+MN_PSBC	rmac/mntab.h	/^#define	MN_PSBC	/;"	d
+MN_PSBS	rmac/mntab.h	/^#define	MN_PSBS	/;"	d
+MN_PSCC	rmac/mntab.h	/^#define	MN_PSCC	/;"	d
+MN_PSCS	rmac/mntab.h	/^#define	MN_PSCS	/;"	d
+MN_PSGC	rmac/mntab.h	/^#define	MN_PSGC	/;"	d
+MN_PSGS	rmac/mntab.h	/^#define	MN_PSGS	/;"	d
+MN_PSIC	rmac/mntab.h	/^#define	MN_PSIC	/;"	d
+MN_PSIS	rmac/mntab.h	/^#define	MN_PSIS	/;"	d
+MN_PSLC	rmac/mntab.h	/^#define	MN_PSLC	/;"	d
+MN_PSLS	rmac/mntab.h	/^#define	MN_PSLS	/;"	d
+MN_PSSC	rmac/mntab.h	/^#define	MN_PSSC	/;"	d
+MN_PSSS	rmac/mntab.h	/^#define	MN_PSSS	/;"	d
+MN_PSWC	rmac/mntab.h	/^#define	MN_PSWC	/;"	d
+MN_PSWS	rmac/mntab.h	/^#define	MN_PSWS	/;"	d
+MN_PTESTR	rmac/mntab.h	/^#define	MN_PTESTR	/;"	d
+MN_PTESTW	rmac/mntab.h	/^#define	MN_PTESTW	/;"	d
+MN_PTRAPAC	rmac/mntab.h	/^#define	MN_PTRAPAC	/;"	d
+MN_PTRAPAS	rmac/mntab.h	/^#define	MN_PTRAPAS	/;"	d
+MN_PTRAPBC	rmac/mntab.h	/^#define	MN_PTRAPBC	/;"	d
+MN_PTRAPBS	rmac/mntab.h	/^#define	MN_PTRAPBS	/;"	d
+MN_PTRAPCC	rmac/mntab.h	/^#define	MN_PTRAPCC	/;"	d
+MN_PTRAPCS	rmac/mntab.h	/^#define	MN_PTRAPCS	/;"	d
+MN_PTRAPGC	rmac/mntab.h	/^#define	MN_PTRAPGC	/;"	d
+MN_PTRAPGS	rmac/mntab.h	/^#define	MN_PTRAPGS	/;"	d
+MN_PTRAPIC	rmac/mntab.h	/^#define	MN_PTRAPIC	/;"	d
+MN_PTRAPIS	rmac/mntab.h	/^#define	MN_PTRAPIS	/;"	d
+MN_PTRAPLC	rmac/mntab.h	/^#define	MN_PTRAPLC	/;"	d
+MN_PTRAPLS	rmac/mntab.h	/^#define	MN_PTRAPLS	/;"	d
+MN_PTRAPSC	rmac/mntab.h	/^#define	MN_PTRAPSC	/;"	d
+MN_PTRAPSS	rmac/mntab.h	/^#define	MN_PTRAPSS	/;"	d
+MN_PTRAPWC	rmac/mntab.h	/^#define	MN_PTRAPWC	/;"	d
+MN_PTRAPWS	rmac/mntab.h	/^#define	MN_PTRAPWS	/;"	d
+MN_QPHRASE	rmac/mntab.h	/^#define	MN_QPHRASE	/;"	d
+MN_REGUNDEF	rmac/mntab.h	/^#define	MN_REGUNDEF	/;"	d
+MN_REPT	rmac/mntab.h	/^#define	MN_REPT	/;"	d
+MN_RESET	rmac/mntab.h	/^#define	MN_RESET	/;"	d
+MN_ROL	rmac/mntab.h	/^#define	MN_ROL	/;"	d
+MN_ROR	rmac/mntab.h	/^#define	MN_ROR	/;"	d
+MN_ROXL	rmac/mntab.h	/^#define	MN_ROXL	/;"	d
+MN_ROXR	rmac/mntab.h	/^#define	MN_ROXR	/;"	d
+MN_RTD	rmac/mntab.h	/^#define	MN_RTD	/;"	d
+MN_RTE	rmac/mntab.h	/^#define	MN_RTE	/;"	d
+MN_RTM	rmac/mntab.h	/^#define	MN_RTM	/;"	d
+MN_RTR	rmac/mntab.h	/^#define	MN_RTR	/;"	d
+MN_RTS	rmac/mntab.h	/^#define	MN_RTS	/;"	d
+MN_SBCD	rmac/mntab.h	/^#define	MN_SBCD	/;"	d
+MN_SCC	rmac/mntab.h	/^#define	MN_SCC	/;"	d
+MN_SCS	rmac/mntab.h	/^#define	MN_SCS	/;"	d
+MN_SEQ	rmac/mntab.h	/^#define	MN_SEQ	/;"	d
+MN_SF	rmac/mntab.h	/^#define	MN_SF	/;"	d
+MN_SGE	rmac/mntab.h	/^#define	MN_SGE	/;"	d
+MN_SGT	rmac/mntab.h	/^#define	MN_SGT	/;"	d
+MN_SHI	rmac/mntab.h	/^#define	MN_SHI	/;"	d
+MN_SHS	rmac/mntab.h	/^#define	MN_SHS	/;"	d
+MN_SLE	rmac/mntab.h	/^#define	MN_SLE	/;"	d
+MN_SLO	rmac/mntab.h	/^#define	MN_SLO	/;"	d
+MN_SLS	rmac/mntab.h	/^#define	MN_SLS	/;"	d
+MN_SLT	rmac/mntab.h	/^#define	MN_SLT	/;"	d
+MN_SMI	rmac/mntab.h	/^#define	MN_SMI	/;"	d
+MN_SNE	rmac/mntab.h	/^#define	MN_SNE	/;"	d
+MN_SNZ	rmac/mntab.h	/^#define	MN_SNZ	/;"	d
+MN_SPL	rmac/mntab.h	/^#define	MN_SPL	/;"	d
+MN_ST	rmac/mntab.h	/^#define	MN_ST	/;"	d
+MN_STOP	rmac/mntab.h	/^#define	MN_STOP	/;"	d
+MN_SUB	rmac/mntab.h	/^#define	MN_SUB	/;"	d
+MN_SUBA	rmac/mntab.h	/^#define	MN_SUBA	/;"	d
+MN_SUBI	rmac/mntab.h	/^#define	MN_SUBI	/;"	d
+MN_SUBQ	rmac/mntab.h	/^#define	MN_SUBQ	/;"	d
+MN_SUBTTL	rmac/mntab.h	/^#define	MN_SUBTTL	/;"	d
+MN_SUBX	rmac/mntab.h	/^#define	MN_SUBX	/;"	d
+MN_SVC	rmac/mntab.h	/^#define	MN_SVC	/;"	d
+MN_SVS	rmac/mntab.h	/^#define	MN_SVS	/;"	d
+MN_SWAP	rmac/mntab.h	/^#define	MN_SWAP	/;"	d
+MN_SZE	rmac/mntab.h	/^#define	MN_SZE	/;"	d
+MN_TAS	rmac/mntab.h	/^#define	MN_TAS	/;"	d
+MN_TEXT	rmac/mntab.h	/^#define	MN_TEXT	/;"	d
+MN_TITLE	rmac/mntab.h	/^#define	MN_TITLE	/;"	d
+MN_TRAP	rmac/mntab.h	/^#define	MN_TRAP	/;"	d
+MN_TRAPCC	rmac/mntab.h	/^#define	MN_TRAPCC	/;"	d
+MN_TRAPCS	rmac/mntab.h	/^#define	MN_TRAPCS	/;"	d
+MN_TRAPEQ	rmac/mntab.h	/^#define	MN_TRAPEQ	/;"	d
+MN_TRAPF	rmac/mntab.h	/^#define	MN_TRAPF	/;"	d
+MN_TRAPGE	rmac/mntab.h	/^#define	MN_TRAPGE	/;"	d
+MN_TRAPGT	rmac/mntab.h	/^#define	MN_TRAPGT	/;"	d
+MN_TRAPHI	rmac/mntab.h	/^#define	MN_TRAPHI	/;"	d
+MN_TRAPLE	rmac/mntab.h	/^#define	MN_TRAPLE	/;"	d
+MN_TRAPLO	rmac/mntab.h	/^#define	MN_TRAPLO	/;"	d
+MN_TRAPLS	rmac/mntab.h	/^#define	MN_TRAPLS	/;"	d
+MN_TRAPLT	rmac/mntab.h	/^#define	MN_TRAPLT	/;"	d
+MN_TRAPMI	rmac/mntab.h	/^#define	MN_TRAPMI	/;"	d
+MN_TRAPNE	rmac/mntab.h	/^#define	MN_TRAPNE	/;"	d
+MN_TRAPNZ	rmac/mntab.h	/^#define	MN_TRAPNZ	/;"	d
+MN_TRAPPL	rmac/mntab.h	/^#define	MN_TRAPPL	/;"	d
+MN_TRAPT	rmac/mntab.h	/^#define	MN_TRAPT	/;"	d
+MN_TRAPV	rmac/mntab.h	/^#define	MN_TRAPV	/;"	d
+MN_TRAPVC	rmac/mntab.h	/^#define	MN_TRAPVC	/;"	d
+MN_TRAPVS	rmac/mntab.h	/^#define	MN_TRAPVS	/;"	d
+MN_TRAPZE	rmac/mntab.h	/^#define	MN_TRAPZE	/;"	d
+MN_TST	rmac/mntab.h	/^#define	MN_TST	/;"	d
+MN_UNDEFMAC	rmac/mntab.h	/^#define	MN_UNDEFMAC	/;"	d
+MN_UNLK	rmac/mntab.h	/^#define	MN_UNLK	/;"	d
+MN_UNPK	rmac/mntab.h	/^#define	MN_UNPK	/;"	d
+MN_WARN	rmac/mntab.h	/^#define	MN_WARN	/;"	d
+MN__56001	rmac/mntab.h	/^#define	MN__56001	/;"	d
+MN__6502	rmac/mntab.h	/^#define	MN__6502	/;"	d
+MN__68000	rmac/mntab.h	/^#define	MN__68000	/;"	d
+MN__68020	rmac/mntab.h	/^#define	MN__68020	/;"	d
+MN__68030	rmac/mntab.h	/^#define	MN__68030	/;"	d
+MN__68040	rmac/mntab.h	/^#define	MN__68040	/;"	d
+MN__68060	rmac/mntab.h	/^#define	MN__68060	/;"	d
+MN__68881	rmac/mntab.h	/^#define	MN__68881	/;"	d
+MN__68882	rmac/mntab.h	/^#define	MN__68882	/;"	d
+MN__ABS	rmac/mntab.h	/^#define	MN__ABS	/;"	d
+MN__ASSERT	rmac/mntab.h	/^#define	MN__ASSERT	/;"	d
+MN__BSS	rmac/mntab.h	/^#define	MN__BSS	/;"	d
+MN__CARGS	rmac/mntab.h	/^#define	MN__CARGS	/;"	d
+MN__CCUNDEF	rmac/mntab.h	/^#define	MN__CCUNDEF	/;"	d
+MN__COMM	rmac/mntab.h	/^#define	MN__COMM	/;"	d
+MN__CSTRUCT	rmac/mntab.h	/^#define	MN__CSTRUCT	/;"	d
+MN__DATA	rmac/mntab.h	/^#define	MN__DATA	/;"	d
+MN__DC	rmac/mntab.h	/^#define	MN__DC	/;"	d
+MN__DCB	rmac/mntab.h	/^#define	MN__DCB	/;"	d
+MN__DISABLE	rmac/mntab.h	/^#define	MN__DISABLE	/;"	d
+MN__DPHRASE	rmac/mntab.h	/^#define	MN__DPHRASE	/;"	d
+MN__DS	rmac/mntab.h	/^#define	MN__DS	/;"	d
+MN__DSM	rmac/mntab.h	/^#define	MN__DSM	/;"	d
+MN__DSP	rmac/mntab.h	/^#define	MN__DSP	/;"	d
+MN__DUMP	rmac/mntab.h	/^#define	MN__DUMP	/;"	d
+MN__EJECT	rmac/mntab.h	/^#define	MN__EJECT	/;"	d
+MN__ELSE	rmac/mntab.h	/^#define	MN__ELSE	/;"	d
+MN__ENABLE	rmac/mntab.h	/^#define	MN__ENABLE	/;"	d
+MN__END	rmac/mntab.h	/^#define	MN__END	/;"	d
+MN__ENDC	rmac/mntab.h	/^#define	MN__ENDC	/;"	d
+MN__ENDIF	rmac/mntab.h	/^#define	MN__ENDIF	/;"	d
+MN__ENDM	rmac/mntab.h	/^#define	MN__ENDM	/;"	d
+MN__ENDR	rmac/mntab.h	/^#define	MN__ENDR	/;"	d
+MN__EQU	rmac/mntab.h	/^#define	MN__EQU	/;"	d
+MN__EQURUNDEF	rmac/mntab.h	/^#define	MN__EQURUNDEF	/;"	d
+MN__ERROR	rmac/mntab.h	/^#define	MN__ERROR	/;"	d
+MN__EVEN	rmac/mntab.h	/^#define	MN__EVEN	/;"	d
+MN__EXITM	rmac/mntab.h	/^#define	MN__EXITM	/;"	d
+MN__EXTERN	rmac/mntab.h	/^#define	MN__EXTERN	/;"	d
+MN__GLOBL	rmac/mntab.h	/^#define	MN__GLOBL	/;"	d
+MN__GOTO	rmac/mntab.h	/^#define	MN__GOTO	/;"	d
+MN__GPU	rmac/mntab.h	/^#define	MN__GPU	/;"	d
+MN__GPUMAIN	rmac/mntab.h	/^#define	MN__GPUMAIN	/;"	d
+MN__IF	rmac/mntab.h	/^#define	MN__IF	/;"	d
+MN__IIF	rmac/mntab.h	/^#define	MN__IIF	/;"	d
+MN__INCBIN	rmac/mntab.h	/^#define	MN__INCBIN	/;"	d
+MN__INCLUDE	rmac/mntab.h	/^#define	MN__INCLUDE	/;"	d
+MN__INIT	rmac/mntab.h	/^#define	MN__INIT	/;"	d
+MN__JPAD	rmac/mntab.h	/^#define	MN__JPAD	/;"	d
+MN__LIST	rmac/mntab.h	/^#define	MN__LIST	/;"	d
+MN__LONG	rmac/mntab.h	/^#define	MN__LONG	/;"	d
+MN__MACRO	rmac/mntab.h	/^#define	MN__MACRO	/;"	d
+MN__MACUNDEF	rmac/mntab.h	/^#define	MN__MACUNDEF	/;"	d
+MN__NLIST	rmac/mntab.h	/^#define	MN__NLIST	/;"	d
+MN__NOCLEAR	rmac/mntab.h	/^#define	MN__NOCLEAR	/;"	d
+MN__NOFPU	rmac/mntab.h	/^#define	MN__NOFPU	/;"	d
+MN__NOJPAD	rmac/mntab.h	/^#define	MN__NOJPAD	/;"	d
+MN__NOLIST	rmac/mntab.h	/^#define	MN__NOLIST	/;"	d
+MN__OBJPROC	rmac/mntab.h	/^#define	MN__OBJPROC	/;"	d
+MN__OFFSET	rmac/mntab.h	/^#define	MN__OFFSET	/;"	d
+MN__OPT	rmac/mntab.h	/^#define	MN__OPT	/;"	d
+MN__ORG	rmac/mntab.h	/^#define	MN__ORG	/;"	d
+MN__PHRASE	rmac/mntab.h	/^#define	MN__PHRASE	/;"	d
+MN__PRGFLAGS	rmac/mntab.h	/^#define	MN__PRGFLAGS	/;"	d
+MN__PRINT	rmac/mntab.h	/^#define	MN__PRINT	/;"	d
+MN__QPHRASE	rmac/mntab.h	/^#define	MN__QPHRASE	/;"	d
+MN__REGBANK0	rmac/mntab.h	/^#define	MN__REGBANK0	/;"	d
+MN__REGBANK1	rmac/mntab.h	/^#define	MN__REGBANK1	/;"	d
+MN__REGUNDEF	rmac/mntab.h	/^#define	MN__REGUNDEF	/;"	d
+MN__REPT	rmac/mntab.h	/^#define	MN__REPT	/;"	d
+MN__SUBTTL	rmac/mntab.h	/^#define	MN__SUBTTL	/;"	d
+MN__TEXT	rmac/mntab.h	/^#define	MN__TEXT	/;"	d
+MN__TITLE	rmac/mntab.h	/^#define	MN__TITLE	/;"	d
+MN__UNDEFMAC	rmac/mntab.h	/^#define	MN__UNDEFMAC	/;"	d
+MN__WARN	rmac/mntab.h	/^#define	MN__WARN	/;"	d
+MO_BITMAP	rmac/opkw.h	/^#define	MO_BITMAP	/;"	d
+MO_BRANCH	rmac/opkw.h	/^#define	MO_BRANCH	/;"	d
+MO_GPUOBJ	rmac/opkw.h	/^#define	MO_GPUOBJ	/;"	d
+MO_JUMP	rmac/opkw.h	/^#define	MO_JUMP	/;"	d
+MO_NOP	rmac/opkw.h	/^#define	MO_NOP	/;"	d
+MO_SCBITMAP	rmac/opkw.h	/^#define	MO_SCBITMAP	/;"	d
+MO_STOP	rmac/opkw.h	/^#define	MO_STOP	/;"	d
+MPCREL	rmac/mark.h	/^#define MPCREL /;"	d
+MP_ADC	rmac/6502kw.h	/^#define	MP_ADC	/;"	d
+MP_AND	rmac/6502kw.h	/^#define	MP_AND	/;"	d
+MP_ASL	rmac/6502kw.h	/^#define	MP_ASL	/;"	d
+MP_BCC	rmac/6502kw.h	/^#define	MP_BCC	/;"	d
+MP_BCS	rmac/6502kw.h	/^#define	MP_BCS	/;"	d
+MP_BEQ	rmac/6502kw.h	/^#define	MP_BEQ	/;"	d
+MP_BIT	rmac/6502kw.h	/^#define	MP_BIT	/;"	d
+MP_BMI	rmac/6502kw.h	/^#define	MP_BMI	/;"	d
+MP_BNE	rmac/6502kw.h	/^#define	MP_BNE	/;"	d
+MP_BPL	rmac/6502kw.h	/^#define	MP_BPL	/;"	d
+MP_BRK	rmac/6502kw.h	/^#define	MP_BRK	/;"	d
+MP_BVC	rmac/6502kw.h	/^#define	MP_BVC	/;"	d
+MP_BVS	rmac/6502kw.h	/^#define	MP_BVS	/;"	d
+MP_CLC	rmac/6502kw.h	/^#define	MP_CLC	/;"	d
+MP_CLD	rmac/6502kw.h	/^#define	MP_CLD	/;"	d
+MP_CLI	rmac/6502kw.h	/^#define	MP_CLI	/;"	d
+MP_CLV	rmac/6502kw.h	/^#define	MP_CLV	/;"	d
+MP_CMP	rmac/6502kw.h	/^#define	MP_CMP	/;"	d
+MP_CPX	rmac/6502kw.h	/^#define	MP_CPX	/;"	d
+MP_CPY	rmac/6502kw.h	/^#define	MP_CPY	/;"	d
+MP_DEC	rmac/6502kw.h	/^#define	MP_DEC	/;"	d
+MP_DEX	rmac/6502kw.h	/^#define	MP_DEX	/;"	d
+MP_DEY	rmac/6502kw.h	/^#define	MP_DEY	/;"	d
+MP_EOR	rmac/6502kw.h	/^#define	MP_EOR	/;"	d
+MP_INC	rmac/6502kw.h	/^#define	MP_INC	/;"	d
+MP_INX	rmac/6502kw.h	/^#define	MP_INX	/;"	d
+MP_INY	rmac/6502kw.h	/^#define	MP_INY	/;"	d
+MP_JMP	rmac/6502kw.h	/^#define	MP_JMP	/;"	d
+MP_JSR	rmac/6502kw.h	/^#define	MP_JSR	/;"	d
+MP_LDA	rmac/6502kw.h	/^#define	MP_LDA	/;"	d
+MP_LDX	rmac/6502kw.h	/^#define	MP_LDX	/;"	d
+MP_LDY	rmac/6502kw.h	/^#define	MP_LDY	/;"	d
+MP_LSR	rmac/6502kw.h	/^#define	MP_LSR	/;"	d
+MP_NOP	rmac/6502kw.h	/^#define	MP_NOP	/;"	d
+MP_ORA	rmac/6502kw.h	/^#define	MP_ORA	/;"	d
+MP_PHA	rmac/6502kw.h	/^#define	MP_PHA	/;"	d
+MP_PHP	rmac/6502kw.h	/^#define	MP_PHP	/;"	d
+MP_PLA	rmac/6502kw.h	/^#define	MP_PLA	/;"	d
+MP_PLP	rmac/6502kw.h	/^#define	MP_PLP	/;"	d
+MP_ROL	rmac/6502kw.h	/^#define	MP_ROL	/;"	d
+MP_ROR	rmac/6502kw.h	/^#define	MP_ROR	/;"	d
+MP_RTI	rmac/6502kw.h	/^#define	MP_RTI	/;"	d
+MP_RTS	rmac/6502kw.h	/^#define	MP_RTS	/;"	d
+MP_SBC	rmac/6502kw.h	/^#define	MP_SBC	/;"	d
+MP_SEC	rmac/6502kw.h	/^#define	MP_SEC	/;"	d
+MP_SED	rmac/6502kw.h	/^#define	MP_SED	/;"	d
+MP_SEI	rmac/6502kw.h	/^#define	MP_SEI	/;"	d
+MP_STA	rmac/6502kw.h	/^#define	MP_STA	/;"	d
+MP_STX	rmac/6502kw.h	/^#define	MP_STX	/;"	d
+MP_STY	rmac/6502kw.h	/^#define	MP_STY	/;"	d
+MP_TAX	rmac/6502kw.h	/^#define	MP_TAX	/;"	d
+MP_TAY	rmac/6502kw.h	/^#define	MP_TAY	/;"	d
+MP_TSX	rmac/6502kw.h	/^#define	MP_TSX	/;"	d
+MP_TXA	rmac/6502kw.h	/^#define	MP_TXA	/;"	d
+MP_TXS	rmac/6502kw.h	/^#define	MP_TXS	/;"	d
+MP_TYA	rmac/6502kw.h	/^#define	MP_TYA	/;"	d
+MQUAD	rmac/mark.h	/^#define MQUAD /;"	d
+MR_ABS	rmac/risckw.h	/^#define	MR_ABS	/;"	d
+MR_ADD	rmac/risckw.h	/^#define	MR_ADD	/;"	d
+MR_ADDC	rmac/risckw.h	/^#define	MR_ADDC	/;"	d
+MR_ADDQ	rmac/risckw.h	/^#define	MR_ADDQ	/;"	d
+MR_ADDQMOD	rmac/risckw.h	/^#define	MR_ADDQMOD	/;"	d
+MR_ADDQT	rmac/risckw.h	/^#define	MR_ADDQT	/;"	d
+MR_AND	rmac/risckw.h	/^#define	MR_AND	/;"	d
+MR_BCLR	rmac/risckw.h	/^#define	MR_BCLR	/;"	d
+MR_BSET	rmac/risckw.h	/^#define	MR_BSET	/;"	d
+MR_BTST	rmac/risckw.h	/^#define	MR_BTST	/;"	d
+MR_CMP	rmac/risckw.h	/^#define	MR_CMP	/;"	d
+MR_CMPQ	rmac/risckw.h	/^#define	MR_CMPQ	/;"	d
+MR_DIV	rmac/risckw.h	/^#define	MR_DIV	/;"	d
+MR_IMACN	rmac/risckw.h	/^#define	MR_IMACN	/;"	d
+MR_IMULT	rmac/risckw.h	/^#define	MR_IMULT	/;"	d
+MR_IMULTN	rmac/risckw.h	/^#define	MR_IMULTN	/;"	d
+MR_JR	rmac/risckw.h	/^#define	MR_JR	/;"	d
+MR_JUMP	rmac/risckw.h	/^#define	MR_JUMP	/;"	d
+MR_LOAD	rmac/risckw.h	/^#define	MR_LOAD	/;"	d
+MR_LOADB	rmac/risckw.h	/^#define	MR_LOADB	/;"	d
+MR_LOADP	rmac/risckw.h	/^#define	MR_LOADP	/;"	d
+MR_LOADW	rmac/risckw.h	/^#define	MR_LOADW	/;"	d
+MR_MIRROR	rmac/risckw.h	/^#define	MR_MIRROR	/;"	d
+MR_MMULT	rmac/risckw.h	/^#define	MR_MMULT	/;"	d
+MR_MOVE	rmac/risckw.h	/^#define	MR_MOVE	/;"	d
+MR_MOVEFA	rmac/risckw.h	/^#define	MR_MOVEFA	/;"	d
+MR_MOVEI	rmac/risckw.h	/^#define	MR_MOVEI	/;"	d
+MR_MOVEQ	rmac/risckw.h	/^#define	MR_MOVEQ	/;"	d
+MR_MOVETA	rmac/risckw.h	/^#define	MR_MOVETA	/;"	d
+MR_MTOI	rmac/risckw.h	/^#define	MR_MTOI	/;"	d
+MR_MULT	rmac/risckw.h	/^#define	MR_MULT	/;"	d
+MR_NEG	rmac/risckw.h	/^#define	MR_NEG	/;"	d
+MR_NOP	rmac/risckw.h	/^#define	MR_NOP	/;"	d
+MR_NORMI	rmac/risckw.h	/^#define	MR_NORMI	/;"	d
+MR_NOT	rmac/risckw.h	/^#define	MR_NOT	/;"	d
+MR_OR	rmac/risckw.h	/^#define	MR_OR	/;"	d
+MR_PACK	rmac/risckw.h	/^#define	MR_PACK	/;"	d
+MR_RESMAC	rmac/risckw.h	/^#define	MR_RESMAC	/;"	d
+MR_ROLQ	rmac/risckw.h	/^#define	MR_ROLQ	/;"	d
+MR_ROR	rmac/risckw.h	/^#define	MR_ROR	/;"	d
+MR_RORQ	rmac/risckw.h	/^#define	MR_RORQ	/;"	d
+MR_SAT16	rmac/risckw.h	/^#define	MR_SAT16	/;"	d
+MR_SAT16S	rmac/risckw.h	/^#define	MR_SAT16S	/;"	d
+MR_SAT24	rmac/risckw.h	/^#define	MR_SAT24	/;"	d
+MR_SAT32S	rmac/risckw.h	/^#define	MR_SAT32S	/;"	d
+MR_SAT8	rmac/risckw.h	/^#define	MR_SAT8	/;"	d
+MR_SH	rmac/risckw.h	/^#define	MR_SH	/;"	d
+MR_SHA	rmac/risckw.h	/^#define	MR_SHA	/;"	d
+MR_SHARQ	rmac/risckw.h	/^#define	MR_SHARQ	/;"	d
+MR_SHLQ	rmac/risckw.h	/^#define	MR_SHLQ	/;"	d
+MR_SHRQ	rmac/risckw.h	/^#define	MR_SHRQ	/;"	d
+MR_STORE	rmac/risckw.h	/^#define	MR_STORE	/;"	d
+MR_STOREB	rmac/risckw.h	/^#define	MR_STOREB	/;"	d
+MR_STOREP	rmac/risckw.h	/^#define	MR_STOREP	/;"	d
+MR_STOREW	rmac/risckw.h	/^#define	MR_STOREW	/;"	d
+MR_SUB	rmac/risckw.h	/^#define	MR_SUB	/;"	d
+MR_SUBC	rmac/risckw.h	/^#define	MR_SUBC	/;"	d
+MR_SUBQ	rmac/risckw.h	/^#define	MR_SUBQ	/;"	d
+MR_SUBQMOD	rmac/risckw.h	/^#define	MR_SUBQMOD	/;"	d
+MR_SUBQT	rmac/risckw.h	/^#define	MR_SUBQT	/;"	d
+MR_UNPACK	rmac/risckw.h	/^#define	MR_UNPACK	/;"	d
+MR_XOR	rmac/risckw.h	/^#define	MR_XOR	/;"	d
+MSYMBOL	rmac/mark.h	/^#define MSYMBOL /;"	d
+MULT	rmac/expr.h	/^#define MULT /;"	d
+MULTX	rmac/token.h	/^#define MULTX /;"	d
+MWORD	rmac/mark.h	/^#define MWORD /;"	d
+M_ABASE	rmac/amode.h	/^#define M_ABASE /;"	d
+M_ABSL	rmac/amode.h	/^#define M_ABSL /;"	d
+M_ABSW	rmac/amode.h	/^#define M_ABSW /;"	d
+M_ACC24	rmac/dsp56k_amode.h	/^#define M_ACC24 /;"	d
+M_ACC48	rmac/dsp56k_amode.h	/^#define M_ACC48 /;"	d
+M_ACC56	rmac/dsp56k_amode.h	/^#define M_ACC56 /;"	d
+M_ACC8	rmac/dsp56k_amode.h	/^#define M_ACC8 /;"	d
+M_ADISP	rmac/amode.h	/^#define M_ADISP /;"	d
+M_AIND	rmac/amode.h	/^#define M_AIND /;"	d
+M_AINDEXED	rmac/amode.h	/^#define M_AINDEXED /;"	d
+M_ALL48	rmac/dsp56k_amode.h	/^#define M_ALL48 /;"	d
+M_ALU24	rmac/dsp56k_amode.h	/^#define M_ALU24 /;"	d
+M_AM_CCR	rmac/amode.h	/^#define M_AM_CCR /;"	d
+M_AM_NONE	rmac/amode.h	/^#define M_AM_NONE /;"	d
+M_AM_SR	rmac/amode.h	/^#define M_AM_SR /;"	d
+M_AM_USP	rmac/amode.h	/^#define M_AM_USP /;"	d
+M_APOSTINC	rmac/amode.h	/^#define M_APOSTINC /;"	d
+M_APREDEC	rmac/amode.h	/^#define M_APREDEC /;"	d
+M_AREG	rmac/amode.h	/^#define M_AREG /;"	d
+M_BITFLD	rmac/amode.h	/^#define M_BITFLD /;"	d
+M_CACHE40	rmac/amode.h	/^#define M_CACHE40 /;"	d
+M_CREG	rmac/amode.h	/^#define M_CREG /;"	d
+M_DREG	rmac/amode.h	/^#define M_DREG /;"	d
+M_DSPAA	rmac/dsp56k_amode.h	/^#define M_DSPAA /;"	d
+M_DSPABS06	rmac/dsp56k_amode.h	/^#define M_DSPABS06 /;"	d
+M_DSPABS12	rmac/dsp56k_amode.h	/^#define M_DSPABS12 /;"	d
+M_DSPABS16	rmac/dsp56k_amode.h	/^#define M_DSPABS16 /;"	d
+M_DSPABS24	rmac/dsp56k_amode.h	/^#define M_DSPABS24 /;"	d
+M_DSPEA	rmac/dsp56k_amode.h	/^#define M_DSPEA /;"	d
+M_DSPIM	rmac/dsp56k_amode.h	/^#define M_DSPIM /;"	d
+M_DSPIM12	rmac/dsp56k_amode.h	/^#define M_DSPIM12 /;"	d
+M_DSPIM8	rmac/dsp56k_amode.h	/^#define M_DSPIM8 /;"	d
+M_DSPM	rmac/dsp56k_amode.h	/^#define M_DSPM /;"	d
+M_DSPN	rmac/dsp56k_amode.h	/^#define M_DSPN /;"	d
+M_DSPPCU	rmac/dsp56k_amode.h	/^#define M_DSPPCU /;"	d
+M_DSPPP	rmac/dsp56k_amode.h	/^#define M_DSPPP /;"	d
+M_DSPR	rmac/dsp56k_amode.h	/^#define M_DSPR /;"	d
+M_FC	rmac/amode.h	/^#define M_FC	/;"	d
+M_FPSCR	rmac/amode.h	/^#define M_FPSCR /;"	d
+M_FREG	rmac/amode.h	/^#define M_FREG /;"	d
+M_IMMED	rmac/amode.h	/^#define M_IMMED /;"	d
+M_INP48	rmac/dsp56k_amode.h	/^#define M_INP48 /;"	d
+M_MEMPOST	rmac/amode.h	/^#define M_MEMPOST /;"	d
+M_MEMPRE	rmac/amode.h	/^#define M_MEMPRE /;"	d
+M_MRN	rmac/amode.h	/^#define M_MRN	/;"	d
+M_PCBASE	rmac/amode.h	/^#define M_PCBASE /;"	d
+M_PCDISP	rmac/amode.h	/^#define M_PCDISP /;"	d
+M_PCINDEXED	rmac/amode.h	/^#define M_PCINDEXED /;"	d
+M_PCMPOST	rmac/amode.h	/^#define M_PCMPOST /;"	d
+M_PCMPRE	rmac/amode.h	/^#define M_PCMPRE /;"	d
+MakeSection	rmac/sect.c	/^void MakeSection(int sno, uint16_t attr)$/;"	f
+MalformedOpcode	rmac/riscasm.c	/^static inline int MalformedOpcode(int signal)$/;"	f	file:
+MarkABSImage	rmac/mark.c	/^uint32_t MarkABSImage(uint8_t * mp, uint32_t siz, uint32_t tsize, int reqseg)$/;"	f
+MarkBSDImage	rmac/mark.c	/^uint32_t MarkBSDImage(uint8_t * mp, uint32_t siz, uint32_t tsize, int reqseg)$/;"	f
+MarkImage	rmac/mark.c	/^uint32_t MarkImage(register uint8_t * mp, uint32_t siz, uint32_t tsize, int okflag)$/;"	f
+MarkRelocatable	rmac/mark.c	/^uint32_t MarkRelocatable(uint16_t section, uint32_t loc, uint16_t to, uint16_t flags, SYM * symbol)$/;"	f
+NBUCKETS	rmac/symbol.c	/^#define NBUCKETS /;"	d	file:
+NDI	test.s	/^NDI EQU $FF00$/;"	d
+NE	rmac/token.h	/^#define NE /;"	d
+NMACHOPS	rmac/6502.c	/^#define	NMACHOPS	/;"	d	file:
+NMODES	rmac/6502.c	/^#define	NMODES	/;"	d	file:
+NOP	rmac/6502.c	/^#define	NOP	/;"	d	file:
+NOPARMO	rmac/dsp56k_amode.h	/^#define NOPARMO /;"	d
+NSECTS	rmac/sect.h	/^#define NSECTS /;"	d
+NSTRINGS	rmac/kwgen.c	/^#define NSTRINGS /;"	d	file:
+NUM_FORCE_LONG	rmac/dsp56k_amode.c	/^	NUM_FORCE_LONG = 1,$/;"	e	enum:__anon4	file:
+NUM_FORCE_SHORT	rmac/dsp56k_amode.c	/^	NUM_FORCE_SHORT = 2$/;"	e	enum:__anon4	file:
+NUM_NORMAL	rmac/dsp56k_amode.c	/^	NUM_NORMAL = 0,$/;"	e	enum:__anon4	file:
+NewSymbol	rmac/symbol.c	/^SYM * NewSymbol(uint8_t * name, int type, int envno)$/;"	f
+OBJS	rmac/makefile	/^OBJS = 6502.o amode.o debug.o direct.o dsp56k.o dsp56k_amode.o dsp56k_mach.o eagen.o error.o expr.o fltpoint.o listing.o mach.o macro.o mark.o object.o op.o procln.o riscasm.o rmac.o sect.o symbol.o token.o$/;"	m
+OK	rmac/rmac.h	/^#define OK /;"	d
+OPAR	rmac/expr.h	/^#define OPAR /;"	d
+OPT_020_DISP	rmac/rmac.h	/^	OPT_020_DISP      = 5,		\/\/ 020+ base and outer displacements (bd, od) absolute long to short$/;"	e	enum:__anon2
+OPT_ABS_SHORT	rmac/rmac.h	/^	OPT_ABS_SHORT     = 0,$/;"	e	enum:__anon2
+OPT_ADDA_ADDQ	rmac/rmac.h	/^	OPT_ADDA_ADDQ     = 8,$/;"	e	enum:__anon2
+OPT_ADDA_LEA	rmac/rmac.h	/^	OPT_ADDA_LEA      = 9,$/;"	e	enum:__anon2
+OPT_BSR_BCC_S	rmac/rmac.h	/^	OPT_BSR_BCC_S     = 2,$/;"	e	enum:__anon2
+OPT_CLR_DX	rmac/rmac.h	/^	OPT_CLR_DX        = 7,$/;"	e	enum:__anon2
+OPT_COUNT	rmac/rmac.h	/^	OPT_COUNT   \/\/ Dummy, used to count number of optimisation switches$/;"	e	enum:__anon2
+OPT_LEA_ADDQ	rmac/rmac.h	/^	OPT_LEA_ADDQ      = 4,$/;"	e	enum:__anon2
+OPT_MOVEL_MOVEQ	rmac/rmac.h	/^	OPT_MOVEL_MOVEQ   = 1,$/;"	e	enum:__anon2
+OPT_NULL_BRA	rmac/rmac.h	/^	OPT_NULL_BRA      = 6,$/;"	e	enum:__anon2
+OPT_OUTER_DISP	rmac/rmac.h	/^	OPT_OUTER_DISP    = 3,$/;"	e	enum:__anon2
+OPT_PC_RELATIVE	rmac/rmac.h	/^	OPT_PC_RELATIVE   = 10,		\/\/ Enforce PC relative$/;"	e	enum:__anon2
+OR	rmac/expr.h	/^#define OR /;"	d
+ORG_L	rmac/dsp56k.h	/^	ORG_L$/;"	e	enum:MEMTYPES
+ORG_P	rmac/dsp56k.h	/^	ORG_P,$/;"	e	enum:MEMTYPES
+ORG_X	rmac/dsp56k.h	/^	ORG_X,$/;"	e	enum:MEMTYPES
+ORG_Y	rmac/dsp56k.h	/^	ORG_Y,$/;"	e	enum:MEMTYPES
+OSTYPE	rmac/makefile	/^OSTYPE := $(shell uname -a)$/;"	m
+P56	rmac/rmac.h	/^P56,				\/\/ DSP 56001 object format$/;"	e	enum:__anon1
+PARMOVE	rmac/dsp56k_amode.h	/^#define PARMOVE /;"	d
+PATCH	rmac/version.h	/^#define PATCH /;"	d
+PCBASE	rmac/amode.h	/^#define PCBASE /;"	d
+PCDISP	rmac/amode.h	/^#define PCDISP /;"	d
+PCINDEXED	rmac/amode.h	/^#define PCINDEXED /;"	d
+PCMPOST	rmac/amode.h	/^#define PCMPOST /;"	d
+PCMPRE	rmac/amode.h	/^#define PCMPRE /;"	d
+PHA	rmac/tests/6502tester.s	/^PHA ;(PusH Accumulator)          $48 $/;"	l
+PHP	rmac/tests/6502tester.s	/^PHP ;(PusH Processor status)     $08 $/;"	l
+PLA	rmac/tests/6502tester.s	/^PLA ;(PuLl Accumulator)          $68 $/;"	l
+PLATFORM	rmac/rmac.h	/^	#define PLATFORM /;"	d
+PLP	rmac/tests/6502tester.s	/^PLP ;(PuLl Processor status)     $28 $/;"	l
+PRGFLAGS	rmac/object.c	/^uint32_t PRGFLAGS;	\/* PRGFLAGS as defined in Atari Compendium Chapter 2$/;"	v
+PTR	rmac/rmac.h	/^#define PTR /;"	d
+P_ERRORS	rmac/dsp56k_amode.c	/^#define P_ERRORS /;"	d	file:
+ParseOptimization	rmac/rmac.c	/^int ParseOptimization(char * optstring)$/;"	f
+Process	rmac/rmac.c	/^int Process(int argc, char ** argv)$/;"	f
+QUANTUM	rmac/token.h	/^#define QUANTUM /;"	d
+RAW	rmac/rmac.h	/^RAW,				\/\/ Output at absolute address$/;"	e	enum:__anon1
+REFERENCED	rmac/rmac.h	/^#define REFERENCED /;"	d
+REG	rmac/token.h	/^#define REG /;"	d
+REL	rmac/expr.h	/^#define REL /;"	d
+RISCREG	rmac/rmac.h	/^#define RISCREG /;"	d
+RI_JR	rmac/riscasm.h	/^#define RI_JR /;"	d
+RI_JUMP	rmac/riscasm.h	/^#define RI_JUMP /;"	d
+RI_LOAD	rmac/riscasm.h	/^#define RI_LOAD /;"	d
+RI_LOADN	rmac/riscasm.h	/^#define RI_LOADN /;"	d
+RI_MOVE	rmac/riscasm.h	/^#define RI_MOVE /;"	d
+RI_MOVEI	rmac/riscasm.h	/^#define RI_MOVEI /;"	d
+RI_NONE	rmac/riscasm.h	/^#define RI_NONE /;"	d
+RI_NUM_15	rmac/riscasm.h	/^#define RI_NUM_15 /;"	d
+RI_NUM_31	rmac/riscasm.h	/^#define RI_NUM_31 /;"	d
+RI_NUM_32	rmac/riscasm.h	/^#define RI_NUM_32 /;"	d
+RI_ONE	rmac/riscasm.h	/^#define RI_ONE /;"	d
+RI_STORE	rmac/riscasm.h	/^#define RI_STORE /;"	d
+RI_STOREN	rmac/riscasm.h	/^#define RI_STOREN /;"	d
+RI_TWO	rmac/riscasm.h	/^#define RI_TWO /;"	d
+RM	rmac/makefile	/^RM = \/bin\/rm -f$/;"	m
+ResolveAllFixups	rmac/sect.c	/^int ResolveAllFixups(void)$/;"	f
+ResolveFixups	rmac/sect.c	/^int ResolveFixups(int sno)$/;"	f
+SABS	rmac/sect.h	/^#define SABS /;"	d
+SBSS	rmac/sect.h	/^#define SBSS /;"	d
+SDECLLIST	rmac/rmac.h	/^#define SDECLLIST /;"	d
+SDreg	rmac/dsp56k_amode.c	/^static inline int SDreg(int reg)$/;"	f	file:
+SEC	rmac/tests/6502tester.s	/^SEC ;(SEt Carry)                $38$/;"	l
+SECT	rmac/sect.h	/^#define SECT /;"	d
+SED	rmac/tests/6502tester.s	/^SED ;(SEt Decimal)              $F8$/;"	l
+SEI	rmac/tests/6502tester.s	/^SEI ;(SEt Interrupt)            $78$/;"	l
+SELF	rmac/token.h	/^#define SELF /;"	d
+SET	rmac/token.h	/^#define SET /;"	d
+SETBE16	rmac/rmac.h	/^#define SETBE16(/;"	d
+SETBE24	rmac/rmac.h	/^#define SETBE24(/;"	d
+SETBE32	rmac/rmac.h	/^#define SETBE32(/;"	d
+SETBE64	rmac/rmac.h	/^#define SETBE64(/;"	d
+SETLE16	rmac/rmac.h	/^#define SETLE16(/;"	d
+SHIFT	rmac/expr.h	/^#define SHIFT /;"	d
+SHL	rmac/token.h	/^#define SHL /;"	d
+SHN_ABS	rmac/object.h	/^#define SHN_ABS /;"	d
+SHN_COMMON	rmac/object.h	/^#define SHN_COMMON /;"	d
+SHN_UNDEF	rmac/object.h	/^#define SHN_UNDEF /;"	d
+SHR	rmac/token.h	/^#define SHR /;"	d
+SIZB	rmac/rmac.h	/^#define SIZB /;"	d
+SIZD	rmac/rmac.h	/^#define SIZD /;"	d
+SIZL	rmac/rmac.h	/^#define SIZL /;"	d
+SIZN	rmac/rmac.h	/^#define SIZN /;"	d
+SIZP	rmac/rmac.h	/^#define SIZP /;"	d
+SIZQ	rmac/rmac.h	/^#define SIZQ /;"	d
+SIZS	rmac/rmac.h	/^#define SIZS /;"	d
+SIZW	rmac/rmac.h	/^#define SIZW /;"	d
+SIZX	rmac/rmac.h	/^#define SIZX /;"	d
+SLASHCHAR	rmac/rmac.h	/^#define SLASHCHAR /;"	d
+SLASHSTRING	rmac/rmac.h	/^#define SLASHSTRING /;"	d
+SPACE	rmac/rmac.h	/^#define SPACE /;"	d
+SPIC	rmac/sect.h	/^#define SPIC /;"	d
+SRC_COL	rmac/listing.h	/^#define SRC_COL /;"	d
+SRC_IFILE	rmac/token.h	/^#define SRC_IFILE /;"	d
+SRC_IMACRO	rmac/token.h	/^#define SRC_IMACRO /;"	d
+SRC_IREPT	rmac/token.h	/^#define SRC_IREPT /;"	d
+STD	rmac/makefile	/^STD := c99$/;"	m
+STD	rmac/makefile	/^STD := gnu99$/;"	m
+STDOUT	rmac/rmac.h	/^#define STDOUT /;"	d
+STKSIZE	rmac/expr.h	/^#define STKSIZE /;"	d
+STRING	rmac/token.h	/^#define STRING /;"	d
+STRINGA8	rmac/token.h	/^#define STRINGA8 /;"	d
+STRINGIZE	rmac/rmac.h	/^	#define STRINGIZE(/;"	d
+STRINGIZE_HELPER	rmac/rmac.h	/^	#define STRINGIZE_HELPER(/;"	d
+STRPOOLSIZ	rmac/kwgen.c	/^#define STRPOOLSIZ /;"	d	file:
+STSYM	rmac/token.h	/^#define STSYM /;"	d
+SUB32	rmac/riscasm.h	/^#define SUB32 /;"	d
+SUNARY	rmac/expr.h	/^#define SUNARY /;"	d
+SUSED	rmac/sect.h	/^#define SUSED /;"	d
+SYM	rmac/symbol.h	/^#define SYM /;"	d
+SYMBOL	rmac/token.h	/^#define SYMBOL /;"	d
+SY_UNDEF	rmac/rmac.h	/^#define SY_UNDEF /;"	d
+SaveSection	rmac/sect.c	/^void SaveSection(void)$/;"	f
+SetFilenameForErrorReporting	rmac/token.c	/^void SetFilenameForErrorReporting(void)$/;"	f
+SetLargestAlignment	rmac/direct.c	/^void SetLargestAlignment(int size)$/;"	f
+SkipBytes	rmac/direct.c	/^static inline void SkipBytes(unsigned bytesToSkip)$/;"	f	file:
+StopMark	rmac/mark.c	/^void StopMark(void)$/;"	f
+SwitchSection	rmac/sect.c	/^void SwitchSection(int sno)$/;"	f
+TABSIZE	rmac/kwgen.c	/^#define TABSIZE /;"	d	file:
+TAG_COL	rmac/listing.h	/^#define TAG_COL /;"	d
+TAX	rmac/tests/6502tester.s	/^TAX ;(Transfer A to X)    $AA$/;"	l
+TAY	rmac/tests/6502tester.s	/^TAY ;(Transfer A to Y)    $A8$/;"	l
+TDB	rmac/rmac.h	/^#define TDB /;"	d
+TEXT	rmac/rmac.h	/^#define TEXT /;"	d
+TIMES1	rmac/amode.h	/^#define TIMES1 /;"	d
+TIMES2	rmac/amode.h	/^#define TIMES2 /;"	d
+TIMES4	rmac/amode.h	/^#define TIMES4 /;"	d
+TIMES8	rmac/amode.h	/^#define TIMES8 /;"	d
+TITLESIZ	rmac/listing.h	/^#define TITLESIZ /;"	d
+TKEOF	rmac/token.h	/^#define TKEOF /;"	d
+TOKBUFSIZE	rmac/token.h	/^#define TOKBUFSIZE /;"	d
+TOKEN	rmac/rmac.h	/^#define TOKEN	/;"	d
+TOKENSTREAM	rmac/token.h	/^#define TOKENSTREAM	/;"	d
+TSX	rmac/tests/6502tester.s	/^TSX ;(Transfer Stack ptr to X)   $BA $/;"	l
+TS_MAXARGS	rmac/token.h	/^#define TS_MAXARGS	/;"	d
+TS_MAXSTRINGS	rmac/token.h	/^#define TS_MAXSTRINGS	/;"	d
+TS_MAXTOKENS	rmac/token.h	/^#define TS_MAXTOKENS	/;"	d
+TXA	rmac/tests/6502tester.s	/^TXA ;(Transfer X to A)    $8A$/;"	l
+TXS	rmac/tests/6502tester.s	/^TXS ;(Transfer X to Stack ptr)   $9A $/;"	l
+TYA	rmac/tests/6502tester.s	/^TYA ;(Transfer Y to A)    $98$/;"	l
+ToUppercase	rmac/symbol.c	/^void ToUppercase(uint8_t * s)$/;"	f
+TokenizeLine	rmac/token.c	/^int TokenizeLine(void)$/;"	f
+UNARY	rmac/expr.h	/^#define UNARY /;"	d
+UNDEF_CC	rmac/rmac.h	/^#define UNDEF_CC /;"	d
+UNDEF_EQUR	rmac/rmac.h	/^#define UNDEF_EQUR /;"	d
+UNGT	rmac/token.h	/^#define UNGT /;"	d
+UNLT	rmac/token.h	/^#define UNLT /;"	d
+UNMINUS	rmac/token.h	/^#define UNMINUS /;"	d
+UNUSED	rmac/kwgen.c	/^#define UNUSED	/;"	d	file:
+UPSEG_SIZE	rmac/6502.c	/^#define	UPSEG_SIZE	/;"	d	file:
+VOID	rmac/rmac.h	/^#define VOID /;"	d
+WARNING	rmac/rmac.h	/^	#define WARNING(/;"	d
+WHITE	rmac/token.h	/^#define WHITE /;"	d
+WORD	rmac/rmac.h	/^#define WORD /;"	d
+WORDSWAP32	rmac/rmac.h	/^#define WORDSWAP32(/;"	d
+WriteLOD	rmac/object.c	/^static void WriteLOD(void)$/;"	f	file:
+WriteLODSection	rmac/symbol.c	/^static uint16_t WriteLODSection(int section, uint16_t symbolCount)$/;"	f	file:
+WriteObject	rmac/object.c	/^int WriteObject(int fd)$/;"	f
+WriteP56	rmac/object.c	/^static void WriteP56(void)$/;"	f	file:
+XEX	rmac/rmac.h	/^XEX, 				\/\/ COM\/EXE\/XEX\/whatever a8 object format$/;"	e	enum:__anon1
+XOR	rmac/expr.h	/^#define XOR /;"	d
+X_ERRORS	rmac/dsp56k_amode.c	/^#define X_ERRORS /;"	d	file:
+Y_ERRORS	rmac/dsp56k_amode.c	/^#define Y_ERRORS /;"	d	file:
+_OPEN_FLAGS	rmac/rmac.h	/^	#define _OPEN_FLAGS /;"	d
+_OPEN_FLAGS	rmac/rmac.h	/^	#undef _OPEN_FLAGS$/;"	d
+_OPEN_INC	rmac/rmac.h	/^	#define _OPEN_INC /;"	d
+_OPEN_INC	rmac/rmac.h	/^	#undef _OPEN_INC$/;"	d
+_PERM_MODE	rmac/rmac.h	/^	#define _PERM_MODE /;"	d
+__6502_H__	rmac/6502.h	/^#define __6502_H__$/;"	d
+__AMODE_H__	rmac/amode.h	/^#define __AMODE_H__$/;"	d
+__DEBUG_H__	rmac/debug.h	/^#define __DEBUG_H__$/;"	d
+__DIRECT_H__	rmac/direct.h	/^#define __DIRECT_H__$/;"	d
+__DSP56KMACH_H__	rmac/dsp56k_mach.h	/^#define __DSP56KMACH_H__$/;"	d
+__DSP56K_AMODE_H__	rmac/dsp56k_amode.h	/^#define __DSP56K_AMODE_H__$/;"	d
+__DSP56K_H__	rmac/dsp56k.h	/^#define __DSP56K_H__$/;"	d
+__EAGEN_H__	rmac/eagen.h	/^#define __EAGEN_H__$/;"	d
+__ERROR_H__	rmac/error.h	/^#define __ERROR_H__$/;"	d
+__EXPR_H__	rmac/expr.h	/^#define __EXPR_H__$/;"	d
+__FLTPOINT_H__	rmac/fltpoint.h	/^#define __FLTPOINT_H__$/;"	d
+__LISTING_H__	rmac/listing.h	/^#define __LISTING_H__$/;"	d
+__MACH_H__	rmac/mach.h	/^#define __MACH_H__$/;"	d
+__MACRO_H__	rmac/macro.h	/^#define __MACRO_H__$/;"	d
+__MARK_H__	rmac/mark.h	/^#define __MARK_H__$/;"	d
+__OBJECT_H__	rmac/object.h	/^#define __OBJECT_H__$/;"	d
+__OP_H__	rmac/op.h	/^#define __OP_H__$/;"	d
+__PROCLN_H__	rmac/procln.h	/^#define __PROCLN_H__$/;"	d
+__RISCASM_H__	rmac/riscasm.h	/^#define __RISCASM_H__$/;"	d
+__RMAC_H__	rmac/rmac.h	/^#define __RMAC_H__$/;"	d
+__SECT_H__	rmac/sect.h	/^#define __SECT_H__$/;"	d
+__SYMBOL_H__	rmac/symbol.h	/^#define __SYMBOL_H__$/;"	d
+__TOKEN_H__	rmac/token.h	/^#define __TOKEN_H__$/;"	d
+__VERSION_H__	rmac/version.h	/^#define __VERSION_H__$/;"	d
+a0bexattr	rmac/amode.c	/^WORD a0bexattr;				\/\/ Base displacement attribute$/;"	v
+a0bexpr	rmac/amode.c	/^TOKEN a0bexpr[EXPRSIZE];	\/\/ Base displacement expression$/;"	v
+a0bexval	rmac/amode.c	/^uint64_t a0bexval;			\/\/ Base displacement value$/;"	v
+a0bsize	rmac/amode.c	/^WORD a0bsize;				\/\/ Base displacement size$/;"	v
+a0esym	rmac/amode.c	/^SYM * a0esym;				\/\/ External symbol involved in expr$/;"	v
+a0exattr	rmac/amode.c	/^WORD a0exattr;				\/\/ Expression's attribute$/;"	v
+a0expr	rmac/amode.c	/^TOKEN a0expr[EXPRSIZE];		\/\/ Expression$/;"	v
+a0extension	rmac/amode.c	/^WORD a0extension;			\/\/ 020+ extension address word$/;"	v
+a0exval	rmac/amode.c	/^uint64_t a0exval;			\/\/ Expression's value$/;"	v
+a0ixreg	rmac/amode.c	/^int a0ixreg;				\/\/ Index register$/;"	v
+a0ixsiz	rmac/amode.c	/^int a0ixsiz;				\/\/ Index register size (and scale)$/;"	v
+a0reg	rmac/amode.c	/^int a0reg;					\/\/ Register$/;"	v
+a1bexattr	rmac/amode.c	/^WORD a1bexattr;				\/\/ Base displacement attribute$/;"	v
+a1bexpr	rmac/amode.c	/^TOKEN a1bexpr[EXPRSIZE];	\/\/ Base displacement expression$/;"	v
+a1bexval	rmac/amode.c	/^uint64_t a1bexval;			\/\/ Base displacement value$/;"	v
+a1bsize	rmac/amode.c	/^WORD a1bsize;				\/\/ Base displacement size$/;"	v
+a1esym	rmac/amode.c	/^SYM * a1esym;				\/\/ External symbol involved in expr$/;"	v
+a1exattr	rmac/amode.c	/^WORD a1exattr;				\/\/ Expression's attribute$/;"	v
+a1expr	rmac/amode.c	/^TOKEN a1expr[EXPRSIZE];		\/\/ Expression$/;"	v
+a1extension	rmac/amode.c	/^WORD a1extension;			\/\/ 020+ extension address word$/;"	v
+a1exval	rmac/amode.c	/^uint64_t a1exval;			\/\/ Expression's value$/;"	v
+a1ixreg	rmac/amode.c	/^int a1ixreg;				\/\/ Index register$/;"	v
+a1ixsiz	rmac/amode.c	/^int a1ixsiz;				\/\/ Index register size (and scale)$/;"	v
+a1reg	rmac/amode.c	/^int a1reg;					\/\/ Register$/;"	v
+a2reg	rmac/amode.c	/^int a2reg;					\/\/ Register for div.l (68020+)$/;"	v
+a8internal	rmac/6502.c	/^static char a8internal[] =$/;"	v	file:
+aNbdexattr	rmac/eagen.c	/^#define aNbdexattr /;"	d	file:
+aNbdexattr	rmac/eagen0.c	/^#undef aNbdexattr$/;"	d	file:
+aNbdexval	rmac/eagen.c	/^#define aNbdexval /;"	d	file:
+aNbdexval	rmac/eagen0.c	/^#undef aNbdexval$/;"	d	file:
+aNbexpr	rmac/eagen.c	/^#define aNbexpr /;"	d	file:
+aNbexpr	rmac/eagen0.c	/^#undef aNbexpr$/;"	d	file:
+aNexattr	rmac/eagen.c	/^#define aNexattr /;"	d	file:
+aNexattr	rmac/eagen0.c	/^#undef aNexattr$/;"	d	file:
+aNexpr	rmac/eagen.c	/^#define aNexpr /;"	d	file:
+aNexpr	rmac/eagen0.c	/^#undef aNexpr$/;"	d	file:
+aNexten	rmac/eagen.c	/^#define aNexten /;"	d	file:
+aNexten	rmac/eagen0.c	/^#undef aNexten$/;"	d	file:
+aNexval	rmac/eagen.c	/^#define aNexval /;"	d	file:
+aNexval	rmac/eagen0.c	/^#undef aNexval$/;"	d	file:
+aNixreg	rmac/eagen.c	/^#define aNixreg /;"	d	file:
+aNixreg	rmac/eagen0.c	/^#undef aNixreg$/;"	d	file:
+aNixsiz	rmac/eagen.c	/^#define aNixsiz /;"	d	file:
+aNixsiz	rmac/eagen0.c	/^#undef aNixsiz$/;"	d	file:
+a_inobj	rmac/token.c	/^INOBJ * a_inobj(int typ)$/;"	f
+abs2zp	rmac/6502.c	/^static int abs2zp[] =$/;"	v	file:
+abs_error	rmac/mach.c	/^char abs_error[] = "illegal absolute expression";$/;"	v
+abs_expr	rmac/direct.c	/^int abs_expr(uint64_t * a_eval)$/;"	f
+accept	rmac/kwgen.c	/^int accept[128];		\/* tmp table for building accept[] *\/$/;"	v
+activecpu	rmac/rmac.c	/^int activecpu = CPU_68000;		\/\/ Active 68k CPU (68000 by default)$/;"	v
+activefpu	rmac/rmac.c	/^int activefpu = FPU_NONE;		\/\/ Active FPU (none by default)$/;"	v
+altbankok	rmac/riscasm.c	/^unsigned altbankok = 0;		\/\/ Ok to use alternate register bank$/;"	v
+am0	rmac/amode.c	/^int am0;					\/\/ Addressing mode$/;"	v
+am0_030	rmac/amode.c	/^WORD am0_030;				\/\/ ea bits for 020+ addressing modes$/;"	v
+am1	rmac/amode.c	/^int am1;					\/\/ Addressing mode$/;"	v
+am1_030	rmac/amode.c	/^WORD am1_030;				\/\/ ea bits for 020+ addressing modes$/;"	v
+amN	rmac/eagen.c	/^#define amN /;"	d	file:
+amN	rmac/eagen0.c	/^#undef amN$/;"	d	file:
+am_6	rmac/mach.c	/^WORD am_6[] = {$/;"	v
+amode	rmac/amode.c	/^int amode(int acount)$/;"	f
+amsktab	rmac/procln.c	/^LONG amsktab[0124] = {$/;"	v
+append_minus_1	rmac/dsp56k_mach.c	/^void append_minus_1(TOKEN * expr)$/;"	f
+argno	rmac/macro.c	/^static uint32_t argno;			\/\/ Formal argument count$/;"	v	file:
+as68_flag	rmac/rmac.c	/^int as68_flag;					\/\/ as68 kludge mode$/;"	v
+auto_even	rmac/direct.c	/^void auto_even(void)$/;"	f
+basename	rmac/kwgen.c	/^char *basename;			\/* -> string to prepend to array names *\/$/;"	v
+bf0esym	rmac/amode.c	/^SYM * bf0esym;				\/\/ External symbol involved in expr$/;"	v
+bf0exattr	rmac/amode.c	/^WORD bf0exattr;				\/\/ Expression's attribute$/;"	v
+bf0expr	rmac/amode.c	/^TOKEN bf0expr[EXPRSIZE];	\/\/ Expression$/;"	v
+bf0exval	rmac/amode.c	/^uint64_t bf0exval;			\/\/ Expression's value$/;"	v
+bfparam1	rmac/amode.c	/^int bfparam1;				\/\/ bfxxx \/ fmove instruction parameter 1$/;"	v
+bfparam2	rmac/amode.c	/^int bfparam2;				\/\/ bfxxx \/ fmove instruction parameter 2$/;"	v
+bfval1	rmac/amode.c	/^int bfval1;					\/\/ bfxxx \/ fmove value 1$/;"	v
+bfval2	rmac/amode.c	/^int bfval2;					\/\/ bfxxx \/ fmove value 2$/;"	v
+buf	rmac/listing.c	/^static char buf[IMAGESIZ];			\/\/ Buffer for numbers$/;"	v	file:
+buffer	rmac/direct.c	/^char buffer[256];			\/\/ Scratch buffer for messages$/;"	v
+byte1	test.s	/^byte1: dc.b $00$/;"	d
+byte_1E06	syn6.s	/^byte_1E06:      dc.b 1                  ; DATA XREF: ROM:000002C6↑r$/;"	d
+byte_1E07	syn6.s	/^byte_1E07:      dc.b 0                  ; DATA XREF: ROM:00000538↑w$/;"	d
+byte_FFE	syn6.s	/^byte_FFE:       dc.b 0                  ; DATA XREF: ROM:000001A6↑o$/;"	d
+byte_FFF	syn6.s	/^byte_FFF:       dc.b 0                  ; DATA XREF: sub_824+8↑o$/;"	d
+cfileno	rmac/token.c	/^WORD cfileno;				\/\/ Current file number$/;"	v
+ch_size	rmac/sect.c	/^uint32_t ch_size;		\/\/ # bytes used in code chunk$/;"	v
+challoc	rmac/sect.c	/^uint32_t challoc;		\/\/ # bytes alloc'd to code chunk$/;"	v
+chcheck	rmac/sect.c	/^void chcheck(uint32_t amt)$/;"	f
+chdump	rmac/debug.c	/^int chdump(CHUNK * ch, int format)$/;"	f
+check_x_y	rmac/dsp56k_amode.c	/^static inline LONG check_x_y(LONG ea1, LONG S1)$/;"	f	file:
+checkea	rmac/dsp56k_amode.c	/^static inline LONG checkea(const uint32_t termchar, const int strings)$/;"	f	file:
+checkea_full	rmac/dsp56k_amode.c	/^LONG checkea_full(const uint32_t termchar, const int strings)$/;"	f
+chptr	rmac/sect.c	/^uint8_t * chptr;		\/\/ Deposit point in code chunk buffer$/;"	v
+chptr_opcode	rmac/sect.c	/^uint8_t * chptr_opcode;	\/\/ Backup of chptr, updated before entering code generators$/;"	v
+chrtab	rmac/token.c	/^uint8_t chrtab[0x100] = {$/;"	v
+cmdlnexec	rmac/rmac.c	/^char * cmdlnexec;				\/\/ Executable name, pointer to ARGV[0]$/;"	v
+comma_error	rmac/procln.c	/^const char comma_error[] = "missing comma";$/;"	v
+comp_entry	rmac/kwgen.c	/^int comp_entry(struct name_entry * ent1, struct name_entry * ent2)$/;"	f
+condname	rmac/riscasm.c	/^static const char condname[MAXINTERNCC][5] = {$/;"	v	file:
+condnumber	rmac/riscasm.c	/^static const char condnumber[] = {$/;"	v	file:
+cur_inobj	rmac/token.c	/^INOBJ * cur_inobj;			\/\/ Ptr current input obj (IFILE\/IMACRO)$/;"	v
+curenv	rmac/symbol.c	/^int curenv;							\/\/ Current enviroment number$/;"	v
+curfname	rmac/token.c	/^char * curfname;			\/\/ Current filename$/;"	v
+curfrom	rmac/mark.c	/^uint16_t curfrom;		\/\/ Current "from" section$/;"	v
+curlineno	rmac/token.c	/^uint32_t curlineno;			\/\/ Current line number (64K max currently)$/;"	v
+curmac	rmac/macro.c	/^static SYM * curmac;		\/\/ Macro currently being defined$/;"	v	file:
+curmch	rmac/mark.c	/^MCHUNK * curmch;		\/\/ Current mark chunk$/;"	v
+currentUID	rmac/symbol.c	/^static uint32_t currentUID;			\/\/ Symbol UID tracking (done by NewSymbol())$/;"	v	file:
+currentorg	rmac/6502.c	/^uint16_t * currentorg = &orgmap[0][0];	\/\/ Current org range$/;"	v
+cursect	rmac/sect.c	/^int cursect;			\/\/ Current section number$/;"	v
+curuniq	rmac/macro.c	/^LONG curuniq;				\/\/ Current macro's unique number$/;"	v
+d_56001	rmac/direct.c	/^int d_56001(void)$/;"	f
+d_6502	rmac/6502.c	/^int d_6502()$/;"	f
+d_68000	rmac/direct.c	/^int d_68000(void)$/;"	f
+d_68020	rmac/direct.c	/^int d_68020(void)$/;"	f
+d_68030	rmac/direct.c	/^int d_68030(void)$/;"	f
+d_68040	rmac/direct.c	/^int d_68040(void)$/;"	f
+d_68060	rmac/direct.c	/^int d_68060(void)$/;"	f
+d_68881	rmac/direct.c	/^int d_68881(void)$/;"	f
+d_68882	rmac/direct.c	/^int d_68882(void)$/;"	f
+d_abs	rmac/direct.c	/^int d_abs(void)$/;"	f
+d_assert	rmac/direct.c	/^int d_assert(void)$/;"	f
+d_bss	rmac/direct.c	/^int d_bss(void)$/;"	f
+d_cargs	rmac/direct.c	/^int d_cargs(void)$/;"	f
+d_ccundef	rmac/direct.c	/^int d_ccundef(void)$/;"	f
+d_comm	rmac/direct.c	/^int d_comm(void)$/;"	f
+d_cstruct	rmac/direct.c	/^int d_cstruct(void)$/;"	f
+d_data	rmac/direct.c	/^int d_data(void)$/;"	f
+d_dc	rmac/direct.c	/^int d_dc(WORD siz)$/;"	f
+d_dcb	rmac/direct.c	/^int d_dcb(WORD siz)$/;"	f
+d_dphrase	rmac/direct.c	/^int d_dphrase(void)$/;"	f
+d_ds	rmac/direct.c	/^int d_ds(WORD siz)$/;"	f
+d_dsm	rmac/direct.c	/^int d_dsm(WORD siz)$/;"	f
+d_dsp	rmac/direct.c	/^int d_dsp(void)$/;"	f
+d_else	rmac/direct.c	/^int d_else(void)$/;"	f
+d_endif	rmac/direct.c	/^int d_endif(void)$/;"	f
+d_equrundef	rmac/direct.c	/^int d_equrundef(void)$/;"	f
+d_error	rmac/direct.c	/^int d_error(char *str)$/;"	f
+d_even	rmac/direct.c	/^int d_even(void)$/;"	f
+d_globl	rmac/direct.c	/^int d_globl(void)$/;"	f
+d_goto	rmac/token.c	/^int d_goto(WORD unused)$/;"	f
+d_gpu	rmac/direct.c	/^int d_gpu(void)$/;"	f
+d_gpumain	rmac/direct.c	/^int d_gpumain(void)$/;"	f
+d_if	rmac/direct.c	/^int d_if(void)$/;"	f
+d_incbin	rmac/direct.c	/^int d_incbin(void)$/;"	f
+d_include	rmac/direct.c	/^int d_include(void)$/;"	f
+d_init	rmac/direct.c	/^int d_init(WORD def_siz)$/;"	f
+d_jpad	rmac/direct.c	/^int d_jpad(void)$/;"	f
+d_list	rmac/direct.c	/^int d_list(void)$/;"	f
+d_long	rmac/direct.c	/^int d_long(void)$/;"	f
+d_nlist	rmac/direct.c	/^int d_nlist(void)$/;"	f
+d_noclear	rmac/direct.c	/^int d_noclear(void)$/;"	f
+d_nofpu	rmac/direct.c	/^int d_nofpu(void)$/;"	f
+d_nojpad	rmac/direct.c	/^int d_nojpad(void)$/;"	f
+d_objproc	rmac/direct.c	/^int d_objproc(void)$/;"	f
+d_opt	rmac/direct.c	/^int d_opt(void)$/;"	f
+d_org	rmac/direct.c	/^int d_org(void)$/;"	f
+d_phrase	rmac/direct.c	/^int d_phrase(void)$/;"	f
+d_prgflags	rmac/direct.c	/^int d_prgflags(void)$/;"	f
+d_print	rmac/direct.c	/^int d_print(void)$/;"	f
+d_qphrase	rmac/direct.c	/^int d_qphrase(void)$/;"	f
+d_regbank0	rmac/direct.c	/^int d_regbank0(void)$/;"	f
+d_regbank1	rmac/direct.c	/^int d_regbank1(void)$/;"	f
+d_subttl	rmac/listing.c	/^int d_subttl(void)$/;"	f
+d_text	rmac/direct.c	/^int d_text(void)$/;"	f
+d_title	rmac/listing.c	/^int d_title(void)$/;"	f
+d_undmac	rmac/direct.c	/^int d_undmac(void)$/;"	f
+d_unimpl	rmac/direct.c	/^int d_unimpl(void)$/;"	f
+d_warn	rmac/direct.c	/^int d_warn(char *str)$/;"	f
+date_string	rmac/listing.c	/^void date_string(char * buf, uint32_t date)$/;"	f
+datestr	rmac/listing.c	/^static char datestr[20];			\/\/ Current date dd-mon-yyyy$/;"	v	file:
+debug	rmac/kwgen.c	/^int debug = 0;			\/* 1, enable debugging messages *\/$/;"	v
+debug	rmac/rmac.c	/^int debug;						\/\/ [1..9] Enable debugging levels$/;"	v
+defmac1	rmac/macro.c	/^int defmac1(char * ln, int notEndFlag)$/;"	f
+defmac2	rmac/macro.c	/^int defmac2(char * argname)$/;"	f
+defname	rmac/rmac.c	/^char defname[] = "noname.o";	\/\/ Default output filename$/;"	v
+defr1	rmac/macro.c	/^int defr1(char * line, int kwno)$/;"	f
+dep_block	rmac/direct.c	/^int dep_block(uint32_t count, WORD siz, uint32_t eval, WORD eattr, TOKEN * exprbuf)$/;"	f
+deposit_extra_ea	rmac/dsp56k_amode.c	/^int  deposit_extra_ea;			\/\/ Optional effective address extension$/;"	v
+dirtab	rmac/direct.c	/^int (*dirtab[])() = {$/;"	v
+disabled	rmac/procln.c	/^int disabled;					\/\/ Assembly conditionally disabled$/;"	v
+dos_date	rmac/listing.c	/^uint32_t dos_date(void)$/;"	f
+dos_time	rmac/listing.c	/^uint32_t dos_time(void)$/;"	f
+dotxtab	rmac/token.c	/^char dotxtab[128];			\/\/ Table for ".b", ".s", etc.$/;"	v
+dsp56001	rmac/rmac.c	/^int dsp56001;					\/\/ Assembling DSP 56001 code$/;"	v
+dsp56k_machtab	rmac/dsp56k_mach.c	/^MNTABDSP dsp56k_machtab[] = {$/;"	v
+dspImmedESYM	rmac/dsp56k_amode.c	/^SYM * dspImmedESYM;				\/\/ External symbol involved in expr$/;"	v
+dspImmedEXATTR	rmac/dsp56k_amode.c	/^WORD  dspImmedEXATTR;			\/\/ Expression's attribute$/;"	v
+dspImmedEXPR	rmac/dsp56k_amode.c	/^TOKEN dspImmedEXPR[EXPRSIZE];	\/\/ Expression$/;"	v
+dspImmedEXVAL	rmac/dsp56k_amode.c	/^uint64_t dspImmedEXVAL;			\/\/ Expression's value$/;"	v
+dsp_a0esym	rmac/dsp56k_amode.c	/^SYM * dsp_a0esym;				\/\/ External symbol involved in expr$/;"	v
+dsp_a0exattr	rmac/dsp56k_amode.c	/^WORD dsp_a0exattr;				\/\/ Expression's attribute$/;"	v
+dsp_a0expr	rmac/dsp56k_amode.c	/^TOKEN dsp_a0expr[EXPRSIZE];		\/\/ Expression$/;"	v
+dsp_a0exval	rmac/dsp56k_amode.c	/^uint64_t dsp_a0exval;			\/\/ Expression's value$/;"	v
+dsp_a0memspace	rmac/dsp56k_amode.c	/^LONG dsp_a0memspace;			\/\/ Addressing mode's memory space (P, X, Y)$/;"	v
+dsp_a0perspace	rmac/dsp56k_amode.c	/^LONG dsp_a0perspace;			\/\/ Peripheral space (X, Y - used in movep)$/;"	v
+dsp_a0reg	rmac/dsp56k_amode.c	/^int dsp_a0reg;					\/\/ Register$/;"	v
+dsp_a1esym	rmac/dsp56k_amode.c	/^SYM * dsp_a1esym;				\/\/ External symbol involved in expr$/;"	v
+dsp_a1exattr	rmac/dsp56k_amode.c	/^WORD dsp_a1exattr;				\/\/ Expression's attribute$/;"	v
+dsp_a1expr	rmac/dsp56k_amode.c	/^TOKEN dsp_a1expr[EXPRSIZE];		\/\/ Expression$/;"	v
+dsp_a1exval	rmac/dsp56k_amode.c	/^uint64_t dsp_a1exval;			\/\/ Expression's value$/;"	v
+dsp_a1memspace	rmac/dsp56k_amode.c	/^LONG dsp_a1memspace;			\/\/ Addressing mode's memory space (P, X, Y)$/;"	v
+dsp_a1perspace	rmac/dsp56k_amode.c	/^LONG dsp_a1perspace;			\/\/ Peripheral space (X, Y - used in movep)$/;"	v
+dsp_a1reg	rmac/dsp56k_amode.c	/^int dsp_a1reg;					\/\/ Register$/;"	v
+dsp_a2esym	rmac/dsp56k_amode.c	/^SYM * dsp_a2esym;				\/\/ External symbol involved in expr$/;"	v
+dsp_a2exattr	rmac/dsp56k_amode.c	/^WORD dsp_a2exattr;				\/\/ Expression's attribute$/;"	v
+dsp_a2expr	rmac/dsp56k_amode.c	/^TOKEN dsp_a2expr[EXPRSIZE];		\/\/ Expression$/;"	v
+dsp_a2exval	rmac/dsp56k_amode.c	/^uint64_t dsp_a2exval;			\/\/ Expression's value$/;"	v
+dsp_a2reg	rmac/dsp56k_amode.c	/^int dsp_a2reg;					\/\/ Register$/;"	v
+dsp_a3esym	rmac/dsp56k_amode.c	/^SYM * dsp_a3esym;				\/\/ External symbol involved in expr$/;"	v
+dsp_a3exattr	rmac/dsp56k_amode.c	/^WORD dsp_a3exattr;				\/\/ Expression's attribute$/;"	v
+dsp_a3expr	rmac/dsp56k_amode.c	/^TOKEN dsp_a3expr[EXPRSIZE];		\/\/ Expression$/;"	v
+dsp_a3exval	rmac/dsp56k_amode.c	/^uint64_t dsp_a3exval;			\/\/ Expression's value$/;"	v
+dsp_a3reg	rmac/dsp56k_amode.c	/^int dsp_a3reg;					\/\/ Register$/;"	v
+dsp_ab	rmac/dsp56k_mach.c	/^int dsp_ab(LONG inst)$/;"	f
+dsp_ab_rn	rmac/dsp56k_mach.c	/^int dsp_ab_rn(LONG inst)$/;"	f
+dsp_abs12	rmac/dsp56k_mach.c	/^int dsp_abs12(LONG inst)$/;"	f
+dsp_acc48	rmac/dsp56k_mach.c	/^int dsp_acc48(LONG inst)$/;"	f
+dsp_alu24	rmac/dsp56k_mach.c	/^int dsp_alu24(LONG inst)$/;"	f
+dsp_alu24_abs16	rmac/dsp56k_mach.c	/^int dsp_alu24_abs16(LONG inst)$/;"	f
+dsp_am0	rmac/dsp56k_amode.c	/^int dsp_am0;					\/\/ Addressing mode$/;"	v
+dsp_am1	rmac/dsp56k_amode.c	/^int dsp_am1;					\/\/ Addressing mode$/;"	v
+dsp_am2	rmac/dsp56k_amode.c	/^int dsp_am2;					\/\/ Addressing mode$/;"	v
+dsp_am3	rmac/dsp56k_amode.c	/^int dsp_am3;					\/\/ Addressing mode$/;"	v
+dsp_amode	rmac/dsp56k_amode.c	/^int dsp_amode(int maxea)$/;"	f
+dsp_baab	rmac/dsp56k_mach.c	/^int dsp_baab(LONG inst)$/;"	f
+dsp_currentorg	rmac/dsp56k.c	/^DSP_ORG * dsp_currentorg = &dsp_orgmap[0];$/;"	v
+dsp_ea	rmac/dsp56k_mach.c	/^int dsp_ea(LONG inst)$/;"	f
+dsp_ea_abs16	rmac/dsp56k_mach.c	/^int dsp_ea_abs16(LONG inst)$/;"	f
+dsp_ea_imm5	rmac/dsp56k_mach.c	/^int dsp_ea_imm5(LONG inst)$/;"	f
+dsp_ea_imm5_abs16	rmac/dsp56k_mach.c	/^int dsp_ea_imm5_abs16(LONG inst)$/;"	f
+dsp_ea_lua	rmac/dsp56k_mach.c	/^int dsp_ea_lua(LONG inst)$/;"	f
+dsp_extra_ea	rmac/dsp56k_mach.c	/^static inline int dsp_extra_ea()$/;"	f	file:
+dsp_imm12	rmac/dsp56k_mach.c	/^int dsp_imm12(LONG inst)$/;"	f
+dsp_imm12_abs16	rmac/dsp56k_mach.c	/^int dsp_imm12_abs16(LONG inst)$/;"	f
+dsp_immcr	rmac/dsp56k_mach.c	/^int dsp_immcr(LONG inst)$/;"	f
+dsp_immmovec	rmac/dsp56k_mach.c	/^int dsp_immmovec(LONG inst)$/;"	f
+dsp_k	rmac/dsp56k_amode.c	/^int dsp_k;						\/\/ Multiplications sign$/;"	v
+dsp_movec_aa	rmac/dsp56k_mach.c	/^int dsp_movec_aa(LONG inst)$/;"	f
+dsp_movec_ea	rmac/dsp56k_mach.c	/^int dsp_movec_ea(LONG inst)$/;"	f
+dsp_movec_reg	rmac/dsp56k_mach.c	/^int dsp_movec_reg(LONG inst)$/;"	f
+dsp_movem_aa	rmac/dsp56k_mach.c	/^int dsp_movem_aa(LONG inst)$/;"	f
+dsp_movem_ea	rmac/dsp56k_mach.c	/^int dsp_movem_ea(LONG inst)$/;"	f
+dsp_movep_ea	rmac/dsp56k_mach.c	/^int dsp_movep_ea(LONG inst)$/;"	f
+dsp_movep_reg	rmac/dsp56k_mach.c	/^int dsp_movep_reg(LONG inst)$/;"	f
+dsp_mult	rmac/dsp56k_mach.c	/^int dsp_mult(LONG inst)$/;"	f
+dsp_orgaddr	rmac/dsp56k_mach.c	/^unsigned int dsp_orgaddr;	\/\/ DSP 56001 ORG address$/;"	v
+dsp_orgmap	rmac/dsp56k.c	/^DSP_ORG dsp_orgmap[1024];		\/\/ Mark all 56001 org changes$/;"	v
+dsp_orgseg	rmac/dsp56k_mach.c	/^unsigned int dsp_orgseg;	\/\/ DSP 56001 ORG segment$/;"	v
+dsp_parmode	rmac/dsp56k_amode.c	/^static inline int dsp_parmode(int *am, int *areg, TOKEN * AnEXPR, uint64_t * AnEXVAL, WORD * AnEXATTR, SYM ** AnESYM, LONG *memspace, LONG *perspace, const int operand)$/;"	f	file:
+dsp_reg	rmac/dsp56k_mach.c	/^int dsp_reg(LONG inst)$/;"	f
+dsp_reg_abs16	rmac/dsp56k_mach.c	/^int dsp_reg_abs16(LONG inst)$/;"	f
+dsp_reg_imm5	rmac/dsp56k_mach.c	/^int dsp_reg_imm5(LONG inst)$/;"	f
+dsp_reg_imm5_abs16	rmac/dsp56k_mach.c	/^int dsp_reg_imm5_abs16(LONG inst)$/;"	f
+dsp_self	rmac/dsp56k_mach.c	/^int dsp_self(LONG inst)$/;"	f
+dsp_tcc2	rmac/dsp56k_mach.c	/^int dsp_tcc2(LONG inst)$/;"	f
+dsp_tcc4	rmac/dsp56k_mach.c	/^int dsp_tcc4(LONG inst)$/;"	f
+dsp_written_data_in_current_org	rmac/dsp56k.c	/^int dsp_written_data_in_current_org = 0;$/;"	v
+dsp_x0y0ab	rmac/dsp56k_mach.c	/^int dsp_x0y0ab(LONG inst)$/;"	f
+dsp_xyab	rmac/dsp56k_mach.c	/^int dsp_xyab(LONG inst)$/;"	f
+dspaaESYM	rmac/dsp56k_amode.c	/^SYM * dspaaESYM;				\/\/ External symbol involved in expr$/;"	v
+dspaaEXATTR	rmac/dsp56k_amode.c	/^WORD  dspaaEXATTR;				\/\/ Expression's attribute$/;"	v
+dspaaEXPR	rmac/dsp56k_amode.c	/^TOKEN dspaaEXPR[EXPRSIZE];		\/\/ Expression$/;"	v
+dspaaEXVAL	rmac/dsp56k_amode.c	/^uint64_t dspaaEXVAL;			\/\/ Expression's value$/;"	v
+dspaccept	rmac/dsp56kkw.h	/^int dspaccept[355] = {$/;"	v
+dspbase	rmac/dsp56kkw.h	/^int dspbase[112] = {$/;"	v
+dspcheck	rmac/dsp56kkw.h	/^int dspcheck[355] = {$/;"	v
+dsptab	rmac/dsp56kkw.h	/^int dsptab[355] = {$/;"	v
+dump_everything	rmac/debug.c	/^int dump_everything(void)$/;"	f
+dumptab	rmac/kwgen.c	/^void dumptab(char * tabname, char * tabprefix, int * table, int tabsize)$/;"	f
+dumptok	rmac/debug.c	/^int dumptok(TOKEN * tk)$/;"	f
+dword_100E	syn6.s	/^dword_100E:     dc.l 0                  ; DATA XREF: sub_68C+4↑w$/;"	d
+dword_1DDC	syn6.s	/^dword_1DDC:     dc.l $FFFFFFFF          ; DATA XREF: ROM:000005E2↑o$/;"	d
+dword_1DE0	syn6.s	/^dword_1DE0:     dcb.l 4,0               ; DATA XREF: ROM:0000011E↑o$/;"	d
+dword_1DF0	syn6.s	/^dword_1DF0:     dc.l 2                  ; DATA XREF: ROM:00000124↑w$/;"	d
+dword_1DFE	syn6.s	/^dword_1DFE:     dc.l $60                ; DATA XREF: ROM:000004E0↑r$/;"	d
+dword_1E08	syn6.s	/^dword_1E08:     dcb.l 3,0               ; DATA XREF: ROM:000003A0↑o$/;"	d
+dword_7E0	syn6.s	/^dword_7E0:      dcb.l $D,0              ; DATA XREF: sub_68C+C2↑o$/;"	d
+dword_814	syn6.s	/^dword_814:      dcb.l 4,0               ; DATA XREF: sub_68C+AA↑o$/;"	d
+dword_E40	syn6.s	/^dword_E40:      dc.l $200022, $2E003A, $460052, $580090, $9E00A0, $DE00EC$/;"	d
+eaNgen	rmac/eagen.c	/^#define eaNgen /;"	d	file:
+eaNgen	rmac/eagen0.c	/^#undef eaNgen$/;"	d	file:
+eaNgen	rmac/eagen0.c	/^int eaNgen(WORD siz)$/;"	f
+ea_errors	rmac/dsp56k_amode.c	/^const char *ea_errors[][12] = {$/;"	v
+eject	rmac/listing.c	/^int eject(void)$/;"	f
+elfHdrNum	rmac/object.c	/^int elfHdrNum[9] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };$/;"	v
+endian	rmac/rmac.c	/^int endian;						\/\/ Host processor endianess (0 = LE, 1 = BE)$/;"	v
+err_fd	rmac/rmac.c	/^int err_fd;						\/\/ File to write error messages to$/;"	v
+err_flag	rmac/rmac.c	/^int err_flag;					\/\/ '-e' specified$/;"	v
+err_fname	rmac/error.c	/^char * err_fname;				\/\/ Name of error message file$/;"	v
+err_setup	rmac/error.c	/^void err_setup(void)$/;"	f
+errcnt	rmac/error.c	/^int errcnt;						\/\/ Error count$/;"	v
+error	rmac/68kgen.c	/^void error(char * s, char * s1)$/;"	f
+error	rmac/dsp56kgen.c	/^void error(char * s, char * s1)$/;"	f
+error	rmac/error.c	/^int error(const char * text, ...)$/;"	f
+etok	rmac/token.c	/^TOKEN * etok;				\/\/ Ptr past last token in tokbuf[]$/;"	v
+evalTokenBuffer	rmac/expr.c	/^static PTR evalTokenBuffer;		\/\/ Deposit tokens here (this is really a$/;"	v	file:
+evattr	rmac/expr.c	/^static WORD evattr[EVSTACKSIZE];	\/\/ Evaluator attribute stack$/;"	v	file:
+evexpr	rmac/expr.c	/^int evexpr(TOKEN * _tk, uint64_t * a_value, WORD * a_attr, SYM ** a_esym)$/;"	f
+evstk	rmac/expr.c	/^static uint64_t evstk[EVSTACKSIZE];	\/\/ Evaluator value stack$/;"	v	file:
+expr	rmac/expr.c	/^int expr(TOKEN * otk, uint64_t * a_value, WORD * a_attr, SYM ** a_esym)$/;"	f
+expr0	rmac/expr.c	/^int expr0(void)$/;"	f
+expr1	rmac/expr.c	/^int expr1(void)$/;"	f
+expr2	rmac/expr.c	/^int expr2(void)$/;"	f
+exprbuf	rmac/direct.c	/^TOKEN exprbuf[128];			\/\/ Expression buffer$/;"	v
+extraSyms	rmac/object.c	/^uint32_t extraSyms;$/;"	v
+extra_addressing	rmac/mach.c	/^WORD extra_addressing[16]=$/;"	v
+extra_stuff	rmac/procln.c	/^const char extra_stuff[] = "extra (unexpected) text found after addressing mode";$/;"	v
+f_ifent	rmac/procln.c	/^IFENT * f_ifent;				\/\/ Freelist of ifents$/;"	v
+f_ifile	rmac/token.c	/^static IFILE * f_ifile;		\/\/ Ptr list of free IFILEs$/;"	v	file:
+f_imacro	rmac/token.c	/^static IMACRO * f_imacro;	\/\/ Ptr list of free IMACROs$/;"	v	file:
+f_inobj	rmac/token.c	/^static INOBJ * f_inobj;		\/\/ Ptr list of free INOBJs$/;"	v	file:
+fatal	rmac/error.c	/^int fatal(const char * s)$/;"	f
+fext	rmac/rmac.c	/^char * fext(char * name, char * extension, int stripp)$/;"	f
+filecount	rmac/token.c	/^WORD filecount;				\/\/ Unique file number counter$/;"	v
+filerec	rmac/token.c	/^FILEREC * filerec;$/;"	v
+firstfname	rmac/rmac.c	/^char * firstfname;				\/\/ First source filename$/;"	v
+firstglobal	rmac/symbol.c	/^uint32_t firstglobal; \/\/ Index of the first global symbol in an ELF object.$/;"	v
+firstmch	rmac/mark.c	/^MCHUNK * firstmch;		\/\/ First mark chunk$/;"	v
+firstrpt	rmac/macro.c	/^static LLIST * firstrpt;	\/\/ First .rept line$/;"	v	file:
+fixtest	rmac/sect.c	/^int fixtest(int sno, uint32_t loc)$/;"	f
+fixupExpr	rmac/op.c	/^static TOKEN fixupExpr[4] = { CONST, 0, 0, ENDEXPR };$/;"	v	file:
+fixupPtr	rmac/op.c	/^static PTR fixupPtr = { (uint8_t *)(fixupExpr + 1) };	\/\/ meh, it works$/;"	v	file:
+fpop	rmac/token.c	/^int fpop(void)$/;"	f
+fpu_reglist_left	rmac/amode.c	/^int fpu_reglist_left(WORD * a_rmask)$/;"	f
+fpu_reglist_right	rmac/amode.c	/^int fpu_reglist_right(WORD * a_rmask)$/;"	f
+fudump	rmac/debug.c	/^int fudump(FIXUP * fup)$/;"	f
+fusizoffs	rmac/sect.c	/^static uint8_t fusizoffs[] = {$/;"	v	file:
+fusiztab	rmac/sect.c	/^static uint8_t fusiztab[] = {$/;"	v	file:
+fwd_error	rmac/mach.c	/^char fwd_error[] = "forward or undefined expression";$/;"	v
+gen_fpu	rmac/mach.c	/^static inline int gen_fpu(WORD inst, WORD siz, WORD opmode, WORD emul)$/;"	f	file:
+glob_flag	rmac/rmac.c	/^int glob_flag;					\/\/ Assume undefined symbols are global$/;"	v
+globl1	rmac/direct.c	/^int globl1(char * p)$/;"	f
+hextab	rmac/token.c	/^int8_t hextab[128];			\/\/ Table of hex values$/;"	v
+ifent	rmac/procln.c	/^IFENT * ifent;					\/\/ Current ifent$/;"	v
+ifent0	rmac/procln.c	/^static IFENT ifent0;			\/\/ Root ifent$/;"	v	file:
+imodes	rmac/6502.c	/^static char imodes[] =$/;"	v	file:
+in_6502mode	rmac/6502.c	/^const char in_6502mode[] = "directive illegal in .6502 section";$/;"	v
+include	rmac/token.c	/^int include(int handle, char * fname)$/;"	f
+inf	rmac/6502.c	/^static unsigned char inf[NMACHOPS][NMODES];	\/\/ Construction info$/;"	v	file:
+inline	rmac/rmac.h	/^	#define inline /;"	d
+interror	rmac/error.c	/^int interror(int n)$/;"	f
+irbuf	rmac/token.c	/^char irbuf[LNSIZ];			\/\/ Text for .rept block line$/;"	v
+itokcl	rmac/expr.c	/^char itokcl[] = {$/;"	v
+just_bss	rmac/procln.c	/^int just_bss;					\/\/ 1, ds.b in microprocessor mode$/;"	v
+kaccept	rmac/kwgen.c	/^int kaccept[TABSIZE];		\/* accept (or -1) *\/$/;"	v
+kbase	rmac/kwgen.c	/^int kbase[TABSIZE];		\/* ktab[] index for a state `i' *\/$/;"	v
+kcheck	rmac/kwgen.c	/^int kcheck[TABSIZE];		\/* check state number (or -1) *\/$/;"	v
+kfp	rmac/68kgen.c	/^FILE * kfp;				\/* keyword file *\/$/;"	v
+kfp	rmac/dsp56kgen.c	/^FILE * kfp;				\/* keyword file *\/$/;"	v
+kmax	rmac/kwgen.c	/^int kmax = 0;			\/* largest index into ktab *\/$/;"	v
+ktab	rmac/kwgen.c	/^int ktab[TABSIZE];		\/* next state number (or -1) *\/$/;"	v
+kwaccept	rmac/kwtab.h	/^int kwaccept[355] = {$/;"	v
+kwbase	rmac/kwtab.h	/^int kwbase[122] = {$/;"	v
+kwcheck	rmac/kwtab.h	/^int kwcheck[355] = {$/;"	v
+kwnum	rmac/68kgen.c	/^int kwnum = 1;			\/* current op# for kwgen output *\/$/;"	v
+kwnum	rmac/dsp56kgen.c	/^int kwnum = 1;			\/* current op# for kwgen output *\/$/;"	v
+kwtab	rmac/kwtab.h	/^int kwtab[355] = {$/;"	v
+lab_ignored	rmac/procln.c	/^const char lab_ignored[] = "label ignored";$/;"	v
+lab_sym	rmac/procln.c	/^SYM * lab_sym;					\/\/ Label on line (or NULL)$/;"	v
+label_defined	rmac/procln.c	/^char * label_defined;			\/\/ The name of the last label defined in current line (if any)$/;"	v
+largestAlign	rmac/direct.c	/^int largestAlign[3] = { 2, 2, 2 };	\/\/ Largest alignment value seen per section$/;"	v
+lastObjType	rmac/op.c	/^static uint8_t lastObjType;$/;"	v	file:
+lastOpcode	rmac/riscasm.c	/^int lastOpcode = -1;		\/\/ Last RISC opcode assembled$/;"	v
+lastSloc	rmac/op.c	/^static uint32_t lastSloc;$/;"	v	file:
+last_fr	rmac/token.c	/^FILEREC * last_fr;$/;"	v
+lcursect	rmac/listing.c	/^static int lcursect;				\/\/ `cursect' at start of line$/;"	v	file:
+lea	test.s	/^lea     $1DE0,a2$/;"	l
+legacy_flag	rmac/rmac.c	/^int legacy_flag;				\/\/ Do stuff like insert code in RISC assembler$/;"	v
+lineno	rmac/68kgen.c	/^int lineno = 0;$/;"	v
+lineno	rmac/dsp56kgen.c	/^int lineno = 0;$/;"	v
+list_fd	rmac/rmac.c	/^int list_fd;					\/\/ File to write listing to$/;"	v
+list_flag	rmac/rmac.c	/^int list_flag;					\/\/ "-l" listing flag on command line$/;"	v
+list_fname	rmac/listing.c	/^char * list_fname;					\/\/ Listing filename$/;"	v
+list_pag	rmac/rmac.c	/^int list_pag = 1;				\/\/ Enable listing pagination by default$/;"	v
+list_setup	rmac/listing.c	/^void list_setup(void)$/;"	f
+listeol	rmac/listing.c	/^void listeol(void)$/;"	f
+listing	rmac/listing.c	/^int listing;						\/\/ Listing level$/;"	v
+listvalue	rmac/listing.c	/^int listvalue(uint32_t v)$/;"	f
+llineno	rmac/listing.c	/^static int llineno;					\/\/ `curlineno' at start of line$/;"	v	file:
+lnbuf	rmac/token.c	/^char lnbuf[LNSIZ];			\/\/ Text of current line$/;"	v
+lnfill	rmac/listing.c	/^void lnfill(char * dest, int len, char chr)$/;"	f
+lnimage	rmac/listing.c	/^static char lnimage[IMAGESIZ];		\/\/ Image of output line$/;"	v	file:
+lnsave	rmac/token.c	/^int lnsave;					\/\/ 1; strcpy() text of current line$/;"	v
+lntag	rmac/token.c	/^char lntag;					\/\/ Line tag$/;"	v
+loc_148	syn6.s	/^loc_148:                                ; CODE XREF: ROM:00000164↓j$/;"	l
+loc_184	syn6.s	/^loc_184:                                ; CODE XREF: sub_16A+2E↓j$/;"	l
+loc_1C6	syn6.s	/^loc_1C6:                                ; CODE XREF: ROM:00000268↓j$/;"	l
+loc_1DC	syn6.s	/^loc_1DC:                                ; CODE XREF: ROM:000001CC↑j$/;"	l
+loc_238	syn6.s	/^loc_238:                                ; CODE XREF: ROM:0000022E↑j$/;"	l
+loc_244	syn6.s	/^loc_244:                                ; CODE XREF: ROM:00000236↑j$/;"	l
+loc_25C	syn6.s	/^loc_25C:                                ; CODE XREF: ROM:000001F0↑j$/;"	l
+loc_292	syn6.s	/^loc_292:                                ; CODE XREF: ROM:00000286↑j$/;"	l
+loc_2A6	syn6.s	/^loc_2A6:                                ; CODE XREF: ROM:00000290↑j$/;"	l
+loc_2AA	syn6.s	/^loc_2AA:                                ; CODE XREF: ROM:00000274↑j$/;"	l
+loc_2BC	syn6.s	/^loc_2BC:                                ; CODE XREF: ROM:000002B6↑j$/;"	l
+loc_2E2	syn6.s	/^loc_2E2:                                ; CODE XREF: ROM:000002D2↑j$/;"	l
+loc_2EE	syn6.s	/^loc_2EE:                                ; CODE XREF: ROM:000002E0↑j$/;"	l
+loc_2F4	syn6.s	/^loc_2F4:                                ; CODE XREF: ROM:00000306↓j$/;"	l
+loc_300	syn6.s	/^loc_300:                                ; CODE XREF: ROM:000002FA↑j$/;"	l
+loc_31E	syn6.s	/^loc_31E:                                ; CODE XREF: ROM:0000032E↓j$/;"	l
+loc_328	syn6.s	/^loc_328:                                ; CODE XREF: ROM:00000320↑j$/;"	l
+loc_364	syn6.s	/^loc_364:                                ; CODE XREF: ROM:0000035E↑j$/;"	l
+loc_374	syn6.s	/^loc_374:                                ; CODE XREF: ROM:0000036E↑j$/;"	l
+loc_380	syn6.s	/^loc_380:                                ; CODE XREF: ROM:0000037A↑j$/;"	l
+loc_398	syn6.s	/^loc_398:                                ; CODE XREF: ROM:000002CA↑j$/;"	l
+loc_3AA	syn6.s	/^loc_3AA:                                ; CODE XREF: ROM:0000039A↑j$/;"	l
+loc_3CE	syn6.s	/^loc_3CE:                                ; CODE XREF: ROM:000003C2↑j$/;"	l
+loc_3E0	syn6.s	/^loc_3E0:                                ; CODE XREF: ROM:000003D2↑j$/;"	l
+loc_3F6	syn6.s	/^loc_3F6:                                ; CODE XREF: ROM:000003EE↑j$/;"	l
+loc_3FC	syn6.s	/^loc_3FC:                                ; CODE XREF: ROM:000003F4↑j$/;"	l
+loc_402	syn6.s	/^loc_402:                                ; CODE XREF: ROM:000003E4↑j$/;"	l
+loc_41A	syn6.s	/^loc_41A:                                ; CODE XREF: ROM:00000410↑j$/;"	l
+loc_41E	syn6.s	/^loc_41E:                                ; CODE XREF: ROM:00000418↑j$/;"	l
+loc_424	syn6.s	/^loc_424:                                ; CODE XREF: ROM:000003CC↑j$/;"	l
+loc_43C	syn6.s	/^loc_43C:                                ; CODE XREF: ROM:00000434↑j$/;"	l
+loc_440	syn6.s	/^loc_440:                                ; CODE XREF: ROM:0000043A↑j$/;"	l
+loc_45A	syn6.s	/^loc_45A:                                ; CODE XREF: ROM:00000446↑j$/;"	l
+loc_46A	syn6.s	/^loc_46A:                                ; CODE XREF: ROM:00000450↑j$/;"	l
+loc_47E	syn6.s	/^loc_47E:                                ; CODE XREF: ROM:00000474↑j$/;"	l
+loc_498	syn6.s	/^loc_498:                                ; CODE XREF: ROM:00000490↑j$/;"	l
+loc_49C	syn6.s	/^loc_49C:                                ; CODE XREF: ROM:00000496↑j$/;"	l
+loc_4AE	syn6.s	/^loc_4AE:                                ; CODE XREF: ROM:000004A4↑j$/;"	l
+loc_4BC	syn6.s	/^loc_4BC:                                ; CODE XREF: ROM:000004AC↑j$/;"	l
+loc_4D0	syn6.s	/^loc_4D0:                                ; CODE XREF: ROM:000004C6↑j$/;"	l
+loc_56	syn6.s	/^loc_56:                                 ; CODE XREF: ROM:00000058↓j$/;"	l
+loc_564	syn6.s	/^loc_564:                                ; CODE XREF: ROM:0000057A↓j$/;"	l
+loc_5B6	syn6.s	/^loc_5B6:                                ; CODE XREF: ROM:000005B0↑j$/;"	l
+loc_5B8	syn6.s	/^loc_5B8:                                ; CODE XREF: ROM:000005B4↑j$/;"	l
+loc_5C2	syn6.s	/^loc_5C2:                                ; CODE XREF: ROM:000005D4↓j$/;"	l
+loc_608	syn6.s	/^loc_608:                                ; CODE XREF: ROM:00000604↑j$/;"	l
+loc_62C	syn6.s	/^loc_62C:                                ; CODE XREF: ROM:00000624↑j$/;"	l
+loc_658	syn6.s	/^loc_658:                                ; CODE XREF: ROM:00000650↑j$/;"	l
+loc_6AE	syn6.s	/^loc_6AE:                                ; CODE XREF: sub_68C+18↑j$/;"	l
+loc_6DE	syn6.s	/^loc_6DE:                                ; CODE XREF: sub_68C:loc_6E6↓j$/;"	l
+loc_6E6	syn6.s	/^loc_6E6:                                ; CODE XREF: sub_68C+54↑j$/;"	l
+loc_702	syn6.s	/^loc_702:                                ; CODE XREF: sub_68C+78↓j$/;"	l
+loc_70E	syn6.s	/^loc_70E:                                ; CODE XREF: sub_68C+84↓j$/;"	l
+loc_73C	syn6.s	/^loc_73C:                                ; CODE XREF: sub_68C+BE↓j$/;"	l
+loc_780	syn6.s	/^loc_780:                                ; CODE XREF: sub_758+82↓j$/;"	l
+loc_79C	syn6.s	/^loc_79C:                                ; CODE XREF: sub_758+3A↑j$/;"	l
+loc_7A6	syn6.s	/^loc_7A6:                                ; CODE XREF: sub_758+4A↑j$/;"	l
+loc_7B8	syn6.s	/^loc_7B8:                                ; CODE XREF: sub_758+42↑j$/;"	l
+loc_850	syn6.s	/^loc_850:                                ; CODE XREF: sub_824+24↑j$/;"	l
+loc_860	syn6.s	/^loc_860:                                ; CODE XREF: sub_824+2E↑j$/;"	l
+loc_862	syn6.s	/^loc_862:                                ; CODE XREF: sub_824+16↑j$/;"	l
+loc_864	syn6.s	/^loc_864:                                ; CODE XREF: sub_824:loc_860↑j$/;"	l
+loc_89E	syn6.s	/^loc_89E:                                ; CODE XREF: sub_824+64↑j$/;"	l
+loc_8A8	syn6.s	/^loc_8A8:                                ; CODE XREF: sub_824+C2↓j$/;"	l
+loc_8C2	syn6.s	/^loc_8C2:                                ; CODE XREF: sub_824+9A↑j$/;"	l
+loc_8E2	syn6.s	/^loc_8E2:                                ; CODE XREF: sub_824+82↑j$/;"	l
+loc_8FE	syn6.s	/^loc_8FE:                                ; CODE XREF: sub_8EE+4↑j$/;"	l
+loc_988	syn6.s	/^loc_988:                                ; CODE XREF: sub_93C+18↑j$/;"	l
+loc_9BA	syn6.s	/^loc_9BA:                                ; CODE XREF: sub_93C+78↑j$/;"	l
+loc_9D2	syn6.s	/^loc_9D2:                                ; CODE XREF: sub_93C+88↑j$/;"	l
+loc_9D8	syn6.s	/^loc_9D8:                                ; CODE XREF: sub_93C+70↑j$/;"	l
+loc_9F4	syn6.s	/^loc_9F4:                                ; CODE XREF: sub_93C+A8↑j$/;"	l
+loc_A00	syn6.s	/^loc_A00:                                ; CODE XREF: sub_93C+C8↓j$/;"	l
+loc_A08	syn6.s	/^loc_A08:                                ; CODE XREF: sub_93C+C6↑j$/;"	l
+loc_A14	syn6.s	/^loc_A14:                                ; CODE XREF: sub_93C+BC↑j$/;"	l
+loc_A2C	syn6.s	/^loc_A2C:                                ; CODE XREF: sub_93C+EA↑j$/;"	l
+loc_A38	syn6.s	/^loc_A38:                                ; CODE XREF: sub_93C+F6↑j$/;"	l
+loc_A4A	syn6.s	/^loc_A4A:                                ; CODE XREF: sub_93C+60↑j$/;"	l
+loc_A5A	syn6.s	/^loc_A5A:                                ; CODE XREF: sub_93C+12A↓j$/;"	l
+loc_A6A	syn6.s	/^loc_A6A:                                ; CODE XREF: sub_93C+122↑j$/;"	l
+loc_A7A	syn6.s	/^loc_A7A:                                ; CODE XREF: sub_93C+136↑j$/;"	l
+loc_A96	syn6.s	/^loc_A96:                                ; CODE XREF: sub_93C+14E↑j$/;"	l
+loc_AD6	syn6.s	/^loc_AD6:                                ; CODE XREF: sub_A9C+1E↑j$/;"	l
+loc_B16	syn6.s	/^loc_B16:                                ; DATA XREF: sub_824+C↑o$/;"	l
+loc_B44	syn6.s	/^loc_B44:                                ; CODE XREF: ROM:00000B3C↑j$/;"	l
+loc_B4C	syn6.s	/^loc_B4C:                                ; CODE XREF: ROM:00000B36↑j$/;"	l
+loc_B52	syn6.s	/^loc_B52:                                ; CODE XREF: ROM:00000B42↑j$/;"	l
+loc_B68	syn6.s	/^loc_B68:                                ; CODE XREF: ROM:00000B72↓j$/;"	l
+loc_B78	syn6.s	/^loc_B78:                                ; CODE XREF: ROM:00000B50↑j$/;"	l
+loc_B90	syn6.s	/^loc_B90:                                ; CODE XREF: ROM:00000B88↑j$/;"	l
+loc_BAC	syn6.s	/^loc_BAC:                                ; CODE XREF: ROM:00000BA4↑j$/;"	l
+loc_BCA	syn6.s	/^loc_BCA:                                ; CODE XREF: sub_BC2+4↑j$/;"	l
+loc_BEA	syn6.s	/^loc_BEA:                                ; CODE XREF: sub_BC2+12↑j$/;"	l
+loc_BFC	syn6.s	/^loc_BFC:                                ; CODE XREF: sub_BC2+1C↑j$/;"	l
+loc_C1A	syn6.s	/^loc_C1A:                                ; CODE XREF: sub_BC2+64↓j$/;"	l
+loc_C2A	syn6.s	/^loc_C2A:                                ; CODE XREF: sub_BC2+5C↑j$/;"	l
+loc_C2E	syn6.s	/^loc_C2E:                                ; CODE XREF: sub_BC2+46↑j$/;"	l
+loc_C48	syn6.s	/^loc_C48:                                ; CODE XREF: ROM:00000C40↑j$/;"	l
+loc_C58	syn6.s	/^loc_C58:                                ; CODE XREF: ROM:00000C50↑j$/;"	l
+loc_C84	syn6.s	/^loc_C84:                                ; CODE XREF: sub_C5C+20↑j$/;"	l
+loc_C92	syn6.s	/^loc_C92:                                ; CODE XREF: sub_C5C+2C↑j$/;"	l
+loc_C96	syn6.s	/^loc_C96:                                ; CODE XREF: sub_C5C+18↑j$/;"	l
+loc_C9A	syn6.s	/^loc_C9A:                                ; CODE XREF: sub_C5C+26↑j$/;"	l
+loc_CB4	syn6.s	/^loc_CB4:                                ; CODE XREF: sub_C5C+52↑j$/;"	l
+loc_CB6	syn6.s	/^loc_CB6:                                ; CODE XREF: sub_C5C+56↑j$/;"	l
+loc_CFE	syn6.s	/^loc_CFE:                                ; CODE XREF: ROM:00000CF6↑j$/;"	l
+loc_D0E	syn6.s	/^loc_D0E:                                ; CODE XREF: ROM:00000D06↑j$/;"	l
+loc_D12	syn6.s	/^loc_D12:                                ; CODE XREF: ROM:00000CEC↑j$/;"	l
+loc_D3C	syn6.s	/^loc_D3C:                                ; CODE XREF: ROM:00000D34↑j$/;"	l
+loc_D4A	syn6.s	/^loc_D4A:                                ; CODE XREF: ROM:00000D40↑j$/;"	l
+loc_D4E	syn6.s	/^loc_D4E:                                ; CODE XREF: ROM:00000D2C↑j$/;"	l
+loc_D52	syn6.s	/^loc_D52:                                ; CODE XREF: ROM:00000D3A↑j$/;"	l
+loc_D6C	syn6.s	/^loc_D6C:                                ; CODE XREF: ROM:00000D66↑j$/;"	l
+loc_D6E	syn6.s	/^loc_D6E:                                ; CODE XREF: ROM:00000D6A↑j$/;"	l
+loc_D72	syn6.s	/^loc_D72:                                ; CODE XREF: ROM:loc_D6E↑j$/;"	l
+loc_D7A	syn6.s	/^loc_D7A:                                ; CODE XREF: ROM:00000D76↑j$/;"	l
+loc_D98	syn6.s	/^loc_D98:                                ; CODE XREF: ROM:00000D92↑j$/;"	l
+loc_DB0	syn6.s	/^loc_DB0:                                ; CODE XREF: ROM:00000DA2↑j$/;"	l
+loc_DD2	syn6.s	/^loc_DD2:                                ; CODE XREF: sub_DB8+C↑j$/;"	l
+loc_DDC	syn6.s	/^loc_DDC:                                ; CODE XREF: sub_DB8+14↑j$/;"	l
+loc_DFE	syn6.s	/^loc_DFE:                                ; CODE XREF: ROM:00000DFA↑j$/;"	l
+loc_FC2	syn6.s	/^loc_FC2:                                ; CODE XREF: sub_F84+38↑j$/;"	l
+loc_FE	syn6.s	/^loc_FE:                                 ; CODE XREF: ROM:loc_FE↑p$/;"	l
+locgl_error	rmac/procln.c	/^const char locgl_error[] = "cannot GLOBL local symbol";$/;"	v
+locret_A94	syn6.s	/^locret_A94:                             ; CODE XREF: sub_93C+50↑j$/;"	l
+locret_E28	syn6.s	/^locret_E28:                             ; CODE XREF: ROM:00000E22↑j$/;"	l
+locret_FCC	syn6.s	/^locret_FCC:                             ; CODE XREF: sub_F84+8↑j$/;"	l
+locret_FDC	syn6.s	/^locret_FDC:                             ; CODE XREF: ROM:00000FD2↑j$/;"	l
+lookup	rmac/symbol.c	/^SYM * lookup(uint8_t * name, int type, int envno)$/;"	f
+lsloc	rmac/listing.c	/^LONG lsloc;							\/\/ `sloc' at start of line$/;"	v
+lstout	rmac/listing.c	/^void lstout(char tag)$/;"	f
+lsym_flag	rmac/rmac.c	/^int lsym_flag;					\/\/ Include local symbols in object file$/;"	v
+lwsiz_8	rmac/mach.c	/^WORD lwsiz_8[] = {$/;"	v
+lwsiz_9	rmac/mach.c	/^WORD lwsiz_9[] = {$/;"	v
+m6502	rmac/rmac.c	/^int m6502;						\/\/ 1, assembling 6502 code$/;"	v
+m6502cg	rmac/6502.c	/^void m6502cg(int op)$/;"	f
+m6502obj	rmac/6502.c	/^void m6502obj(int ofd)$/;"	f
+m_abcd	rmac/mach.c	/^int m_abcd(WORD inst, WORD siz)$/;"	f
+m_adda	rmac/mach.c	/^int m_adda(WORD inst, WORD siz)$/;"	f
+m_addq	rmac/mach.c	/^int m_addq(WORD inst, WORD siz)$/;"	f
+m_badmode	rmac/mach.c	/^int m_badmode(WORD unused1, WORD unused2)$/;"	f
+m_bfop	rmac/mach.c	/^int m_bfop(WORD inst, WORD siz)$/;"	f
+m_bitop	rmac/mach.c	/^int m_bitop(WORD inst, WORD siz)$/;"	f
+m_bkpt	rmac/mach.c	/^int m_bkpt(WORD inst, WORD siz)$/;"	f
+m_br	rmac/mach.c	/^int m_br(WORD inst, WORD siz)$/;"	f
+m_br30	rmac/mach.c	/^int m_br30(WORD inst, WORD siz)$/;"	f
+m_callm	rmac/mach.c	/^int m_callm(WORD inst, WORD siz)$/;"	f
+m_cas	rmac/mach.c	/^int m_cas(WORD inst, WORD siz)$/;"	f
+m_cas2	rmac/mach.c	/^int m_cas2(WORD inst, WORD siz)$/;"	f
+m_chk2	rmac/mach.c	/^int m_chk2(WORD inst, WORD siz)$/;"	f
+m_cinv	rmac/mach.c	/^int m_cinv(WORD inst, WORD siz)$/;"	f
+m_clra	rmac/mach.c	/^int m_clra(WORD inst, WORD siz)$/;"	f
+m_clrd	rmac/mach.c	/^int m_clrd(WORD inst, WORD siz)$/;"	f
+m_cmp2	rmac/mach.c	/^int m_cmp2(WORD inst, WORD siz)$/;"	f
+m_cpbcc	rmac/mach.c	/^int m_cpbcc(WORD inst, WORD siz)$/;"	f
+m_cpdbr	rmac/mach.c	/^int m_cpdbr(WORD inst, WORD siz)$/;"	f
+m_cprest	rmac/mach.c	/^int m_cprest(WORD inst, WORD siz)$/;"	f
+m_dbra	rmac/mach.c	/^int m_dbra(WORD inst, WORD siz)$/;"	f
+m_ea	rmac/mach.c	/^int m_ea(WORD inst, WORD siz)$/;"	f
+m_ea030	rmac/mach.c	/^int m_ea030(WORD inst, WORD siz)$/;"	f
+m_exg	rmac/mach.c	/^int m_exg(WORD inst, WORD siz)$/;"	f
+m_fabs	rmac/mach.c	/^int m_fabs(WORD inst, WORD siz)$/;"	f
+m_facos	rmac/mach.c	/^int m_facos(WORD inst, WORD siz)$/;"	f
+m_fadd	rmac/mach.c	/^int m_fadd(WORD inst, WORD siz)$/;"	f
+m_fasin	rmac/mach.c	/^int m_fasin(WORD inst, WORD siz)$/;"	f
+m_fatan	rmac/mach.c	/^int m_fatan(WORD inst, WORD siz)$/;"	f
+m_fatanh	rmac/mach.c	/^int m_fatanh(WORD inst, WORD siz)$/;"	f
+m_fbcc	rmac/mach.c	/^int m_fbcc(WORD inst, WORD siz)$/;"	f
+m_fcmp	rmac/mach.c	/^int m_fcmp(WORD inst, WORD siz)$/;"	f
+m_fcos	rmac/mach.c	/^int m_fcos(WORD inst, WORD siz)$/;"	f
+m_fcosh	rmac/mach.c	/^int m_fcosh(WORD inst, WORD siz)$/;"	f
+m_fdabs	rmac/mach.c	/^int m_fdabs(WORD inst, WORD siz)$/;"	f
+m_fdadd	rmac/mach.c	/^int m_fdadd(WORD inst, WORD siz)$/;"	f
+m_fdbcc	rmac/mach.c	/^int m_fdbcc(WORD inst, WORD siz)$/;"	f
+m_fddiv	rmac/mach.c	/^int m_fddiv(WORD inst, WORD siz)$/;"	f
+m_fdfsqrt	rmac/mach.c	/^int m_fdfsqrt(WORD inst, WORD siz)$/;"	f
+m_fdiv	rmac/mach.c	/^int m_fdiv(WORD inst, WORD siz)$/;"	f
+m_fdmove	rmac/mach.c	/^int m_fdmove(WORD inst, WORD siz)$/;"	f
+m_fdmul	rmac/mach.c	/^int m_fdmul(WORD inst, WORD siz)$/;"	f
+m_fdneg	rmac/mach.c	/^int m_fdneg(WORD inst, WORD siz)$/;"	f
+m_fdsub	rmac/mach.c	/^int m_fdsub(WORD inst, WORD siz)$/;"	f
+m_fetox	rmac/mach.c	/^int m_fetox(WORD inst, WORD siz)$/;"	f
+m_fetoxm1	rmac/mach.c	/^int m_fetoxm1(WORD inst, WORD siz)$/;"	f
+m_fgetexp	rmac/mach.c	/^int m_fgetexp(WORD inst, WORD siz)$/;"	f
+m_fgetman	rmac/mach.c	/^int m_fgetman(WORD inst, WORD siz)$/;"	f
+m_fint	rmac/mach.c	/^int m_fint(WORD inst, WORD siz)$/;"	f
+m_fintrz	rmac/mach.c	/^int m_fintrz(WORD inst, WORD siz)$/;"	f
+m_flog10	rmac/mach.c	/^int m_flog10(WORD inst, WORD siz)$/;"	f
+m_flog2	rmac/mach.c	/^int m_flog2(WORD inst, WORD siz)$/;"	f
+m_flogn	rmac/mach.c	/^int m_flogn(WORD inst, WORD siz)$/;"	f
+m_flognp1	rmac/mach.c	/^int m_flognp1(WORD inst, WORD siz)$/;"	f
+m_fmod	rmac/mach.c	/^int m_fmod(WORD inst, WORD siz)$/;"	f
+m_fmove	rmac/mach.c	/^int m_fmove(WORD inst, WORD siz)$/;"	f
+m_fmovecr	rmac/mach.c	/^int m_fmovecr(WORD inst, WORD siz)$/;"	f
+m_fmovem	rmac/mach.c	/^int m_fmovem(WORD inst, WORD siz)$/;"	f
+m_fmovescr	rmac/mach.c	/^int m_fmovescr(WORD inst, WORD siz)$/;"	f
+m_fmul	rmac/mach.c	/^int m_fmul(WORD inst, WORD siz)$/;"	f
+m_fneg	rmac/mach.c	/^int m_fneg(WORD inst, WORD siz)$/;"	f
+m_fnop	rmac/mach.c	/^int m_fnop(WORD inst, WORD siz)$/;"	f
+m_fpbr	rmac/mach.c	/^int m_fpbr(WORD inst, WORD siz)$/;"	f
+m_fpusavrest	rmac/mach.c	/^int m_fpusavrest(WORD inst, WORD siz)$/;"	f
+m_frem	rmac/mach.c	/^int m_frem(WORD inst, WORD siz)$/;"	f
+m_frestore	rmac/mach.c	/^int m_frestore(WORD inst, WORD siz)$/;"	f
+m_fsabs	rmac/mach.c	/^int m_fsabs(WORD inst, WORD siz)$/;"	f
+m_fsadd	rmac/mach.c	/^int m_fsadd(WORD inst, WORD siz)$/;"	f
+m_fscale	rmac/mach.c	/^int m_fscale(WORD inst, WORD siz)$/;"	f
+m_fscc	rmac/mach.c	/^int m_fscc(WORD inst, WORD siz)$/;"	f
+m_fsdiv	rmac/mach.c	/^int m_fsdiv(WORD inst, WORD siz)$/;"	f
+m_fsfsqrt	rmac/mach.c	/^int m_fsfsqrt(WORD inst, WORD siz)$/;"	f
+m_fsfsub	rmac/mach.c	/^int m_fsfsub(WORD inst, WORD siz)$/;"	f
+m_fsgldiv	rmac/mach.c	/^int m_fsgldiv(WORD inst, WORD siz)$/;"	f
+m_fsglmul	rmac/mach.c	/^int m_fsglmul(WORD inst, WORD siz)$/;"	f
+m_fsin	rmac/mach.c	/^int m_fsin(WORD inst, WORD siz)$/;"	f
+m_fsincos	rmac/mach.c	/^int m_fsincos(WORD inst, WORD siz)$/;"	f
+m_fsinh	rmac/mach.c	/^int m_fsinh(WORD inst, WORD siz)$/;"	f
+m_fsmove	rmac/mach.c	/^int m_fsmove(WORD inst, WORD siz)$/;"	f
+m_fsmul	rmac/mach.c	/^int m_fsmul(WORD inst, WORD siz)$/;"	f
+m_fsneg	rmac/mach.c	/^int m_fsneg(WORD inst, WORD siz)$/;"	f
+m_fsqrt	rmac/mach.c	/^int m_fsqrt(WORD inst, WORD siz)$/;"	f
+m_fsub	rmac/mach.c	/^int m_fsub(WORD inst, WORD siz)$/;"	f
+m_ftan	rmac/mach.c	/^int m_ftan(WORD inst, WORD siz)$/;"	f
+m_ftanh	rmac/mach.c	/^int m_ftanh(WORD inst, WORD siz)$/;"	f
+m_ftentox	rmac/mach.c	/^int m_ftentox(WORD inst, WORD siz)$/;"	f
+m_ftrapcc	rmac/mach.c	/^int m_ftrapcc(WORD inst, WORD siz)$/;"	f
+m_ftst	rmac/mach.c	/^int m_ftst(WORD inst, WORD siz)$/;"	f
+m_ftwotox	rmac/mach.c	/^int m_ftwotox(WORD inst, WORD siz)$/;"	f
+m_imm	rmac/mach.c	/^int m_imm(WORD inst, WORD siz)$/;"	f
+m_imm8	rmac/mach.c	/^int m_imm8(WORD inst, WORD siz)$/;"	f
+m_lea	rmac/mach.c	/^int m_lea(WORD inst, WORD siz)$/;"	f
+m_link	rmac/mach.c	/^int m_link(WORD inst, WORD siz)$/;"	f
+m_lpstop	rmac/mach.c	/^int m_lpstop(WORD inst, WORD siz)$/;"	f
+m_move	rmac/mach.c	/^int m_move(WORD inst, WORD size)$/;"	f
+m_move16a	rmac/mach.c	/^int m_move16a(WORD inst, WORD siz)$/;"	f
+m_move16b	rmac/mach.c	/^int m_move16b(WORD inst, WORD siz)$/;"	f
+m_move30	rmac/mach.c	/^int m_move30(WORD inst, WORD size)$/;"	f
+m_movec	rmac/mach.c	/^int m_movec(WORD inst, WORD siz)$/;"	f
+m_movem	rmac/mach.c	/^int m_movem(WORD inst, WORD siz)$/;"	f
+m_movep	rmac/mach.c	/^int m_movep(WORD inst, WORD siz)$/;"	f
+m_moveq	rmac/mach.c	/^int m_moveq(WORD inst, WORD siz)$/;"	f
+m_moves	rmac/mach.c	/^int m_moves(WORD inst, WORD siz)$/;"	f
+m_muls	rmac/mach.c	/^int m_muls(WORD inst, WORD siz)$/;"	f
+m_pack	rmac/mach.c	/^int m_pack(WORD inst, WORD siz)$/;"	f
+m_pbcc	rmac/mach.c	/^int m_pbcc(WORD inst, WORD siz)$/;"	f
+m_pflush	rmac/mach.c	/^int m_pflush(WORD inst, WORD siz)$/;"	f
+m_pflusha	rmac/mach.c	/^int m_pflusha(WORD inst, WORD siz)$/;"	f
+m_pflushan	rmac/mach.c	/^int m_pflushan(WORD inst, WORD siz)$/;"	f
+m_pflushr	rmac/mach.c	/^int m_pflushr(WORD inst, WORD siz)$/;"	f
+m_pload	rmac/mach.c	/^int m_pload(WORD inst, WORD siz, WORD extension)$/;"	f
+m_ploadr	rmac/mach.c	/^int m_ploadr(WORD inst, WORD siz)$/;"	f
+m_ploadw	rmac/mach.c	/^int m_ploadw(WORD inst, WORD siz)$/;"	f
+m_plpa	rmac/mach.c	/^int m_plpa(WORD inst, WORD siz)$/;"	f
+m_pmove	rmac/mach.c	/^int m_pmove(WORD inst, WORD siz)$/;"	f
+m_pmovefd	rmac/mach.c	/^int m_pmovefd(WORD inst, WORD siz)$/;"	f
+m_ptest	rmac/mach.c	/^int m_ptest(WORD inst, WORD siz, WORD extension)$/;"	f
+m_ptestr	rmac/mach.c	/^int m_ptestr(WORD inst, WORD siz)$/;"	f
+m_ptestw	rmac/mach.c	/^int m_ptestw(WORD inst, WORD siz)$/;"	f
+m_ptrapcc	rmac/mach.c	/^int m_ptrapcc(WORD inst, WORD siz)$/;"	f
+m_reg	rmac/mach.c	/^int m_reg(WORD inst, WORD siz)$/;"	f
+m_rtd	rmac/mach.c	/^int m_rtd(WORD inst, WORD siz)$/;"	f
+m_rtm	rmac/mach.c	/^int m_rtm(WORD inst, WORD siz)$/;"	f
+m_self	rmac/mach.c	/^int m_self(WORD inst, WORD usused)$/;"	f
+m_shi	rmac/mach.c	/^int m_shi(WORD inst, WORD siz)$/;"	f
+m_shr	rmac/mach.c	/^int m_shr(WORD inst, WORD siz)$/;"	f
+m_trap	rmac/mach.c	/^int m_trap(WORD inst, WORD siz)$/;"	f
+m_trapcc	rmac/mach.c	/^int m_trapcc(WORD inst, WORD siz)$/;"	f
+m_unimp	rmac/mach.c	/^int m_unimp(WORD unused1, WORD unused2)$/;"	f
+m_usp	rmac/mach.c	/^int m_usp(WORD inst, WORD siz)$/;"	f
+machtab	rmac/mach.c	/^MNTAB machtab[] = {$/;"	v
+macnum	rmac/macro.c	/^int macnum;					\/\/ Unique number for macro definition$/;"	v
+macuniq	rmac/macro.c	/^static LONG macuniq;		\/\/ Unique-per-macro number$/;"	v	file:
+main	rmac/68kgen.c	/^int main(int argc, char ** argv)$/;"	f
+main	rmac/dsp56kgen.c	/^int main(int argc, char ** argv)$/;"	f
+main	rmac/kwgen.c	/^int main(int argc, char ** argv)$/;"	f
+main	rmac/rmac.c	/^int main(int argc, char ** argv)$/;"	f
+malform1	rmac/riscasm.c	/^static const char malform1[] = "missing '#'";$/;"	v	file:
+malform2	rmac/riscasm.c	/^static const char malform2[] = "bad expression";$/;"	v	file:
+malform3	rmac/riscasm.c	/^static const char malform3[] = "missing ')'";$/;"	v	file:
+malform4	rmac/riscasm.c	/^static const char malform4[] = "missing '('";$/;"	v	file:
+malformErr	rmac/riscasm.c	/^static const char * malformErr[] = {$/;"	v	file:
+mark_tr	rmac/mark.c	/^static uint8_t mark_tr[] = {$/;"	v	file:
+markptr	rmac/mark.c	/^PTR markptr;			\/\/ Deposit point in current mark chunk$/;"	v
+mcalloc	rmac/mark.c	/^uint32_t mcalloc;		\/\/ # bytes alloc'd to current mark chunk$/;"	v
+mcused	rmac/mark.c	/^uint32_t mcused;		\/\/ # bytes used in current mark chunk$/;"	v
+mdump	rmac/debug.c	/^int mdump(char * start, LONG count, int flg, LONG base)$/;"	f
+missym_error	rmac/expr.c	/^const char missym_error[] = "missing symbol";$/;"	v
+mjump_align	rmac/token.c	/^int mjump_align = 0;		\/\/ mjump alignment flag$/;"	v
+mnaccept	rmac/mntab.h	/^int mnaccept[1550] = {$/;"	v
+mnbase	rmac/mntab.h	/^int mnbase[838] = {$/;"	v
+mncheck	rmac/mntab.h	/^int mncheck[1550] = {$/;"	v
+mntab	rmac/mntab.h	/^int mntab[1550] = {$/;"	v
+moaccept	rmac/opkw.h	/^int moaccept[161] = {$/;"	v
+mobase	rmac/opkw.h	/^int mobase[29] = {$/;"	v
+mocheck	rmac/opkw.h	/^int mocheck[161] = {$/;"	v
+month	rmac/listing.c	/^static char * month[16] = {$/;"	v	file:
+motab	rmac/opkw.h	/^int motab[161] = {$/;"	v
+movep	rmac/mach.c	/^int movep = 0; \/\/ Global flag to indicate we're generating a movep instruction$/;"	v
+mpaccept	rmac/6502kw.h	/^int mpaccept[228] = {$/;"	v
+mpbase	rmac/6502kw.h	/^int mpbase[49] = {$/;"	v
+mpcheck	rmac/6502kw.h	/^int mpcheck[228] = {$/;"	v
+mptab	rmac/6502kw.h	/^int mptab[228] = {$/;"	v
+mraccept	rmac/risckw.h	/^int mraccept[261] = {$/;"	v
+mrbase	rmac/risckw.h	/^int mrbase[98] = {$/;"	v
+mrcheck	rmac/risckw.h	/^int mrcheck[261] = {$/;"	v
+mrtab	rmac/risckw.h	/^int mrtab[261] = {$/;"	v
+mudump	rmac/debug.c	/^int mudump(void)$/;"	f
+nam	rmac/kwgen.c	/^char nam[128];$/;"	v
+name_entry	rmac/kwgen.c	/^struct name_entry {$/;"	s	file:
+namtab	rmac/kwgen.c	/^} namtab[NSTRINGS];$/;"	v	typeref:struct:name_entry
+nextrpt	rmac/macro.c	/^static LLIST * nextrpt;		\/\/ Last .rept line$/;"	v	file:
+nlines	rmac/listing.c	/^int nlines;							\/\/ #lines on page so far$/;"	v
+nmatch	rmac/kwgen.c	/^int nmatch(int len, char * s1, char * s2)$/;"	f
+nmodes	rmac/amode.c	/^int nmodes;					\/\/ Number of addr'ing modes found$/;"	v
+nnames	rmac/kwgen.c	/^int nnames;			\/* number of keywords *\/$/;"	v
+noflt_error	rmac/expr.c	/^const char noflt_error[] = "operator not usable with float";$/;"	v
+nstates	rmac/kwgen.c	/^int nstates;			\/* number of states in kbase[] *\/$/;"	v
+nstr	rmac/kwgen.c	/^	char *nstr;			\/* -> name string *\/$/;"	m	struct:name_entry	file:
+nthpath	rmac/rmac.c	/^int nthpath(char * env_var, int itemno, char * buf)$/;"	f
+nval	rmac/kwgen.c	/^	int nval;			\/* = name's value *\/$/;"	m	struct:name_entry	file:
+objImage	rmac/object.c	/^uint8_t * objImage;				\/\/ Global object image pointer$/;"	v
+obj_format	rmac/rmac.c	/^int obj_format;					\/\/ Object format flag$/;"	v
+objfname	rmac/rmac.c	/^char * objfname;				\/\/ Object filename pointer$/;"	v
+off64_t	rmac/rmac.h	/^	#define off64_t /;"	d
+off_t	rmac/rmac.h	/^	#define off_t /;"	d
+opcoderecord	rmac/riscasm.c	/^struct opcoderecord {$/;"	s	file:
+ops	rmac/6502.c	/^static char ops[NMACHOPS][NMODES];			\/\/ Opcodes$/;"	v	file:
+optim_flags	rmac/rmac.c	/^int optim_flags[OPT_COUNT];		\/\/ Specific optimisations on\/off matrix$/;"	v
+optim_warn_flag	rmac/rmac.c	/^int optim_warn_flag;			\/\/ Warn about possible short branches$/;"	v
+optimizeOff	rmac/token.c	/^int optimizeOff;			\/\/ Optimization override flag$/;"	v
+org68k_active	rmac/rmac.c	/^int org68k_active = 0;			\/\/ .org switch for 68k (only with RAW output format)$/;"	v
+org68k_address	rmac/rmac.c	/^uint32_t org68k_address;		\/\/ .org for 68k$/;"	v
+orgactive	rmac/riscasm.c	/^unsigned orgactive = 0;		\/\/ RISC\/6502 org directive active$/;"	v
+orgaddr	rmac/riscasm.c	/^unsigned orgaddr = 0;		\/\/ Org'd address$/;"	v
+orgmap	rmac/6502.c	/^static uint16_t orgmap[1024][2];		\/\/ Mark all 6502 org changes$/;"	v	file:
+orgwarning	rmac/riscasm.c	/^unsigned orgwarning = 0;	\/\/ Has an ORG warning been issued$/;"	v
+pagelen	rmac/listing.c	/^int pagelen = 61;					\/\/ Lines on a page$/;"	v
+pageno	rmac/listing.c	/^static int pageno;					\/\/ Current page number$/;"	v	file:
+pagewidth	rmac/listing.c	/^static int pagewidth;				\/\/ #columns on a page$/;"	v	file:
+panic	rmac/kwgen.c	/^void panic(char * s)$/;"	f
+param	rmac/riscasm.c	/^	uint16_t param;		\/\/ Opcode Parameter$/;"	m	struct:opcoderecord	file:
+parmoves	rmac/dsp56k_amode.c	/^LONG parmoves(WORD dest)$/;"	f
+parse_l	rmac/dsp56k_amode.c	/^static inline LONG parse_l(const int W, LONG inst, LONG S1)$/;"	f	file:
+parse_x	rmac/dsp56k_amode.c	/^static inline LONG parse_x(const int W, LONG inst, const LONG S1, const int check_for_x_y)$/;"	f	file:
+parse_y	rmac/dsp56k_amode.c	/^static inline LONG parse_y(LONG inst, LONG S1, LONG D1, LONG S2)$/;"	f	file:
+pcloc	rmac/procln.c	/^uint32_t pcloc;					\/\/ Value of "PC" at beginning of line$/;"	v
+perm_verb_flag	rmac/rmac.c	/^int perm_verb_flag;				\/\/ Permanently verbose, interactive mode$/;"	v
+pnam	rmac/kwgen.c	/^char * pnam;$/;"	v
+prg_extend	rmac/rmac.c	/^int prg_extend;					\/\/ !=0, output extended .PRG symbols$/;"	v
+prg_flag	rmac/rmac.c	/^int prg_flag;					\/\/ !=0, produce .PRG executable (2=symbols)$/;"	v
+print_tables	rmac/kwgen.c	/^void print_tables(void)$/;"	f
+printexpr	rmac/debug.c	/^TOKEN * printexpr(TOKEN * tokenptr)$/;"	f
+println	rmac/listing.c	/^void println(const char * ln)$/;"	f
+procln	rmac/68kgen.c	/^void procln(int namc, char ** namv)$/;"	f
+procln	rmac/dsp56kgen.c	/^void procln(int namc, char ** namv)$/;"	f
+range_error	rmac/mach.c	/^char range_error[] = "expression out of range";$/;"	v
+rdsp	rmac/rmac.c	/^int rgpu, rdsp;					\/\/ Assembling Jaguar GPU or DSP code$/;"	v
+reg_9	rmac/mach.c	/^WORD reg_9[8] = {$/;"	v
+reg_err	rmac/riscasm.c	/^static const char reg_err[] = "missing register R0...R31";$/;"	v	file:
+regbank	rmac/rmac.c	/^int regbank;					\/\/ RISC register bank$/;"	v
+reglist	rmac/amode.c	/^int reglist(WORD * a_rmask)$/;"	f
+regname	rmac/token.c	/^static char * regname[] = {$/;"	v	file:
+rel_error	rmac/mach.c	/^char rel_error[] = "illegal relative address";$/;"	v
+rgpu	rmac/rmac.c	/^int rgpu, rdsp;					\/\/ Assembling Jaguar GPU or DSP code$/;"	v
+riscImmTokenSeen	rmac/riscasm.c	/^uint8_t riscImmTokenSeen;	\/\/ The '#' (immediate) token was seen$/;"	v
+riscregname	rmac/token.c	/^static char * riscregname[] = {$/;"	v	file:
+robjproc	rmac/rmac.c	/^int robjproc;					\/\/ Assembling Jaguar Object Processor code$/;"	v
+roptbl	rmac/riscasm.c	/^static const struct opcoderecord roptbl[] = {$/;"	v	typeref:struct:opcoderecord	file:
+rptlevel	rmac/macro.c	/^static int rptlevel;		\/\/ .rept nesting level$/;"	v	file:
+scattr	rmac/sect.c	/^uint16_t scattr;		\/\/ Section attributes$/;"	v
+scode	rmac/sect.c	/^CHUNK * scode;			\/\/ Current (last) code chunk$/;"	v
+scratchbuf	rmac/op.c	/^static char scratchbuf[4096];$/;"	v	file:
+sdecl	rmac/symbol.c	/^static SYM * sdecl;					\/\/ * -> Symbols, in order of declaration$/;"	v	file:
+sdecltail	rmac/symbol.c	/^static SYM * sdecltail;				\/\/ * -> Last symbol in sdecl list$/;"	v	file:
+searchpath	rmac/rmac.c	/^char * searchpath = NULL;		\/\/ Search path for include files$/;"	v
+searchpatha	rmac/rmac.c	/^char searchpatha[512] = { 0 };	\/\/ Buffer to hold searchpath when specified$/;"	v
+sect	rmac/sect.c	/^SECT sect[NSECTS];		\/\/ All sections...$/;"	v
+seg_error	rmac/mach.c	/^char seg_error[] = "bad (section) expression";$/;"	v
+segpadsize	rmac/rmac.c	/^int segpadsize;					\/\/ Segment padding size$/;"	v
+ship_ln	rmac/listing.c	/^void ship_ln(const char * ln)$/;"	f
+siz_12	rmac/mach.c	/^WORD siz_12[] = {$/;"	v
+siz_6	rmac/mach.c	/^WORD siz_6[] = {$/;"	v
+siz_error	rmac/mach.c	/^char siz_error[] = "bad size specified";$/;"	v
+siztab	rmac/debug.c	/^static int siztab[4] = { 3, 5, 9, 9 };$/;"	v	file:
+sloc	rmac/sect.c	/^uint32_t sloc;			\/\/ Current loc in section$/;"	v
+sorder	rmac/symbol.c	/^static SYM * sorder;				\/\/ * -> Symbols, in order of reference$/;"	v	file:
+sordtail	rmac/symbol.c	/^static SYM * sordtail;				\/\/ * -> Last symbol in sorder list$/;"	v	file:
+state	rmac/riscasm.c	/^	uint16_t state;		\/\/ Opcode Name (unused)$/;"	m	struct:opcoderecord	file:
+str_error	rmac/expr.c	/^const char str_error[] = "missing symbol or string";$/;"	v
+str_value	rmac/expr.c	/^static uint32_t str_value(char * p)$/;"	f	file:
+strindx	rmac/object.c	/^uint32_t strindx = 0x00000004;	\/\/ BSD\/ELF string table index$/;"	v
+string	rmac/token.c	/^char * string[TOKBUFSIZE*2];\/\/ Token buffer string pointer storage$/;"	v
+strpool	rmac/kwgen.c	/^char strpool[STRPOOLSIZ];	\/* pool for keyword text *\/$/;"	v
+strtable	rmac/object.c	/^uint8_t * strtable;				\/\/ Pointer to the symbol string table$/;"	v
+strtoa8	rmac/6502.c	/^char strtoa8[128];	\/\/ ASCII to Atari 800 internal conversion table$/;"	v
+strtoupper	rmac/rmac.c	/^void strtoupper(char * s)$/;"	f
+sub_16A	syn6.s	/^sub_16A:                                ; CODE XREF: ROM:00000102↑p$/;"	l
+sub_684	syn6.s	/^sub_684:                                ; CODE XREF: ROM:0000011A↑p$/;"	l
+sub_68C	syn6.s	/^sub_68C:                                ; CODE XREF: sub_684↑p$/;"	l
+sub_758	syn6.s	/^sub_758:                                ; CODE XREF: sub_684+2↑p$/;"	l
+sub_824	syn6.s	/^sub_824:                                ; CODE XREF: ROM:000001A2↑p$/;"	l
+sub_8EE	syn6.s	/^sub_8EE:                                ; CODE XREF: sub_824+1A↑p$/;"	l
+sub_93C	syn6.s	/^sub_93C:                                ; CODE XREF: sub_8EE+28↑p$/;"	l
+sub_A9C	syn6.s	/^sub_A9C:                                ; CODE XREF: sub_824+44↑p$/;"	l
+sub_B4	syn6.s	/^sub_B4:                                 ; CODE XREF: ROM:00000062↑p$/;"	l
+sub_BC2	syn6.s	/^sub_BC2:                                ; CODE XREF: ROM:00000BB8↑j$/;"	l
+sub_C5C	syn6.s	/^sub_C5C:                                ; CODE XREF: ROM:00000C36↑j$/;"	l
+sub_DB8	syn6.s	/^sub_DB8:                                ; CODE XREF: ROM:00000CD4↑p$/;"	l
+sub_F84	syn6.s	/^sub_F84:                                ; CODE XREF: sub_A9C+6↑p$/;"	l
+subflag	rmac/listing.c	/^static int subflag;					\/\/ 0, don't do .eject on subttl (set 1)$/;"	v	file:
+subttl	rmac/listing.c	/^uint8_t subttl[TITLESIZ];			\/\/ Current subtitle$/;"	v
+swap	syn6.s	/^                swap    d0$/;"	d
+swap	syn6.s	/^                swap    d1$/;"	d
+swap	syn6.s	/^                swap    d3$/;"	d
+sy_assign	rmac/symbol.c	/^uint32_t sy_assign(uint8_t * buf, uint8_t *(* construct)())$/;"	f
+sy_assign_ELF	rmac/symbol.c	/^uint32_t sy_assign_ELF(uint8_t * buf, uint8_t *(* construct)())$/;"	f
+symbolNum	rmac/expr.c	/^static int symbolNum;			\/\/ Pointer to the entry in symbolPtr[]$/;"	v	file:
+symbolPtr	rmac/direct.c	/^SYM * symbolPtr[1000000];	\/\/ Symbol pointers table$/;"	v
+symbolTable	rmac/symbol.c	/^static SYM * symbolTable[NBUCKETS];	\/\/ User symbol-table header$/;"	v	file:
+symlist	rmac/direct.c	/^int symlist(int(* func)())$/;"	f
+symsize	rmac/object.c	/^uint32_t symsize = 0;			\/\/ Size of BSD\/ELF symbol table$/;"	v
+symtable	rmac/symbol.c	/^int symtable(void)$/;"	f
+syntax_error	rmac/procln.c	/^const char syntax_error[] = "syntax error";$/;"	v
+tab	rmac/kwgen.c	/^int tab[128];			\/* tmp table for building ktab[] *\/$/;"	v
+tab_A18	rmac/dsp56k_mach.c	/^static inline LONG tab_A18(int *am, int *reg)$/;"	f	file:
+taglist	rmac/listing.c	/^void taglist(char chr)$/;"	f
+tdb_tab	rmac/object.c	/^static uint16_t tdb_tab[] = {$/;"	v	file:
+tdb_text	rmac/symbol.c	/^static uint8_t tdb_text[8] = {$/;"	v	file:
+time_string	rmac/listing.c	/^void time_string(char * buf, uint32_t time)$/;"	f
+timestr	rmac/listing.c	/^static char timestr[20];			\/\/ Current time hh:mm:ss [am|pm]$/;"	v	file:
+title	rmac/listing.c	/^static char title[TITLESIZ];		\/\/ Current title$/;"	v	file:
+tok	rmac/token.c	/^TOKEN * tok;				\/\/ Ptr to current token$/;"	v
+tokbuf	rmac/token.c	/^static TOKEN tokbuf[TOKBUFSIZE];	\/\/ Token buffer (stack-like, all files)$/;"	v	file:
+tokenClass	rmac/expr.c	/^static char tokenClass[256];		\/\/ Generated table of token classes$/;"	v	file:
+tokeol	rmac/token.c	/^TOKEN tokeol[1] = {EOL};	\/\/ Bailout end-of-line token$/;"	v
+tolowertab	rmac/token.c	/^char tolowertab[128];		\/\/ Uppercase ==> lowercase$/;"	v
+totlines	rmac/token.c	/^int totlines;				\/\/ Total # of lines$/;"	v
+tp	rmac/debug.c	/^static PTR tp;$/;"	v	file:
+traverse	rmac/kwgen.c	/^void traverse(int state)$/;"	f
+type	rmac/riscasm.c	/^	uint16_t type;		\/\/ Opcode Type$/;"	m	struct:opcoderecord	file:
+uc_ln	rmac/listing.c	/^void uc_ln(char * ln)$/;"	f
+undef_error	rmac/mach.c	/^char undef_error[] = "undefined expression";$/;"	v
+undmac1	rmac/direct.c	/^int undmac1(char * p)$/;"	f
+unsupport	rmac/mach.c	/^char unsupport[] = "unsupported for selected CPU";$/;"	v
+unused	rmac/direct.c	/^static long unused;			\/\/ For supressing 'write' warnings$/;"	v	file:
+unused	rmac/error.c	/^static long unused;				\/\/ For supressing 'write' warnings$/;"	v	file:
+unused	rmac/listing.c	/^static long unused;					\/\/ For supressing 'write' warnings$/;"	v	file:
+uppername	rmac/kwgen.c	/^char uppername[100];		\/* all-uppercase version of basename *\/$/;"	v
+verb_flag	rmac/rmac.c	/^int verb_flag;					\/\/ Be verbose about what's going on$/;"	v
+visprt	rmac/debug.c	/^int visprt(char c)$/;"	f
+warn	rmac/error.c	/^int warn(const char * text, ...)$/;"	f
+wiredown	rmac/kwgen.c	/^void wiredown(void)$/;"	f
+word_120C	syn6.s	/^word_120C:      dc.w $40                ; DATA XREF: ROM:0000047A↑w$/;"	d
+word_120E	syn6.s	/^word_120E:      dc.w 0                  ; DATA XREF: ROM:000005F0↑o$/;"	d
+word_1792	syn6.s	/^word_1792:      dc.w 0                  ; DATA XREF: ROM:00000142↑o$/;"	d
+word_AE6	syn6.s	/^word_AE6:       dc.w $40                ; DATA XREF: sub_A9C+30↑o$/;"	d
+word_B06	syn6.s	/^word_B06:       dc.w 0                  ; DATA XREF: sub_8EE+48↑o$/;"	d
+word_FDE	syn6.s	/^word_FDE:       dc.w 0                  ; DATA XREF: ROM:000001B4↑o$/;"	d
+word_FE6	syn6.s	/^word_FE6:       dc.w 0                  ; DATA XREF: sub_8EE+2E↑o$/;"	d
+word_FEE	syn6.s	/^word_FEE:       dc.w 0                  ; DATA XREF: sub_8EE+38↑o$/;"	d
+word_FF6	syn6.s	/^word_FF6:       dc.w 0                  ; DATA XREF: sub_8EE+42↑o$/;"	d
