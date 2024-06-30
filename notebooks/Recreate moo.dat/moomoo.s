@@ -29,7 +29,7 @@ update_interrupt:
                 bset    #3,(intmask).l
                 clr.w   d0
                 move.b  (intmask).l,d0
-                move.w  d0,($F000E0).l
+                move.w  d0,(INT1).l
                 move.w  (sp)+,d0
                 rts
 
