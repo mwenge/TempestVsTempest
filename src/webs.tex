@@ -1,0 +1,112 @@
+\chapter{webs}
+\label{sec:webs}
+\lstset{style=68KStyle}
+
+\begin{lstlisting}
+web1: 
+  dc.w 11 ; length of orientation table, number of channels in the web.
+  dc.w 5  ; first position on the web
+
+  ; x/y pairs of all vertices in the web.
+  dc.w -3,16,-1,16,1,16,3,16,5,16
+  dc.w 7,16,9,16,11,16,13,16
+  dc.w 15,16,17,16,19,16,-3,16,0
+
+  ;orientation table (angle of an object within a particular lane)
+  dc.w 0,0,0,0,0,0,0,0,0,0,0  
+  dc.w $80,$70,$60,$50,$40,$30,$32,$34,$36,$48,$5a
+\end{lstlisting}
+
+This is the routine that converts the web data structure into a list of vertices and lines between vertices
+that will make up the web itself:
+
+\begin{lstlisting}
+extrude:
+;
+; extrude a web from a list of 16 pairs of XY coordinates addressed by (a1)
+;
+; a0 = vector ram space; a2.l = z depth to extrude to; d0-d7 as above
+
+  move.l vadd,a0
+  movem.l d0-d7/a0/a2,-(a7)    ;save so routine can return address
+  clr connect
+  move.l a2,-(a7)    ;save z depth
+  bsr initvo    ;make header, do standard vector object init
+  move.l a3,a4    ;save first vertex
+  move.l (a7)+,d7    ;retrieve z-depth
+  move d7,d0
+  asr #1,d0
+  move d0,web_z    ;Current Web z centering
+  clr.l d0
+  clr.l d1
+  clr d5      ;to catch highest X point
+  move (a1)+,d6    ;# channels to a web
+  move d6,web_max
+  move (a1)+,web_firstseg  ;first position on web
+  move.l a1,web_ptab  ;position table
+  move.l a3,(a5)+    ;first vertex to lanes list
+xweb:
+  move (a1)+,d0
+  move (a1)+,d1    ;get X and Y
+  ext.l d0
+  ext.l d1
+  cmp d5,d1
+  blt xweb2
+  move d1,d5    ;save biggest X co-ordinate
+xweb2:
+  move.l d0,(a2)+
+  move.l d1,(a2)+
+  clr.l (a2)+    ;near point
+  move.l d0,(a2)+
+  move.l d1,(a2)+
+  move.l d7,(a2)+    ;far point
+  move d3,(a3)+    ;vertex ID to conn list
+  tst d6
+  beq lastpoint    ;special case for last point!
+  move d3,d4    ;copy vertex #
+  addq #1,d4
+  move d4,(a3)+    ;connect to n+1
+  addq #1,d4
+  move d4,(a3)+    ;connect to n+2
+  move #0,(a3)+    ;end vertex 
+  subq #1,d4    ;point to n+1
+  move d4,(a3)+
+  addq #2,d4    ;n+3
+  move d4,(a3)+    ;connect
+  move #0,(a3)+    ;delimit
+  move.l a3,(a5)+    ;to v.conn list
+  add #2,d3    ;move 2 vertices
+  dbra d6,xweb
+
+lastpoint:
+  addq #1,d3
+  move d3,(a3)+    ;connect to n+1
+  move 4(a1),connect
+  tst connect
+  beq nconn1    ;connect to vertex 1 if required
+  add #1,web_max
+  move #1,(a3)+
+  move #0,(a3)+
+  move d3,(a3)+
+  move #2,(a3)+
+nconn1:
+  move.l #0,(a3)+
+  and.l #$ffff,d3
+  move.l d3,(a0)+    ;pass # of vertices in header
+  lea 6(a1),a1
+  move.l a1,web_otab
+  move.l a3,connect_ptr
+  move.l a2,vertex_ptr
+  move.l a0,vadd
+  move.l a4,(a5)+    ;repeat first vertex addr.
+  asr #1,d5
+  add #1,d5
+  move #8,web_x
+  movem.l (a7)+,d0-d7/a0/a2  ;return with stuff intact and handle in a0
+  move web_x,d5
+  and.l #$ffff,d5
+  move.l d5,12(a0)  ;set x centre
+  move web_z,d5
+  move.l d5,20(a0)  ;set z centre
+  rts
+\end{lstlisting}

@@ -1,0 +1,24 @@
+\chapter{what is blitting} 
+\label{sec:listing}
+\lstset{style=6502Style}
+
+Blitting is the process of writing pixels to the screen. So you need read no further and pass on to the next chapter.
+
+This short extract from the routine that looks after the 'high score' table gives you an idea of how easy using the blitter
+can be. All we have to do is point at the position in RAM containing our pixel data (in this case the pixels from \icode{beasty7.cry}
+we loaded to \icode{pic5}), tell the blitter the x and y position we want to copy from, the width and height we want to copy, and
+the x and y position on the screen we want to copy to.
+
+\begin{lstlisting}[escapechar=\%]
+  ; Paint the 'Top Guns' graphic
+  move.l #pic5,a0    ; file images/beasty7.cry
+  move.l #screen3,a1
+  move #1,d0         ; x position in pic5
+  move #1,d1         ; y position in pic5
+  move #223,d2       ; width of block to copy
+  move #79,d3        ; height of block to copy 
+  move #70,d4        ; x pos of destination
+  move #10+8,d5      ; y pos of destination
+  jsr CopyBlock
+\end{lstlisting}
+
