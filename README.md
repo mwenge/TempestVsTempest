@@ -1,6 +1,6 @@
-# tempest 2000 in 25 easy pieces
+# Tempest vs Tempest
 
-Taking apart Tempest 2000 piece by piece.
+Taking apart Tempest (1980) and Tempest 2000 (1994) piece by piece.
 
 [<img height=360 src="https://github.com/mwenge/t2k-25easypieces/raw/master/src/cover/pdf/cover_front.png">](https://github.com/mwenge/t2k-25easypieces/releases/download/v0.01/t2k25.pdf) 
 
