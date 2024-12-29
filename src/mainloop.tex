@@ -1,0 +1,88 @@
+\chapter{mainloop} 
+\label{sec:listing}
+\lstset{style=68KStyle}
+\lhead[tempest 2000]{}
+
+\begin{lstlisting}[escapechar=\%]
+; This loop runs the GPU/Blitter code.  I found that if you
+; started up the GPU/Blitter pair from inside the FRAME
+; Interrupt, the system would fall over if they got really heavily
+; loaded.  MAINLOOP just waits for a sync from the FRAME routine,
+; launches the GPU, then loops waiting for another sync.
+
+
+mainloop:
+        move #1,sync
+        move #1,screen_ready
+        move pauen,_pauen
+main:   tst sync
+        bne main
+        move #1,sync
+        move.l dscreen,gpu_screen
+
+
+        move.l mainloop_routine,a0
+        jsr (a0)
+        tst z
+        bne rax
+        move.l s_routine,d0
+        beq mloop
+        tst auto
+        beq nauty
+        clr.l s_routine
+        move #1,z
+        clr _pauen
+        move.l #rrts,routine
+        clr term
+        rts
+nauty:  move.l d0,a0
+        jsr (a0)
+        clr.l s_routine
+mloop:  tst pawsed
+        beq mlooo
+        jsr paustuff            ;pause displayed if pressed.
+        
+mlooo: tst unpaused
+        beq nunpa2
+        jsr eepromsave
+        clr unpaused    
+nunpa2:
+        move #1,screen_ready
+        tst term
+        beq main
+rax:    clr _pauen
+        move.l #rrts,routine
+        clr term
+        rts
+\end{lstlisting}
+
+\begin{lstlisting}[escapechar=\%]
+draw_objects:
+        tst h2h
+        bne nodraw              ;cheque 2p h2h mode
+        clr h2hor
+stayhalt:
+        tst drawhalt
+        bsr clearscreen
+        move.b sysflags,d0
+        and.l #$ff,d0
+        move.l d0,_sysflags             ;pass sys flags to GPU
+        tst sf_on
+        bne dostarf
+        bra gwb
+dostarf:
+        move.l #3,gpu_mode      ;mode 3 is starfield1
+        move.l vp_x,in_buf+4
+        move.l vp_y,in_buf+8
+        move.l vp_z,d0
+        add.l vp_sf,d0
+        move.l d0,in_buf+12             ;pass viewpoint to GPU
+        move.l #field1,d0
+        move.l d0,in_buf+16     ;address off the starfield data structure
+        move.l warp_count,in_buf+20
+        move.l warp_add,in_buf+24
+        lea fastvector,a0
+        jsr gpurun              ;do gpu routine
+        jsr gpuwait
+\end{lstlisting}
+
