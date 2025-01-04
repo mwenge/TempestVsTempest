@@ -3,6 +3,29 @@
 \lstset{style=68KStyle}
 \lhead[tempest 2000]{}
 
+Unlike Tempest, the engine that runs Tempest 2000 is not contained within a mainline routine. Instead
+the donkey work is done during a vertical sync interrupt. Vertical sync is a point in time: specifically
+when the Atari Jaguar has finished writing pixels to the screen and has a short amount of time available
+before it starts writing pixels again from the top. An interrupt is a routine the system will call at a moment
+of the programmer's choosing. A vertical sync interrupt is when you combine the two, and in this case they 
+are combined in a routine called \icode{Frame}. It is this routine that manages the state of the game and prepares
+all the objects for display and the sound for output.
+
+That said, Tempest 2000 does have a mainline routine but it is there to solve a problem encountered in development
+rather than as part of a grand design. As we shall see there are a number of ways of generating graphical data on the Atari
+Jaguar, and two of them have their own dedicated processors. These are the Graphics Processor (GPU), which specializes
+in the fast trigonometric operations required for 3D displays and the Blitter, which is suited for large copy and fill operations.
+It is worth being clear that neither of these processors or any of their operations actually write graphics to the screen.
+Instead this function is performed by a third dedicated processing unit, the Object Processor. It is the Object Processor 
+that turns data into light. This unit takes a list of operations set up by the programmer for each frame and uses them to write
+pixels to the screen. These operations will usually include data prepared by the GPU and the Blitter in a long list of tasks
+for the Object Processor known as an Object List. It's the programmer's job to have a new Object List ready every time
+the Object Processor is about to paint the screen. 
+
+It was the initial intention that the \icode{Frame} routine would be solely responsible for this task in Tempest 2000. 
+But there was a snag: it kept crashing. We know this because Jeff Minter left us one of his rare comments at the head
+of the \icode{mainloop routine}:
+
 \begin{lstlisting}[escapechar=\%]
 ; This loop runs the GPU/Blitter code.  I found that if you
 ; started up the GPU/Blitter pair from inside the FRAME
@@ -10,79 +33,545 @@
 ; loaded.  MAINLOOP just waits for a sync from the FRAME routine,
 ; launches the GPU, then loops waiting for another sync.
 
-
 mainloop:
-        move #1,sync
-        move #1,screen_ready
-        move pauen,_pauen
-main:   tst sync
-        bne main
-        move #1,sync
+        move #1,sync               ; Reset the sync
+        move #1,screen_ready       ; Reset the screen ready.
+        move pauen,_pauen          ; Reset the pause indicator.
+
+main:   tst sync                   ; loop waiting for another sync
+        bne main                   ; from the interrupt in 'Frame'
+
+        move #1,sync               ; reset the sync so that we wait for a new frame next time around.
         move.l dscreen,gpu_screen
 
-
-        move.l mainloop_routine,a0
-        jsr (a0)
-        tst z
-        bne rax
-        move.l s_routine,d0
-        beq mloop
-        tst auto
-        beq nauty
-        clr.l s_routine
-        move #1,z
-        clr _pauen
-        move.l #rrts,routine
-        clr term
-        rts
-nauty:  move.l d0,a0
-        jsr (a0)
-        clr.l s_routine
-mloop:  tst pawsed
-        beq mlooo
-        jsr paustuff            ;pause displayed if pressed.
-        
-mlooo: tst unpaused
-        beq nunpa2
-        jsr eepromsave
-        clr unpaused    
-nunpa2:
-        move #1,screen_ready
-        tst term
-        beq main
-rax:    clr _pauen
-        move.l #rrts,routine
-        clr term
-        rts
+        move.l mainloop_routine,a0 ; do the actual mainloop work, mainloop_routine
+        jsr (a0)                   ; is usually a reference to the 'draw_objects' routine.
 \end{lstlisting}
+
+So instead of doing all the necessary GPU and Blitter operations during a vertical sync interrupt, we do them
+here in this \icode{mainloop}. Notice the busyloop in the second paragraph above where we wait for the value in \icode{sync}
+to change to a zero. This forces the CPU to wait until the \icode{Frame} routine resets it to zero. Once it has
+been reset we can go ahead and execute our \icode{mainloop\_routine}. This is actually a reference to the 
+\icode{draw\_objects} routine - and it is this routine that does all the GPU and Blitter work required to calculate
+the pixels for display.
+
+Here we see that when the game is initialized, \icode{draw\_objects} is selected as the destination for
+\icode{mainloop\_routine}, and then we enter the \icode{mainloop}.
+\begin{lstlisting}
+go_in:  move.l #rotate_web,routine
+        move.l #0,warp_count
+        move.l #draw_objects,mainloop_routine  ; Make draw_objects the mainloop_routine
+        move pauen,_pauen
+        clr db_on
+        bra mainloop
+\end{lstlisting}
+
+We will investigate the mechanics of using the GPU and the Blitter in later sections, but for now let's get a
+sense of the kind of things the \icode{draw\_objects} routine uses the GPU and Blitter for.
+A quick glance through the top of the routine shows us drawing the starfield (\icode{dostarf}).
 
 \begin{lstlisting}[escapechar=\%]
 draw_objects:
-        tst h2h
-        bne nodraw              ;cheque 2p h2h mode
+        tst h2h                 ; Are we in head to head mode?
+        bne nodraw              ; Yes, go to 'nodraw'.
         clr h2hor
 stayhalt:
-        tst drawhalt
+        tst drawhalt            ; 
         bsr clearscreen
         move.b sysflags,d0
         and.l #$ff,d0
-        move.l d0,_sysflags             ;pass sys flags to GPU
-        tst sf_on
-        bne dostarf
-        bra gwb
-dostarf:
-        move.l #3,gpu_mode      ;mode 3 is starfield1
-        move.l vp_x,in_buf+4
-        move.l vp_y,in_buf+8
-        move.l vp_z,d0
-        add.l vp_sf,d0
-        move.l d0,in_buf+12             ;pass viewpoint to GPU
-        move.l #field1,d0
-        move.l d0,in_buf+16     ;address off the starfield data structure
-        move.l warp_count,in_buf+20
-        move.l warp_add,in_buf+24
-        lea fastvector,a0
-        jsr gpurun              ;do gpu routine
-        jsr gpuwait
+        move.l d0,_sysflags     ;pass sys flags to GPU
+        tst sf_on               ; Is the starfield active?
+        bne dostarf             ; If yes, go to 'dostarf'.
+        bra gwb                 ; Otherwise do the web.
+
+dostarf:                        ; Prepare the starfield!
+        move.l #3,gpu_mode      ; mode 3 is starfield1
+        move.l vp_x,in_buf+4    ; Put x pos in the in_buf buffer.
+        move.l vp_y,in_buf+8    ; Put y pos in the buffer.
+        move.l vp_z,d0          ; Get the current z pos.
+        add.l vp_sf,d0          ; Increment it. 
+        move.l d0,in_buf+12     ; Add it to the buffer.
+        move.l #field1,d0       ; Get the starfield data structure.
+        move.l d0,in_buf+16     ; And put it in the buffer.
+        move.l warp_count,in_buf+20 ; Add the warp count.
+        move.l warp_add,in_buf+24   ; Add the warp increment.
+        lea fastvector,a0       ; Get the GPU routine to use.
+        jsr gpurun              ; do gpu routine
+        jsr gpuwait             ; Wait until its finished.
+
 \end{lstlisting}
 
+As you can see 'doing the starfield' involves setting up a number of registers and variables
+before finally invoking the GPU (\icode{jsr gpurun}) to do its magic and waiting for it to finish
+(\icode{jsr gpuwait}). We will take a closer look at the mechanics of starfield generation in a later
+chapter, but the above begins to give us a flavour of the formula required to get a GPU routine up 
+and running.
+
+The next element we find is a routine for drawing the playfield of Tempest 2000: the web. As you can
+see there is a lot going on here and the truth is, this isn't even all of it. And not just that,
+there are a number of different GPU routines used for drawing webs scattered throughout the game depending
+on the mode we are playing or whether there is more than one player. Just looking briefly through the code
+below (and you should confine yourself to that for now) gives you a sense of the overhead involved in setting
+up a reasonably complex piece of GPU code. Note that at the end of the listing below we load a variable called
+\icode{equine2} to the \icode{A0} register. This is an address to the actual GPU code that the Graphics Processor
+will run, using all the data set up in the previous lines. So there is much more complexity and detail underneath,
+even here. We will cover this in more detail in the chapter devoted to webs.
+
+\begin{lstlisting}[escapechar=\%]
+gwb:
+        move.l vp_x,d3
+        move.l vp_y,d4
+        move.l vp_z,d5
+
+dscud:
+solweb:
+        move #120,d0
+        add palfix2,d0
+        and.l #$ff,d0
+        move.l d0,ycent
+        tst l_solidweb
+        beq vweb
+        cmp #1,webcol           ;our 'transparent' webs...
+        beq vweb
+        lea _web,a6             ;draw a solid poly Web
+        tst 34(a6)
+        beq n_wb
+        lea in_buf,a0
+        move.l 46(a6),d0
+        move.l d0,(a0)
+        move.l 4(a6),d0
+        sub.l d3,d0
+        move.l d0,4(a0)
+        move.l 8(a6),d0
+        sub.l d4,d0
+        move.l d0,8(a0)
+        move.l 12(a6),d0
+        sub.l d5,d0
+        bmi n_wb
+        move.l d0,12(a0)
+        move l_solidweb,d0   ; The web data structure.
+        and.l #$ff,d0
+        move.l d0,16(a0)
+        move 28(a6),d0
+        and.l #$ff,d0
+        move.l d0,24(a0)
+        move frames,d0
+        and.l #$ff,d0
+        move.l d0,28(a0)
+        move.l #w16col,32(a0)
+        move.l #0,gpu_mode
+        lea equine2,a0        ; The GPU shader routine for webs.
+        jsr gpurun
+        jsr gpuwait
+        jsr WaitBlit
+\end{lstlisting}
+You may note at the end that we call a routine called \icode{WaitBlit}. This is because in addition to computing the
+polygons that make up the 3D web, the GPU also 'blits' or writes its results to a buffer that will ultimately be used
+by the Object Processor to write the pixels to the screen. It is this dual operation that caused Minter a headache
+when attempting it from within the vertical sync interrupt. (My own suspicion is that there just wasn't enough time in the
+interrupt to do everything he wanted on the GPU and Blitter - so moving it here to the mainloop ensured that it would only
+be done opportunistically and at the risk of missing a frame every now and then.)
+
+But there is more to Tempest 2000 than starfields and webs so there must be plenty of other things being drawn in here too.
+At first it is not easy to see where though. The next section of the \icode{draw\_objects} routine is cryptic at best 
+but on close inspection does contain some clues. As elsewhere, I've added comments to assist understanding:
+
+\begin{lstlisting}
+n_wb:   move.l activeobjects,a6 ; activeobjects is a list of things to draw!
+        bsr d_obj
+        bra odend
+
+        ; A loop for processing everything in 'activeobjects'.
+d_obj:  cmpa.l #-1,a6      ; Have we reached the end of activeobjects? 
+        beq oooend         ; If yes, skip to end.
+        move 50(a6),d0     ; Is the object marked for deletion? 
+        beq no_unlink      ; If not, skip to no_unlink and draw it.
+
+        ; This verbose section up until no_unlink is concerned entirely 
+        ; with deleting the dead object from the activeobjects list.
+        move.l 56(a6),d1
+        bmi tlink
+        move.l d1,a5
+        move.l 60(a6),60(a5) ; Make it invisible to the vsync interrupt.
+
+tlink:  move #-1,50(a6)     ; mark it bad
+        move.l 60(a6),-(a7)
+        move d0,-(a7)
+        move.l a6,a0
+        move 32(a6),-(a7)   ;save player ownership tag
+        move (a7)+,d1
+        move (a7)+,d0
+        lea uls,a1
+        asl #2,d0
+        move.l -4(a1,d0.w),a1
+        jmp (a1)
+
+uls: dc.l afinc,ashinc,pshinc
+
+pshinc: tst d1              ;player ownership of an unlinked bullet
+        beq ulsh1
+        add #1,shots+2
+ulo:    move #1,locked
+        bsr unlinkobject        
+        clr locked
+        bra nxt_o
+ulsh1:  add #1,shots
+        bra ulo
+ashinc: add #1,ashots
+afinc:  add #1,afree
+        bra ulo
+
+        ; Actually draw the object.
+        ; No need to remove the object, just draw it.
+no_unlink:      
+        lea draw_vex,a0      ; Get our table of draw routines.
+        move 34(a6),d0       ; Is this object smaller than a pixel?
+        bpl notpxl           ; If not, go to notpxl.
+        move.l #draw_pel,a0  ; Use draw_pex for pixel-size objects.
+        bra apal             ; Jump to the draw call. 
+notpxl: asl #2,d0            ; Multiply the val in d0 by 2.
+        move.l 0(a0,d0.w),a0 ; Use it as an index into draw_vex.
+apal:   move.l 60(a6),-(a7)  ; Store the index of next object in a7. 
+        jsr (a0)             ; But first call the routine in draw_vex.
+        jsr gpuwait          ; Wait for the GPU to finish.
+nxt_o:  clr locked           ; Clear 'locked' just in case.
+nxt_ob: move.l (a7)+,a6      ; Put the index of next object back in a6.
+        bra d_obj            ; Go to the next object.
+oooend: rts
+
+\end{lstlisting}
+
+This part of the \icode{draw\_objects} routine is concerned with processing a linked list called
+\icode{activeobjects} using a loop that runs from \icode{d\_obj} to \icode{bra d\_obj} in the second
+last line from the end. This \icode{activeobjects} list contains the detail for all objects that
+are active on the screen and require drawing by the GPU/Blitter. Some of the original (but sparse)
+code comments added by Minter suggest that this was initially conceived as a list for managing just
+the player and enemy bullets but it expanded over time. 
+
+Each object in the \icode{activeobjects} list has the following structure:
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=9cm,center}
+
+      \begin{tabular}{lll}
+        \toprule
+        Bytes & Solid Objects & Vector Objects\\
+        \midrule
+        0-4 & Vector Object or Solid Object \\ 
+        4-8 &  X \\
+        8-12 &  Y \\
+        12-16 &  Z \\
+        16-20 & Position on web.\\
+        20-24 & Velocity \\
+        24-28 & Acceleration  & XY orientation \\
+        28-30 & XZ Orientation & XZ orientation  \\
+        30-32 & Y Rotation \\
+        32-34 & Z Rotation \\
+        34-36 & Index into draw routine in \icode{draw\_vex}.
+        36-38 & Start address of pixel data. & Delta Z \\
+        38-40 & Y & Colour change value\\
+        40-42 & Colour \\
+        42-44 & Scale factor \\
+        44-46 & Mode to climb, descend or cross rail \\
+        46-48 & Size of Pixel Data.\\
+        48-50 & Fire Timer \\
+        50-52 & Marked for deletion \\
+        52-54 & Whether an enemy or not. \\
+        54-56 & Object Type \\
+        56-60 & Address of Previous Object \\
+        60-64 & Address of Next Object \\
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }\caption*{The structure of objects in \icode{activeobjects}.}
+\end{figure}
+
+So in the 64 bytes of each object we cover quite a bit of ground. There is colour, co-ordinate, motion, and orientation
+information. There's also detail that defines the behaviour of the object and most immediately relevant to what
+we are looking at here, an index into the draw routine to use for the object at bytes 34-36.
+
+This index is a value that references the routine given at the appropriate position in the \icode{draw\_vex} array:
+\begin{lstlisting}
+draw_vex: 
+         dc.l rrts,draw,draw_z,draw_vxc,draw_spike,draw_pixex,draw_mpixex,draw_oneup,draw_pel,changex
+         dc.l draw_pring,draw_prex,dxshot,drawsphere,draw_fw,dmpix,dsclaw,dsclaw2
+\end{lstlisting}
+
+The draw routine can vary depending on the type of object. There's a distinct treatment of vector object and objects
+that are solid polygons. Vector objects require the least work and if the header in bytes 0-4 indicates that it requires
+vector drawing only (for example the player's claw) then a vector draw in the GPU will suffice. The \icode{draw} routine
+in the second item in \icode{draw\_vex} is the base routine for deciding whether a vector draw is sufficient or not, and
+most of the other routines make use of it in addition to the object-specific detail they manage:
+
+\begin{lstlisting}
+draw:
+        move.l a6,oopss   ; Stash the header.
+        move.l (a6),d0    ; Is the header value greater than zero?
+        bpl vector        ; If yes, then a vector draw will suffice.
+
+        ; Otherwise we need to do add this object to the 'apriority'
+        ; list so that it can be drawn as a solid polygon.
+
+        ; The 'apriority' list stores objects in the descending order
+        ; of their Z co-ordinate. This ensures that nearer objects are
+        ; painted in front of objects that are further away or 'behind' them.
+        move.l fpriority,a0  ;get a free priority object
+        move.l a6,(a0)
+        move.l 12(a6),d0  ;get 'z'
+        move.l d0,12(a0)  ;put z in prior object
+        move.l apriority,a1
+        move.l a1,a2
+chklp:
+        cmp.l #-1,a1       ;no objects active?
+        bne prio1
+        bra insertprior    ;we are at top of list then, if we are first a1=a2=-1
+
+prio1:
+        cmp.l 12(a1),d0    ;check against stored 'z'
+        bge insertprior    ;behind, insert on to list
+        move.l a1,a2
+        move.l 8(a1),a1    ;get next object
+        bra chklp    ;loop until list end or next object in front of us
+        rts      ;return with object at right place in the list
+\end{lstlisting}
+
+Reading through the above we can see that if a \icode{vector} draw won't do the job then the object gets
+added to a list called \icode{apriority} and nothing else is done with it for now. So what we are doing in our
+\icode{d\_obj} loop is a first pass through the \icode{activeobjects} list, with any items on the list that 
+require attention to the order in which they are painted, passed off to the \icode{apriority} list. Notice
+that we don't mutate or update the objects in any way, we simply pass them over so the structure of the objects
+we described above remains unchanged.
+
+Once we have finished this first run through the \icode{activeobjects} list our next order of business
+is to process the \icode{apriority} list we've populated. This is done in \icode{drawpolyos} which we
+call right after we've finished with our first pass of \icode{activeobjects}. 
+
+\begin{lstlisting}
+        ; We've finished our first pass of activeobjects.
+odend:
+        bsr showscore     ; Show the score.
+        ; In Tempest Classic mode we don't need solid polygons.
+        tst blanka        ; Are we doing solid polygons?
+        beq odvec         ; If not, skip.
+        bsr drawpolyos    ; if we are, draw them.
+\end{lstlisting}
+
+Drawing our polygons happens below. We iterate through the 'apriority' list, deleting items in it
+as we go, and calling the object-specific draw routine for each to render them to the screen.
+
+\begin{lstlisting}
+solids: 
+        dc.l rrts,cdraw_sflipper,draw_sfliptank,s_shot,draw_sfuseball
+        dc.l draw_spulsar,draw_sfusetank,ringbull,draw_spulstank
+        dc.l draw_pixex,draw_pup1,draw_gate,draw_h2hclaw,draw_mirr
+        dc.l draw_h2hshot,draw_h2hgen,dxshot,draw_pprex,draw_h2hball
+        dc.l draw_blueflip,ringbull,supf1,supf2,draw_beast,dr_beast3
+        dc.l dr_beast2,draw_adroid            
+
+; Routine for drawing all solid polygons.
+; Process each object in the 'apriority' list. We remove each item after
+; processing.The draw routine for each item is given by its index into
+; the 'solids' array.
+drawpolyos:
+        move.l #192,xcent   ; Set 192 as X centre.
+        move.l #120,d6      ; Set 120 as Y centre.
+        add palfix2,d6      ; Adjust for PAL if necessary.
+        move.l d6,ycent     ; Store it as Y centre.
+        move.l apriority,a0 ; Get our 'apriority' list.
+dpoloop:
+        cmp.l #-1,a0
+        beq rrts            ; End of list was reached
+        move.l (a0),a6      ; Get the index to 'solids'
+        move.l (a6),d0      ; Store it in d0.
+        move.l a0,-(a7)     ; Stash our current position in the list.
+        bsr podraw          ; Go do object type draw
+        jsr gpuwait         ; wait for gpu
+        move.l (a7)+,a0     ; Get our current position in the list
+        move.l 8(a0),-(a7)  ; Get the next position in the list
+        bsr unlinkprior     ; Delete the current object.
+        move.l (a7)+,a0     ; Move to the next position in the list.
+        bra dpoloop         ; Loop until all objects drawn and unlinked
+ 
+podraw:
+        move.l #9,d4        ; Set X centre as 9.
+        move.l #9,d5        ; Set Y centre as 9.
+soldraw:
+        neg d0
+        lea solids,a4       ; Get the 'solids' list.
+        lsl #2,d0           ; Multiply our index by 2.
+        move.l 0(a4,d0.w),a0  ; Get the draw routine address from 'solids'.
+        move.l 4(a6),d2     ; Get the X position from our object.
+        sub.l vp_x,d2       ; Subtract our X viewpoint.
+        move.l 8(a6),d3     ; Get the Y position from our object.
+        sub.l vp_y,d3       ; Subtract our Y viewpoint.
+        move.l 12(a6),d1    ; Get the Z position from our object.
+        sub.l vp_z,d1       ; Subtract our X viewpoint.
+        bmi rrts            ; Skip if not visible.
+        move 28(a6),d0      ; Get orientation of object.
+        and.l #$ff,d0       ; Use only the least significant bytes.
+        jmp (a0)            ; Call the objects draw routine.
+                            ; The draw routine returns to 'dpoloop'.
+\end{lstlisting}
+
+
+\section*{The \icode{Frame} Routine}
+We set up our frame interrupt handler near the very start of initialisation:
+
+\begin{lstlisting}
+;*****int setup
+        jsr scint               ;set intmask according to controller prefs
+        move.l #Frame,$100
+        move.w n_vde,d0
+        or #1,d0
+        move d0,VI
+        move pit0,PIT0
+        clr d0
+        move.b intmask,d0
+        move.w  d0,INT1         ;enable frame int
+        move.w  sr,d0
+        and.w   #$f8ff,d0
+        move.w  d0,sr           ;interrupts on
+\end{lstlisting}
+
+\begin{lstlisting}
+Frame:
+;       add #1,frames
+
+;       move.l #$FFFFFFFF,BORD1
+        movem.l d0-d5/a0-a2,-(a7)       ;simple thang to make
+
+; vertical blank code goes here
+
+
+
+fr:     move INT1,d0
+        move d0,-(a7)
+        btst #0,d0
+        beq CheckTimer          ;go do Music thang
+
+
+        movem.l d6-d7/a3-a6,-(a7)
+        move.l blist,a0
+        move.l dlist,a1
+        move.l #$30,d0
+xlst:   move.l (a0)+,(a1)+      ;copy built list to displayed list
+        dbra d0,xlst
+
+        bsr RunBeasties         ;build the next one
+
+
+setdb:          
+;
+; this code writes the proper screen address to double buffered objects in the display list
+
+;       lea 32(a0),a0           ;skip background object
+
+        tst screen_ready        ;is GPU ready with a new screen
+        beq no_new_screen       ;no
+;       tst pawsed
+;       bne no_new_screen
+        tst sync
+        beq no_new_screen
+        move.l cscreen,d1
+        move.l dscreen,cscreen
+        move.l d1,dscreen       ;swap screens
+        clr screen_ready
+        clr sync
+no_new_screen:
+
+        move.l dlist,a0
+        move db_on,d7           ;check for double buffer on (d7 holds # of contiguous DB'ed screens)
+        bmi no_db
+
+
+
+stdb:   move.l cscreen,d6       ;get address of current displayed screen
+        and.l #$fffffff8,d6     ;lose three LSB's
+        lsl.l #8,d6             ;move to correct bit position
+        move.l (a0),d1          ;get first word of the BMO
+        and.l #$7ff,d1          ;clear data pointer
+        or.l d6,d1              ;mask in new pointer
+        move.l d1,(a0)          ;replace in OL
+        lea 32(a0),a0           ;skip to nxt object
+;       dbra d7,stdb            ;loop for all DB backgrounds
+
+
+no_db:  
+        jsr dowf
+
+        tst pal
+        bne dtoon
+        add #1,tuntime          ;do NTSC interrupts only 5/6 times
+        cmp #4,tuntime
+        ble dtoon
+        cmp #6,tuntime
+        bne ntoon
+        clr tuntime     
+dtoon:  tst modstop
+        bne ntoon
+        jsr NT_VBL
+ntoon:
+
+
+;       bsr readpad                     ;get joy values
+        tst pawsed
+        bne zial
+        add #1,frames 
+        move.l fx,a0
+        jsr (a0)                ;for plaette changes etc
+zial:
+        tst locked
+        beq doframe
+;       move #1,drawhalt
+        bra loseframe
+doframe: 
+        move.l routine,a0
+        jsr (a0)                ;call do thangs routine
+        clr drawhalt
+
+loseframe:
+        bsr checkpause       ;do pause and overriding reset command
+        bsr domod               ;do music handling      
+        btst.b #0,sysflags
+        bne chit                ;check for no h.interlace
+        move frames,d0
+        and #$01,d0
+        add #SIDE,d0
+        sub palside,d0
+        move d0,beasties        ;H. Interlace mode
+chit:   movem.l (a7)+,d6-d7/a3-a6
+
+CheckTimer: move (a7)+,d0       ;get back int status
+        move d0,-(a7)
+        btst #3,d0
+        beq exxit
+
+        tst roconon             ;Rotary Controller enabled?
+        bne roco
+        jsr dopad
+        bra exxit               ;Yeah, interrupts at 8x normal speed, go do special stuff
+
+roco:   move pitcount,d1
+        and #$07,d1
+        bne rotonly
+        jsr dopad
+rotonly: add #1,pitcount
+        bsr readrotary
+
+
+
+exxit:  move (a7)+,d0
+        lsl #8,d0
+        move.b intmask,d0
+        move d0,INT1
+        move d0,INT2 
+        movem.l (a7)+,d0-d5/a0-a2
+;       move.l #0,BORD1
+;       move.w #$101,INT1       ;do interrupt stuff
+;       move.w  #0,INT2
+        rte
+\end{lstlisting}
