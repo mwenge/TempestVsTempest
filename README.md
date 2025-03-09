@@ -1,10 +1,13 @@
 # Tempest vs Tempest
 
-Taking apart Tempest (1980) and Tempest 2000 (1994) piece by piece.
+In this book I attempt to explore and understand the code and craft of Dave Theurer's 'Tempest' (1980) and Jeff Minter's 'Tempest 2000' (1994).
 
-[<img height=360 src="https://github.com/mwenge/t2k-25easypieces/raw/master/src/cover/pdf/cover_front.png">](out/TempestVsTempest_release.pdf) 
+I'm trying to keep it light and digestible so the book consists of lots of little chapters, each one presenting
+a hopefully-tasty morsel from one of the games.
 
-Work-in-progress is available for free as a [Scrapbook Edition](out/TempestVsTempest_release.pdf).
+[<img width=80% src="https://github.com/mwenge/t2k-25easypieces/raw/master/src/cover/pdf/cover_front.png">](out/TempestVsTempest_release.pdf) 
+
+Work-in-progress is available for free as a [Work in Progress Edition](out/TempestVsTempest_release.pdf).
 
 You can [gift what you want](https://www.paypal.com/paypalme/hoganrobert).
 
