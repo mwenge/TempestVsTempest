@@ -259,7 +259,7 @@ Each object in the \icode{activeobjects} list has the following structure:
 
       \begin{tabular}{lll}
         \toprule
-        Bytes & Solid Objects & Vector Objects\\
+        Bytes & \\
         \midrule
         0-4 & Vector Object or Solid Object \\ 
         4-8 &  X \\
@@ -267,17 +267,17 @@ Each object in the \icode{activeobjects} list has the following structure:
         12-16 &  Z \\
         16-20 & Position on web.\\
         20-24 & Velocity \\
-        24-28 & Acceleration  & XY orientation \\
-        28-30 & XZ Orientation & XZ orientation  \\
+        24-28 & Acceleration  \& XY orientation \\
+        28-30 & XZ Orientation \& XZ orientation  \\
         30-32 & Y Rotation \\
         32-34 & Z Rotation \\
         34-36 & Index into draw routine in \icode{draw\_vex}.
-        36-38 & Start address of pixel data. & Delta Z \\
+        36-38 & Start address of pixel data. \& Delta Z \\
         38-40 & Y & Colour change value\\
         40-42 & Colour \\
         42-44 & Scale factor \\
         44-46 & Mode to climb, descend or cross rail \\
-        46-48 & Size of Pixel Data.\\
+        46-48 & Size of Pixel Data  \& Duration.\\
         48-50 & Fire Timer \\
         50-52 & Marked for deletion \\
         52-54 & Whether an enemy or not. \\

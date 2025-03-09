@@ -2,24 +2,75 @@
 \label{sec:webs}
 \lstset{style=68KStyle}
 
+Webs are fun and should be easy to draw. To start with, we can describe a 2d shape
+of our choice using a bunch of x/y co-ordinates as points.
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=7cm,center}
+      \includegraphics[width=12cm]{src/webs/sine_wave_dots_no_title.png}%
+    \end{adjustbox}
+  \caption{Make our dots.}
+\end{figure}
+
+Next we can join these together to give us a 2d shape.
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \includegraphics[width=12cm]{src/webs/sine_wave_2d_no_title.png}%
+    \end{adjustbox}
+  \caption{Start with a 2d shape..}
+\end{figure}
+
+To make this thing three dimensional all we have to do is project our shape onto
+some chosen distant position along the Z plane.
+\vspace{-0.5cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \includegraphics[width=12cm]{src/webs/sine_wave_no_title.png}%
+    \end{adjustbox}
+  \caption{..then make it three dimensional.}
+\end{figure}
+
+Seems simple enough. With this as our objective the data structure below gives us
+everything we need to create the web. In addition to listing the 16 vertices that
+make up the web's shape in two dimensions, we also include some information on whether
+the web should be open (like the one pictured above) or closed (like a circle or 
+square). Since a web of 16 vertices will give us 14 lanes which the player and
+enemies can occupy we also add a 'Rotation Table' to tell us how players and
+enemies should be oriented when on that lane.
+
 \begin{lstlisting}
-web4: 
-  dc.w 15 ; length of orientation table, number of channels in the web.
-  dc.w 7  ; player's initial position on the web
+; Data structure for the 'Sine Wave' web. 
+web13:       
+  dc.w 14    ; Number of lanes in the web.
+  dc.w  6    ; The lane the player starts on.
 
-  ; x/y pairs of all vertices in the web.
-  dc.w 8,6,7,4,5,5,4,7    ;clover
-  dc.w 6,8,4,9,5,11,7,12
-  dc.w 8,10,9,12,11,11,12,9
-  dc.w 10,8,12,7,11,5,9,4,8,6
+  ; The x/y pairs of all vertices in the web. So for example
+  ; -2/14 indicates the X and Y co-ordinates of the first vertex.
+  ; There are always 16 in total.
+  dc.w -2,14,-2,12,-1,10, 1, 8
+  dc.w  3, 7, 5, 7, 7, 8, 9,10
+  dc.w 11,12,13,13,15,13,17,12
+  dc.w 19,10,20, 8,20, 6,-2,14
 
-  dc.w -1  ; Whether to join the last vertex with the first
-
-  ;orientation table (angle of an object within a particular lane)
-  dc.w -80,112,80,16,112,48,16,-48,48,-16,-48,-112,-16,-80,-112,80  
-  dc.w $0,$70,$10,$60,$20,$50,$30,$40,$40,$30,$50,$20,$60,$10,$70,0
-
+  dc.w 0     ; 0 = Open Web, -1 = Closed Web
+    
+  ; Rotation Table (angle of an object within a particular lane)
+  ; The length of this list is specified by the '14' above.
+  dc.w -64,-48,-32,-16, 0,16,32,32,16, 0,-16,-32,-48,-64
 \end{lstlisting}
+
+The values given in the Rotation Table are angles of roll to apply to the claw
+(and to the claw's enemies) when placing them in the lane. Negative values rotate
+the object to the right, while positive values rotate it to the left. 
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6cm,center}
+      \includegraphics[width=12cm]{src/webs/sine_wave_dots_claws_no_title.png}%
+    \end{adjustbox}
+  \caption{The rotation table applied to the claw in each lane of the web.}
+\end{figure}
 
 This is the routine that converts the web data structure into a list of vertices and lines between vertices
 that will make up the web itself:
