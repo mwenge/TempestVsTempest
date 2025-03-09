@@ -2,9 +2,9 @@
 
 Taking apart Tempest (1980) and Tempest 2000 (1994) piece by piece.
 
-[<img height=360 src="https://github.com/mwenge/t2k-25easypieces/raw/master/src/cover/pdf/cover_front.png">](https://github.com/mwenge/t2k-25easypieces/releases/download/v0.01/t2k25.pdf) 
+[<img height=360 src="https://github.com/mwenge/t2k-25easypieces/raw/master/src/cover/pdf/cover_front.png">](out/TempestVsTempest_release.pdf) 
 
-Work-in-progress is available for free as a [Scrapbook Edition](https://github.com/mwenge/t2k-25easypieces/releases/download/v0.01/t2k25.pdf).
+Work-in-progress is available for free as a [Scrapbook Edition](out/TempestVsTempest_release.pdf).
 
 You can [gift what you want](https://www.paypal.com/paypalme/hoganrobert).
 
