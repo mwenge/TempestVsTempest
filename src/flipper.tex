@@ -6,30 +6,30 @@ The data structure as given in the source code is:
 
 \begin{lstlisting}
 s_flipper: 
-  dc.l 4		;4 faces in this object, a shaded solid Flipper
-
-	dc.w $f0		;Face colour - RED
-	dc.w 3,$8000		;vertex ptr and i
-	dc.w 1,$c000		;vertex ptr and i
-	dc.w 0,$ff00		;vertex ptr and i
+  dc.l 4        ; 4 faces in this object, a shaded solid Flipper
+    
+	dc.w $f0       ; Face colour - Red.
+	dc.w 3,$8000   ; vertex index, intensity.
+	dc.w 1,$c000   ; vertex index, intensity.
+	dc.w 0,$ff00   ; vertex index, intensity.
 	dc.w 0
-
-	dc.w $f4		;Face colour - Blueish
-	dc.w 4,$4000		;vertex ptr and i
-	dc.w 2,$8000		;vertex ptr and i
-	dc.w 0,$c000		;vertex ptr and i
+    
+	dc.w $f4       ; Face colour - Orange.
+	dc.w 4,$4000   ; vertex index, intensity.
+	dc.w 2,$8000   ; vertex index, intensity.
+	dc.w 0,$c000   ; vertex index, intensity.
 	dc.w 0
-
-	dc.w $f4		;Face colour - RED
-	dc.w 5,$8000		;vertex ptr and i
-	dc.w 1,$c000		;vertex ptr and i
-	dc.w 0,$ff00		;vertex ptr and i
+    
+	dc.w $f4       ; Face colour - Red.
+	dc.w 5,$8000   ; vertex index, intensity.
+	dc.w 1,$c000   ; vertex index, intensity.
+	dc.w 0,$ff00   ; vertex index, intensity.
 	dc.w 0
-
-	dc.w $f0		;Face colour - Blueish
-	dc.w 6,$4000		;vertex ptr and i
-	dc.w 2,$8000		;vertex ptr and i
-	dc.w 0,$c000		;vertex ptr and i
+    
+	dc.w $f0       ; Face colour - Orange.
+	dc.w 6,$4000   ; vertex index, intensity.
+	dc.w 2,$8000   ; vertex index, intensity.
+	dc.w 0,$c000   ; vertex index, intensity.
 	dc.w 0
 
 fverts: dc.w 9,9,5,9,13,9,1,0,17,0,1,18,17,18
@@ -37,7 +37,7 @@ fverts: dc.w 9,9,5,9,13,9,1,0,17,0,1,18,17,18
 
 A little more explanation, taking the first entry in the structure:
 \begin{lstlisting}
-	dc.w $f0		  ; Face colour - RED
+	dc.w $f0		  ; Face colour - Red.
 	dc.w 3,$8000	; Index into fverts, followed by intensity value.
 	dc.w 1,$c000	; Index into fverts, followed by intensity value.
 	dc.w 0,$ff00	; Index into fverts, followed by intensity value.
@@ -47,7 +47,7 @@ A little more explanation, taking the first entry in the structure:
 We can see that the middle three entries start with an index into the array \icode{fverts} we listed above.
 The index is pair-wise, so for example an index of \icode{3} must be multiplied by 2, and then counting into \icode{fverts}
 starting from 0 we end up at the 7th element and the pair: \icode{1,0}. We can make this more explicit by breaking out the
-presentation of \icode{fverts} to match the way its used:
+presentation of \icode{fverts} to match the way it's used:
 \begin{lstlisting}
 fverts: dc.w 9,9   ; Index 0
         dc.w 5,9   ; Index 1
@@ -87,21 +87,43 @@ to be as follows:
 With these, and our specified colour of red (\icode{\$f0}), we can make a triangle:
 
 \begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=4.5cm,center}
-      \includegraphics[width=12cm]{src/flipper/face1.png}%
-    \end{adjustbox}
-  \caption{Our three vertices joined together in a triangle. Notice that we\'ve scaled up our co-ordinates by 10. So \icode{(1,3)}, for example, is given as \icode{(10,30)}.}
+  \centering
+  \begin{adjustbox}{width=13cm,center}
+    \begin{minipage}[c]{0.48\linewidth}
+      \begin{figure}[H]
+        \centering
+        \begin{adjustbox}{width=5.5cm,center}
+          \includegraphics[width=12cm]{src/flipper/flipper_face_1.png}%
+        \end{adjustbox}
+      \end{figure}
+    \end{minipage}
+    \begin{minipage}[c]{0.48\linewidth}
+      \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+      dc.w $f0       ; Colour - Red.
+      dc.w 3,$8000   ; index, intensity.
+      dc.w 1,$c000   ; index, intensity.
+      dc.w 0,$ff00   ; index, intensity.
+      dc.w 0
+      \end{lstlisting}
+      \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+      dc.w 9,9   ; Index 0
+      dc.w 5,9   ; Index 1
+      dc.w 1,0   ; Index 3
+      \end{lstlisting}
+      \vspace*{\fill}
+    \end{minipage}
+  \end{adjustbox}
+  \caption{Our three vertices joined together in a triangle. Notice that we\'ve scaled up our co-ordinates by 10. So \icode{(9,9)}, for example, is given as \icode{(90,90)}.}
 \end{figure}
 
 One triangle is all very nice, but we have a flipper to build. Should we try a second triangle? Let's see how that goes.
 
 The instructions for our new triangle are in the second paragraph of the \icode{s\_flipper} data structure:
 \begin{lstlisting}
-	dc.w $f4		;Face colour - Blueish
-	dc.w 4,$4000		;vertex ptr and i
-	dc.w 2,$8000		;vertex ptr and i
-	dc.w 0,$c000		;vertex ptr and i
+	dc.w $f4       ; Face colour - Orange.
+	dc.w 4,$4000   ; vertex index, intensity.
+	dc.w 2,$8000   ; vertex index, intensity.
+	dc.w 0,$c000   ; vertex index, intensity.
 	dc.w 0
 \end{lstlisting}
 
@@ -146,10 +168,32 @@ table we get:
 Let's see what we get when we add it in:
 
 \begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=9cm,center}
-      \includegraphics[width=12cm]{src/flipper/face2.png}%
-    \end{adjustbox}
+  \centering
+  \begin{adjustbox}{width=13cm,center}
+    \begin{minipage}[c]{0.48\linewidth}
+      \begin{figure}[H]
+        \centering
+        \begin{adjustbox}{width=5.5cm,center}
+          \includegraphics[width=12cm]{src/flipper/flipper_face_2.png}%
+        \end{adjustbox}
+      \end{figure}
+    \end{minipage}
+    \begin{minipage}[c]{0.48\linewidth}
+      \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+dc.w $f4       ; Colour - Orange.
+dc.w 4,$4000   ; index, intensity.
+dc.w 2,$8000   ; index, intensity.
+dc.w 0,$c000   ; index, intensity.
+dc.w 0
+      \end{lstlisting}
+      \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+dc.w 9,9   ; Index 0
+dc.w 13,9  ; Index 2
+dc.w 17,0  ; Index 4
+      \end{lstlisting}
+      \vspace*{\fill}
+    \end{minipage}
+  \end{adjustbox}
   \caption{Adding in our second triangle}
 \end{figure}
 
@@ -173,13 +217,69 @@ OK, things are starting to take shape. Here are the vertices for all four faces 
     \end{adjustbox}
   }
 \end{figure}
-Let's see what it looks like when we add in the final two triangles:
+
+Let's see what it looks like when we add in the third triangle:
+
 \begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=9cm,center}
-      \includegraphics[width=12cm]{src/flipper/face4.png}%
-    \end{adjustbox}
-  \caption{Adding in our second triangle}
+  \centering
+  \begin{adjustbox}{width=13cm,center}
+    \begin{minipage}[c]{0.48\linewidth}
+      \begin{figure}[H]
+        \centering
+        \begin{adjustbox}{width=5.5cm,center}
+          \includegraphics[width=12cm]{src/flipper/flipper_face_3.png}%
+        \end{adjustbox}
+      \end{figure}
+    \end{minipage}
+    \begin{minipage}[c]{0.48\linewidth}
+      \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+dc.w $f4       ; Colour - Red.
+dc.w 5,$8000   ; index, intensity.
+dc.w 1,$c000   ; index, intensity.
+dc.w 0,$ff00   ; index, intensity.
+dc.w 0
+      \end{lstlisting}
+      \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+dc.w 9,9   ; Index 0
+dc.w 5,9   ; Index 1
+dc.w 1,18  ; Index 5
+      \end{lstlisting}
+      \vspace*{\fill}
+    \end{minipage}
+  \end{adjustbox}
+  \caption{Adding in our third triangle}
+\end{figure}
+
+And the fourth and final triangle:
+
+\begin{figure}[H]
+  \centering
+  \begin{adjustbox}{width=13cm,center}
+    \begin{minipage}[c]{0.48\linewidth}
+      \begin{figure}[H]
+        \centering
+        \begin{adjustbox}{width=5.5cm,center}
+          \includegraphics[width=12cm]{src/flipper/flipper_face_4.png}%
+        \end{adjustbox}
+      \end{figure}
+    \end{minipage}
+    \begin{minipage}[c]{0.48\linewidth}
+      \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+dc.w $f0       ; Colour - Orange.
+dc.w 6,$4000   ; index, intensity.
+dc.w 2,$8000   ; index, intensity.
+dc.w 0,$c000   ; index, intensity.
+dc.w 0
+      \end{lstlisting}
+      \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+dc.w 9,9   ; Index 0
+dc.w 13,9  ; Index 2
+dc.w 17,18 ; Index 6
+      \end{lstlisting}
+      \vspace*{\fill}
+    \end{minipage}
+  \end{adjustbox}
+  \caption{Adding in our final triangle}
 \end{figure}
 
 \begin{lstlisting}
