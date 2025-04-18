@@ -1,0 +1,93 @@
+\chapter{how to make tempest in 1981}
+\label{sec:building}
+\lstset{style=6502Style}
+\lhead[tempest]{}
+
+It is 1981 and Atari Corporation has tasked you with writing a state-of-the-art video game.
+To complete your assignment they have equipped you with a pencil and a bundle of sheets. You
+wonder where the computer is, and at what point they will give you one. 
+
+You can sit in your office and wonder in vain, because they are never going to give you one.
+You must devise and program the game entirely with pencil and paper. There is only one computer
+in the building, and it is the price of a house. They are not going to let
+you anywhere near that computer. You are in building 1272 and the computer is in building 1360.
+You are not even on the same block as the computer.
+\begin{figure}[H]
+			\centering
+			\frame{\includegraphics[width=8cm]{src/build/map.png}}%
+		\caption{The computer is in another building.}
+\end{figure}
+
+Instead you are confronted with a ream of blank sheets such as this one; into which you must pencil
+the assembly language instructions that will make your game happen.
+\begin{figure}[H]
+			\centering
+			\frame{\includegraphics[width=10cm]{src/build/codingsheet.png}}%
+		\caption{An example of a coding sheet to give you an idea of what programming was like in 1981.}
+\end{figure}
+
+If you fill out enough of these sheets you have a program that can be typed out and assembled. 
+\begin{definition}[dave says\index{dave says}]
+\setlength{\intextsep}{0pt}%
+\setlength{\columnsep}{3pt}%
+\begin{wrapfigure}{l}{0.12\textwidth}
+\includegraphics[width=\linewidth]{src/callout/claw_t.png} 
+\end{wrapfigure}
+\small
+\textcolor{white}{
+I’d write the code on programming sheets and turn it in to the typists
+who’d type them in to a DEC computer, then give us a tape with the resulting
+compiled/linked program.
+}
+\end{definition}
+
+Once the typists had entered your program into the PDP-11 in building 1360 the would see a listing
+of the files such as this on a VT-100 terminal.
+\begin{figure}[H]
+			\centering
+			\frame{\includegraphics[width=12cm]{src/build/dir.png}}%
+		\caption{Listing the Tempest source files.}
+\end{figure}
+
+Their next step was to assemble each of the files using the \icode{MAC65} command on each:
+\begin{figure}[H]
+			\centering
+			\frame{\includegraphics[width=6cm]{src/build/assemble1.png}}%
+			\frame{\includegraphics[width=6cm]{src/build/assemble2.png}}%
+		\caption{Assembling the Tempest source files.}
+\end{figure}
+
+Once that was done they could run the \icode{RMAC} command to link the assembled files into a
+single object file \icode{ALEXEC.LDA}.
+\begin{figure}[H]
+			\centering
+			\frame{\includegraphics[width=12cm]{src/build/link.png}}%
+		\caption{Linking the Tempest object files.}
+\end{figure}
+
+\begin{definition}[dave says\index{dave says}]
+\setlength{\intextsep}{0pt}%
+\setlength{\columnsep}{3pt}%
+\begin{wrapfigure}{l}{0.12\textwidth}
+\includegraphics[width=\linewidth]{src/callout/claw_t.png} 
+\end{wrapfigure}
+\small
+\textcolor{white}{
+We’d then take that to a blue box [which used the
+FORTH programming language] for debugging. We’d mark changes to the code on a
+listing, give it back to the typists who’d edit our files and give us a new
+tape. Repeat ad infinitum.
+}
+\end{definition}
+
+Once you have completed the ad-infinitum phase of this process you may have a game that is ready
+for production and distribution. For this you must talk to your project manager, Morgan, and together
+decide how to split the \icode{ALEXEC.LDA} file into a number of different files. Each of these will
+be written to a specific ROM chip as detailed by the parts manifest you devise together and distribute to
+the guys in building 1320:
+\begin{figure}[H]
+			\centering
+			\frame{\includegraphics[width=13cm]{src/build/tempst.doc.png}}%
+		\caption{The actual build manifest for Tempest, recreated in the style of the time.}
+\end{figure}
+
