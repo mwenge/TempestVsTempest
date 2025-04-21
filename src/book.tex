@@ -569,11 +569,19 @@ boxsep=0pt,left=2pt,right=2pt,top=2pt,bottom=.5pt}
 \fancyfoot[EL]{\thepage}                                                
 \fancyfoot[OR]{\thepage} 
 
-\begin{multicols}{2}
-  {\setupTOC \tableofcontents}
-\end{multicols}
+\pagestyle{empty} 
+\lhead[]{}
+\rhead[]{}
+\begingroup
+\let\cleardoublepage\clearpage
+\tableofcontents
+\endgroup
+\pagestyle{fancy}                                                       
+\clearpage
+\blankpage
 
 \subfile{src/preface} %draft
+
 \subfile{src/build}            % tempest
 %\subfile{src/assemble}         % t2k
 \subfile{src/mainline_tempest} % tempest
