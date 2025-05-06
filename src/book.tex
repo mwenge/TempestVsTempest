@@ -505,7 +505,7 @@ boxsep=0pt,left=2pt,right=2pt,top=2pt,bottom=.5pt}
 \usepackage{pgfplotstable}
 \usepackage{makecell}
 
-\usepackage{attachfile}
+\usepackage[xetex]{attachfile2}
 \usepackage{pdflscape}
 \usepackage[figuresright]{rotating}
 
@@ -592,8 +592,6 @@ boxsep=0pt,left=2pt,right=2pt,top=2pt,bottom=.5pt}
 %\subfile{src/tempest_title}   % tempest: title screen graphics
 \subfile{src/shader}           % t2k
 \subfile{src/starfield}        % t2k
-\subfile{src/sounds}           % t2k
-%\subfile{src/tempest_sounds}   % tempest
 \subfile{src/flipper}          % t2k
 \subfile{src/wells}            % tempest
 \subfile{src/webs}             % t2k
@@ -606,6 +604,9 @@ boxsep=0pt,left=2pt,right=2pt,top=2pt,bottom=.5pt}
 \subfile{src/activeobjects}             % t2k
 \subfile{src/rotary} % t2k about the rotary controller
 \subfile{src/tempest_unused} % tempest: unused graphics
+\subfile{src/sounds}           % t2k
+\subfile{src/tempest_beep}           % t2k
+\subfile{src/tempest_unused_sounds}           % t2k
 %\subfile{src/music} % draft
 %\subfile{src/reverse} % t2k: something about yak using the GPU 'in reverse' the wrong way round.
 

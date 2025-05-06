@@ -1,6 +1,6 @@
-\chapter{sounds}
+\chapter{sexy yes}
 \lhead[tempest 2000]{}
-\label{sec:listing}
+\label{sec:sexy_yes}
 \lstset{style=68KStyle}
 
 The sound effects in Tempest 2000 are stpred in the game as Pulse Code Modulation (PCM) data. This is the most common format for storing
@@ -42,12 +42,12 @@ some information on what we have to do with them. This is provided by \icode{sam
 \end{lstlisting}
 
 Just byt itself, the \icode{samtab} table reveals some interesting potential for ways that we can use the
-raw PCM bytes. 
+raw PCM bytes. Here it is in its raw form. With the bytes in \icode{samtab} exactly as they are. 
 
 \begin{lstlisting}[basicstyle=\scriptsize\ttfamily,caption=The contents of \icode{samtab} at \icode{\$9AC800}.]
-;                       Prio-                                  Repeat     Repeat
-;Name                   rity   Period Start      Length        Start      Length      
-;---------------------- -----  ------ ---------  -------  --   ---------  -------  ---
+                        Prio-                                  Repeat     Repeat
+ Name                   rity   Period Start      Length        Start      Length      
+---------------------- -----  ------ ---------  -------  --   ---------  -------  ---
 'Engine Noise 1      ', $0001, $01ac, $009acd00, $0011a0, $00, $009acd02, $00119e, $00
 'Player Shot Normal 2', $0002, $01ac, $009adea4, $0008e8, $00, $009adea4, $000000, $00
 'Engine Noise        ', $0003, $01ac, $009ae290, $003378, $00, $009aee9e, $002594, $00
@@ -81,6 +81,311 @@ raw PCM bytes.
 'dummy               ', $0020, $0200, $009fcb7a, $00a1d8, $00, $009fcb7a, $000000, $00
 \end{lstlisting}
 
+And here is a 'normalized' version of the table, with appropriate values converted to decimal
+for convenience. 
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=11cm,center}
+
+      \begin{tabular}{lllllllll}
+        \toprule
+				Name & Priority & Period & Start & Length & Repeat Start & Repeat Length  \\
+        \midrule
+				\icode{'Engine Noise 1'} & 1 & 428 & \icode{\$009acd00} & 4512 & \icode{\$009acd02} & 4510 \\
+				\icode{'Player Shot Normal 2'} & 2 & 428 & \icode{\$009adea4} & 2280 & \icode{\$009adea4} & 0 \\
+				\icode{'Engine Noise'} & 3 & 428 & \icode{\$009ae290} & 13176 & \icode{\$009aee9e} & 9620 \\
+				\icode{'Player Death'} & 4 & 214 & \icode{\$00000000} & 21658 & \icode{\$00000000} & 0 \\
+				\icode{'Player Death 2'} & 5 & 428 & \icode{\$00000000} & 9304 & \icode{\$00000000} & 0 \\
+				\icode{'Player Shot Normal'} & 6 & 428 & \icode{\$009b160c} & 1956 & \icode{\$009b160c} & 0 \\
+				\icode{'Player Jump'} & 7 & 428 & \icode{\$009b1db4} & 6366 & \icode{\$009b1db4} & 0 \\
+				\icode{'Crackle'} & 8 & 214 & \icode{\$009b3696} & 17812 & \icode{\$009b3696} & 0 \\
+				\icode{'Cleared Level'} & 9 & 428 & \icode{\$009b7c2e} & 14242 & \icode{\$009b7c2e} & 0 \\
+				\icode{'Warp'} & 10 & 568 & \icode{\$009bb3d4} & 28360 & \icode{\$009bb3d4} & 0 \\
+				\icode{'Large Explosion'} & 11 & 428 & \icode{\$009c22a0} & 20674 & \icode{\$009c22a0} & 0 \\
+				\icode{'Powered Up Shot'} & 12 & 428 & \icode{\$009c7366} & 6518 & \icode{\$009c7366} & 0 \\
+				\icode{'Get Power Up'} & 13 & 428 & \icode{\$009c8ce0} & 6890 & \icode{\$009c8ce0} & 0 \\
+				\icode{'Tink For Spike'} & 14 & 254 & \icode{\$009ca7ce} & 1038 & \icode{\$009ca7ce} & 0 \\
+				\icode{'NME At Top Of Web'} & 15 & 428 & \icode{\$009cabe0} & 30 & \icode{\$009cabe0} & 0 \\
+				\icode{'Pulse For Pulsar'} & 16 & 856 & \icode{\$009cac02} & 6654 & \icode{\$009cac02} & 0 \\
+				\icode{'Normal Explosion'} & 17 & 214 & \icode{\$009cc604} & 10934 & \icode{\$009cc604} & 0 \\
+				\icode{'Extra Explosion'} & 18 & 856 & \icode{\$009cf0be} & 6346 & \icode{\$009cf0be} & 0 \\
+				\icode{'Static or Pulsar'} & 19 & 284 & \icode{\$009d098c} & 16356 & \icode{\$009d098c} & 0 \\
+				\icode{'Pulsar Pulse'} & 20 & 856 & \icode{\$009d4974} & 3852 & \icode{\$009d4974} & 0 \\
+				\icode{'Off Shielded NME'} & 21 & 170 & \icode{\$009d5884} & 10186 & \icode{\$009d5884} & 0 \\
+				\icode{'Excellent'} & 22 & 512 & \icode{\$009d8052} & 22902 & \icode{\$009d8052} & 0 \\
+				\icode{'Superzapper Recharge'} & 22 & 512 & \icode{\$009dd9cc} & 43352 & \icode{\$009dd9cc} & 0 \\
+				\icode{'yes'} & 24 & 512 & \icode{\$009e8328} & 23148 & \icode{\$009e832a} & 23146 \\
+				\icode{'oneup'} & 25 & 512 & \icode{\$009edd98} & 17326 & \icode{\$009edd98} & 0 \\
+				\icode{'screeeam'} & 26 & 512 & \icode{\$009f214a} & 17768 & \icode{\$009f214a} & 0 \\
+				\icode{'sexy yes 1'} & 27 & 512 & \icode{\$009f66b6} & 11348 & \icode{\$009f66b6} & 0 \\
+				\icode{'sexy yes 2'} & 28 & 512 & \icode{\$009f9362} & 12854 & \icode{\$009f9362} & 0 \\
+				\icode{'tink'} & 30 & 512 & \icode{\$009fc59c} & 1486 & \icode{\$009fc59c} & 0 \\
+				\icode{'zero'} & 31 & 512 & \icode{\$009fcb6e} & 8 & \icode{\$009fcb6e} & 0 \\
+				\icode{'dummy'} & 32 & 512 & \icode{\$009fcb7a} & 41432 & \icode{\$009fcb7a} & 0 \\
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }\caption*{Turning the raw bytes of \icode{samtab} into something we can read.}
+\end{figure}
+
+\begin{figure}[H]
+{
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/01.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/01.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Player Death'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/02.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/02.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Player Death 2'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/03.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/03.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Engine Noise 1'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/04.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/04.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Player Shot Normal 2'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/05.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/05.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Engine Noise'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/06.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/06.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Player Shot Normal'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/07.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/07.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Player Jump'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/08.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/08.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Crackle'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/09.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/09.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Cleared Level'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/10.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/10.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Warp'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/11.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/11.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Large Explosion'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/12.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/12.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Powered Up Shot'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/13.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/13.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Get Power Up'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/14.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/14.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Tink For Spike'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/15.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/15.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'NME At Top Of Web'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/16.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/16.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Pulse For Pulsar'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/17.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/17.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Normal Explosion'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/18.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/18.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Extra Explosion'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/19.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/19.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Static or Pulsar'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/20.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/20.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Pulsar Pulse'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/21.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/21.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Off Shielded NME'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/22.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/22.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Excellent'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/23.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/23.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'Superzapper Recharge'}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/24.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/24.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'yes'}
+    \end{subfigure}
+    \begin{subfigure}{0.245\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/25.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/25.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'oneup'}
+    \end{subfigure}
+    \begin{subfigure}{0.247\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/26.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/26.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'screeeam'}
+    \end{subfigure}
+    \begin{subfigure}{0.247\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/27.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/27.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'sexy yes 1'}
+    \end{subfigure}
+    \begin{subfigure}{0.247\textwidth}
+      \includegraphics[width=3cm]{sounds/buttons/28.wav-button.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/sounds/wav/28.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{'sexy yes 2'}
+    \end{subfigure}
+}\caption*{All 28 sound samples and their spectrograms. If your reader supports it you can play the samples.}
+\end{figure}
 Of course the best way of seeing how this works is to follow one through in practice. Here
 is the little routine that shouts 'Excellent!' when you navigate the options menu. We can
 see that we do a little set up such as selecting the sample from the table above ('Excellent'
@@ -94,11 +399,9 @@ called \icode{fox} that inches nearer the actual work of playing the sample:
 sayex:
   move #21,sfx           ; Select effect $16 (21) from samtab, 'Excellent'.
   move #101,sfx_pri      ; Set the priority.
-  ;move #$ff,sfx_vol     ; Setting the volume is commented out.
   move.l #$160,sfx_pitch ; Set the pitch.
   jsr fox                ; Play the effect (see below).
   move #101,sfx_pri      ; Do it again.
-  ;move #$ff,sfx_vol
   move.l #$162,sfx_pitch ; This time with a different pitch.
   jmp fox                ; Play it.
 \end{lstlisting}
@@ -285,27 +588,3 @@ rln -n -z -u -v -a 4040 xd xd -e moomoo_header.o syn6.o -o moomoo.dat
 
 Voila, we have our \icode{moomoo.dat}. If you'd like to follow these steps yourself, \href{https://github.com/mwenge/t2k-25easypieces/blob/master/notebooks/Recreate%20moo.dat/Recreate%20moomoo.dat%20using%20syn6.o.ipynb}{\textcolor{blue}{you can use this Python notebook}}.
 
-\begin{figure}[H]
-{
-\setlength{\tabcolsep}{1.0pt}
-\setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
-\begin{adjustbox}{width=14cm,center}
-\begin{tabular}{ccc}
-\toprule
-Spectrogram & Amplitude & Sound \\
-\midrule
-  \makecell[l]{
-    \includegraphics[width=6cm]{sounds/22.wav-spec.png}%
-  } &
-  \makecell[l]{
-    \includegraphics[width=6cm]{sounds/22.wav-amp.png}%
-  } &
-  \makecell[l]{
-    \textattachfile{src/sounds/22.wav}{\includegraphics[width=1cm]{sounds/play.png}}
-  } \\
-  \addlinespace
-    \bottomrule
-    \end{tabular}
-  \end{adjustbox}
-}\caption{Spectrogram and Sine Plot of the 'Excellent' sound sample. On a PDF viewer that supports, it you can click 'Play' to hear it.}
-\end{figure}
