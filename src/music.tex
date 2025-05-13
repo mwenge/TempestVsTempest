@@ -2,309 +2,356 @@
 \label{sec:listing}
 \lstset{style=68KStyle}
 
-The sound effects in Tempest 2000 are stpred in the game as Pulse Code Modulation (PCM) data. This is the most common format for storing
-raw audio and flavors of it are used in everything from CDs to telephony. PCM data is as simple as a stream of numbers. Each of the numbers
-is between a lower and upper limit:, for example between -128 and 128. If you plot enough of these numbers along a graph you get what looks like
-a wave. This is pretty much the sound wave, the analog version of our digital values. If you put these values through the right piece of hardware,
-such as a Digital Analog Converter (DAC) you can get a sound out the other side.
+Music in \textit{Tempest 2000} comes in the form of \icode{mod} files. The mechanics of
+processing these files are hidden from us in a blob of bytes provide by Imagitec Ltd
+and included in the game binary. This blob of bytes is a sound synthesiser that transforms
+the contents of a \icode{mod} file into a tune that you can hear with your ears. What we can
+do instead is dig into the contents and structure of a mod file to understand how it stores
+a tune. The obvious candidate for this research is the music played over the title screen.
+
+I'm not sure if this music ever had a proper title, however the source code knows it fondly
+as \icode{tune13.mod}. This file, along with all the other tunes included in the game, are
+stored in a reference table called \icode{modbase}. This allows us to pick a tune for playing
+by referencing it using an index into the table. 
+
+\begin{lstlisting}
+modbase      EQU $8d6800
+modtable:
+.dc.l modbase + $100   ; tune13.mod
+.dc.l modbase + $18d2c ; tune7.mod
+.dc.l modbase + $37a04 ; tune1.mod
+.dc.l modbase + $5bd7c ; tune3.mod
+.dc.l modbase + $80b22 ; rave4.mod
+.dc.l modbase + $99d72 ; tune5.mod
+.dc.l modbase + $b0a50 ; tune12.mod
+.dc.l 0
+\end{lstlisting}
+
+In the little routine that plays a selected tune we can see this happening in practice. The
+index value for the selected tune is passed in the \icode{d0} register and used as an index
+into \icode{modbase} to retrieve the address in memory of the tune we've picked to play.
+\clearpage
+\begin{lstlisting}
+playtune:
+        jsr STOP_MOD               ; Stop any current tune.
+        lsl #2,d0                  ; Multiply index (d0) by 4
+        lea modbase,a0             ; Point a0 at modbase.
+        move.l 0(a0,d0.w),a0       ; Get tune base using index.
+        jsr PT_MOD_INIT            ; Point the MOD player at a0.
+        move.b vols,d0             ; Store the volume in d0.
+        and.l #$ff,d0              ; Keep it between 0 and 255
+        clr d1                     ; Clear d1
+        jsr SET_VOLUME             ; Actually set the volume.
+        move.l d0,vset             ; Store the selected volume.
+        jsr NOFADE                 ; Turn off 'fading'.
+        jmp START_MOD              ; Start playing the tune.
+\end{lstlisting}
+
+So to play the title screen tune, which is the first entry in \icode{modtable}, we point
+the sound synthesiser at the region in memory containing \icode{tune13.mod} by calling
+its black-box routine \icode{PT\_MOD\_INIT} and then once we've set the volume, instruct
+it to start playing the darn thing (\icode{jmp START\_MOD}).
+
+To understand the contents of \icode{tune13.mod} and how it gives us a tune, it is best to
+start with the most basic building blocks it contains. These are 11 raw sound samples of
+Pulse Code Modulation (PCM) data like the ones we discussed in 
+\hyperref[sec:sexy_yes]{\textcolor{blue}{'sexy yes'}}.
+They are stored at the very end of the file, one after another from
+byte 9276 to byte 101416. This means they constitute the bulk of the \icode{tune13.mod} tune file - which
+is not surprising since they are the part of the file that carries all the sounds. If you want to hear
+what each sample sounds like, your reader might support clicking on each sample to play it.
 
 \begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=7cm,center}
-      \frame{\includegraphics[width=4cm]{src/sounds/sample.png}}%
-    \end{adjustbox}
-  \caption{A sample of 80 bytes plotted as a wave graph.}
+{
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{titletune/buttons/samples/tune13.mod-1.wav-spec.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/titletune/samples/tune13.mod-1.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{Sample 1}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{titletune/buttons/samples/tune13.mod-2.wav-spec.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/titletune/samples/tune13.mod-2.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{Sample 2}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{titletune/buttons/samples/tune13.mod-4.wav-spec.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/titletune/samples/tune13.mod-4.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{Sample 4}
+    \end{subfigure}
+    \begin{subfigure}{0.23\textwidth}
+      \includegraphics[width=3cm]{titletune/buttons/samples/tune13.mod-5.wav-spec.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/titletune/samples/tune13.mod-5.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{Sample 5}
+    \end{subfigure}
+    \begin{subfigure}{0.24\textwidth}
+      \includegraphics[width=3cm]{titletune/buttons/samples/tune13.mod-6.wav-spec.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/titletune/samples/tune13.mod-6.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{Sample 6}
+    \end{subfigure}
+    \begin{subfigure}{0.24\textwidth}
+      \includegraphics[width=3cm]{titletune/buttons/samples/tune13.mod-7.wav-spec.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/titletune/samples/tune13.mod-7.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{Sample 7}
+    \end{subfigure}
+    \begin{subfigure}{0.24\textwidth}
+      \includegraphics[width=3cm]{titletune/buttons/samples/tune13.mod-8.wav-spec.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/titletune/samples/tune13.mod-8.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{Sample 8}
+    \end{subfigure}
+    \begin{subfigure}{0.24\textwidth}
+      \includegraphics[width=3cm]{titletune/buttons/samples/tune13.mod-10.wav-spec.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/titletune/samples/tune13.mod-10.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{Sample 10}
+    \end{subfigure}
+}
 \end{figure}
-
-The PCM data in Tempest 2000's sound samples is nothing more than this series of bytes, each one representing a value between -128 and 128, which can
-be converted into sound. A single series of bytes will give us one 'channel' of sound, i.e. a mono sound sample. What we actually have are stereo
-sound samples so each sample contains two channels. The simplest way of incorporating two separate channels in the sample (one for the left speaker
-and one for the right) is to interleave them, in alternating bytes. We can see that this is the way the Tempest samples are encoded if we split out
-an arbitrary sample into separate streams of alternate bytes and graph them.
+\clearpage
 
 \begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=12cm,center}
-      \frame{\includegraphics[width=4cm]{src/sounds/samplel.png}}%
-      \hspace{0.5cm}
-      \frame{\includegraphics[width=4cm]{src/sounds/sampler.png}}%
-    \end{adjustbox}
-  \caption{Plotted sound waves for the left and right channels respectively.}
+{
+    \begin{subfigure}{0.25\textwidth}
+      \includegraphics[width=3cm]{titletune/buttons/samples/tune13.mod-11.wav-spec.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/titletune/samples/tune13.mod-11.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{Sample 11}
+    \end{subfigure}
+    \begin{subfigure}{0.25\textwidth}
+      \includegraphics[width=3cm]{titletune/buttons/samples/tune13.mod-12.wav-spec.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/titletune/samples/tune13.mod-12.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{Sample 12}
+    \end{subfigure}
+    \begin{subfigure}{0.25\textwidth}
+      \includegraphics[width=3cm]{titletune/buttons/samples/tune13.mod-13.wav-spec.png}%
+      \makebox[0pt][r]{%
+        \raisebox{.3cm}{%
+          \textattachfile{src/titletune/samples/tune13.mod-13.wav}{\includegraphics[width=1.5cm]{sounds/play.png}}%
+        }\hspace*{0.75cm}%
+      }%
+      \caption*{Sample 13}
+    \end{subfigure}
+}\caption*{All 11 sound samples and their spectrograms. If your reader supports it you can play the samples.}
 \end{figure}
 
-Since the sounds we want to play are just blobs of data, we need a way of knowing where these blobs are, and perhaps
-some information on what we have to do with them. This is provided by \icode{samtab}, a block of data at address
-\icode{\$9ac800} that tells us everything we need to know:
+If you try playing the files you'll notice that the majority of them are single notes on an instrument. This
+gives us a clue as to what the rest of the \icode{tune13.mod} file might contain: instructions on how to play
+these notes in the correct order. More than this, the instructions might even tell us what pitch to play each
+note at, for example, whether a C sharp or a B flat.
 
-\begin{lstlisting}
-  samtab       EQU $9ac800
-\end{lstlisting}
-
-Just byt itself, the \icode{samtab} table reveals some interesting potential for ways that we can use the
-raw PCM bytes. 
-
-\begin{lstlisting}[basicstyle=\scriptsize\ttfamily,caption=The contents of \icode{samtab} at \icode{\$9AC800}.]
-;                       Prio-                                  Repeat     Repeat
-;Name                   rity   Period Start      Length        Start      Length      
-;---------------------- -----  ------ ---------  -------  --   ---------  -------  ---
-'Engine Noise 1      ', $0001, $01ac, $009acd00, $0011a0, $00, $009acd02, $00119e, $00
-'Player Shot Normal 2', $0002, $01ac, $009adea4, $0008e8, $00, $009adea4, $000000, $00
-'Engine Noise        ', $0003, $01ac, $009ae290, $003378, $00, $009aee9e, $002594, $00
-'Player Death        ', $0004, $00d6, $00000000, $00549a, $00, $00000000, $000000, $00
-'Player Death 2      ', $0005, $01ac, $00000000, $002458, $00, $00000000, $000000, $00
-'Player Shot Normal  ', $0006, $01ac, $009b160c, $0007a4, $00, $009b160c, $000000, $00
-'Player Jump         ', $0007, $01ac, $009b1db4, $0018de, $00, $009b1db4, $000000, $00
-'Crackle             ', $0008, $00d6, $009b3696, $004594, $00, $009b3696, $000000, $00
-'Cleared Level       ', $0009, $01ac, $009b7c2e, $0037a2, $00, $009b7c2e, $000000, $00
-'Warp                ', $000a, $0238, $009bb3d4, $006ec8, $00, $009bb3d4, $000000, $00
-'Large Explosion     ', $000b, $01ac, $009c22a0, $0050c2, $00, $009c22a0, $000000, $00
-'Powered Up Shot     ', $000c, $01ac, $009c7366, $001976, $00, $009c7366, $000000, $00
-'Get Power Up        ', $000d, $01ac, $009c8ce0, $001aea, $00, $009c8ce0, $000000, $00
-'Tink For Spike      ', $000e, $00fe, $009ca7ce, $00040e, $00, $009ca7ce, $000000, $00
-'NME At Top Of Web   ', $000f, $01ac, $009cabe0, $00001e, $00, $009cabe0, $000000, $00
-'Pulse For Pulsar    ', $0010, $0358, $009cac02, $0019fe, $00, $009cac02, $000000, $00
-'Normal Explosion    ', $0011, $00d6, $009cc604, $002ab6, $00, $009cc604, $000000, $00
-'Extra Explosion     ', $0012, $0358, $009cf0be, $0018ca, $00, $009cf0be, $000000, $00
-'Static or Pulsar    ', $0013, $011c, $009d098c, $003fe4, $00, $009d098c, $000000, $00
-'Pulsar Pulse        ', $0014, $0358, $009d4974, $000f0c, $00, $009d4974, $000000, $00
-'Off Shielded NME    ', $0015, $00aa, $009d5884, $0027ca, $00, $009d5884, $000000, $00
-'Excellent           ', $0016, $0200, $009d8052, $005976, $00, $009d8052, $000000, $00
-'Superzapper Recharge', $0016, $0200, $009dd9cc, $00a958, $00, $009dd9cc, $000000, $00
-'yes                 ', $0018, $0200, $009e8328, $005a6c, $00, $009e832a, $005a6a, $00
-'oneup               ', $0019, $0200, $009edd98, $0043ae, $00, $009edd98, $000000, $00
-'screeeam            ', $001a, $0200, $009f214a, $004568, $00, $009f214a, $000000, $00
-'sexy yes 1          ', $001b, $0200, $009f66b6, $002c54, $00, $009f66b6, $000000, $00
-'sexy yes 2          ', $001c, $0200, $009f9362, $003236, $00, $009f9362, $000000, $00
-'tink                ', $001e, $0200, $009fc59c, $0005ce, $00, $009fc59c, $000000, $00
-'zero                ', $001f, $0200, $009fcb6e, $000008, $00, $009fcb6e, $000000, $00
-'dummy               ', $0020, $0200, $009fcb7a, $00a1d8, $00, $009fcb7a, $000000, $00
-\end{lstlisting}
-
-Of course the best way of seeing how this works is to follow one through in practice. Here
-is the little routine that shouts 'Excellent!' when you navigate the options menu. We can
-see that we do a little set up such as selecting the sample from the table above ('Excellent'
-is at position 21 (\icode{\$16} in hex)), setting its pitch and then calling another routine
-called \icode{fox} that inches nearer the actual work of playing the sample:
-
-\begin{lstlisting}
-; *******************************************************************
-; Say 'Excellent', e.g. when the user naviates to an option.
-; *******************************************************************
-sayex:
-  move #21,sfx           ; Select effect $16 (21) from samtab, 'Excellent'.
-  move #101,sfx_pri      ; Set the priority.
-  ;move #$ff,sfx_vol     ; Setting the volume is commented out.
-  move.l #$160,sfx_pitch ; Set the pitch.
-  jsr fox                ; Play the effect (see below).
-  move #101,sfx_pri      ; Do it again.
-  ;move #$ff,sfx_vol
-  move.l #$162,sfx_pitch ; This time with a different pitch.
-  jmp fox                ; Play it.
-\end{lstlisting}
-
-\icode{fox} (why waste an opportunity to pun on  something in the animal kingdom) sets
-up our data for playing the sample. It's main preoccupation is turning our index into
-the \icode{samtab} table to a pointer to the data there.
-
-\begin{lstlisting}
-; *******************************************************************
-; Play a selected sound sample.
-; *******************************************************************
-fox:
-  movem.l d0-d3/a0,-(a7)  ; Save d0,d1,d2,d3,a0 to the a7 register.
-                          ; Because we're going to clobber them here.
-  move sfx,d0             ; Store sfx in d0, this is '$16' for 'Excellent'.
-
-  ; Use '21' to point to the address of sample data, i.e. directly after
-  ; the 'Excellent    ' in this entry in samtab:
-  ; 'Excellent           ', $0016, $0200, $009d8052, $005976, $00, 
-
-  ; Since each entry in samtab is 40 bytes long, multiplying our index by
-  ; 40 will bring us to the start of the 'Excellent' entry. The steps below
-  ; are a fast way of doing this multiplication by 40.
-  lsl #3,d0   ; Turn $16(21) into $a8 by left-shifting. 
-  move d0,d1  ; Store in d1.
-  lsl #2,d0   ; Turn $a8 into $2a0 by left-shifting.           
-  add d1,d0   ; d0 is now $348 (840), i.e. 21 * 40. 
-
-  ; Now that we have an offset for our sample information in samtab, we'll
-  ; add 20 to it (so that it's after the sample name) and store it in a0.
-  lea samtab,a0           ; Store samtab address in a0.
-  lea 20(a0,d0.w),a0      ; Add 840 + 20 to it. 
-
-  ; Now we can set up the last few items our sound synth needs.
-  move sfx_pri,d1
-  move sfx_vol,d2
-  move.l sfx_pitch,d3
-
-  ; Invoke the sound synth to play our sample.
-  jsr PLAYFX2
-
-  ; Clean up.
-  move d0,handl
-  clr sfx_pri
-  clr sfx_vol
-  clr.l sfx_pitch
-
-  movem.l (a7)+,d0-d3/a0 ; Restore the old unclobbered values we saved off
-                         ; at the start.
-  rts
-\end{lstlisting}
-
-To recap, at this point we have set up our registers as follows:
+We find these instructions at byte 1084 in the file and they occupy all the space in the file up to the beginning
+of the samples at byte 9276. The instructions are broken up into chunks called 'Patterns'. Each 'Pattern' describes
+a passage of music, using the samples to play notes across four separate audio channels at once. Another way of thinking
+of a 'Pattern' is like a piece of sheet music that describes the notes to play and the instrument to play them for four
+different players. In this case our instruments are the 'samples'. To give you an idea of what I mean here is the
+first note for all four players (which we call channels) given in the first 16 bytes of the data for the first of
+the seven patterns in \icode{tune13.mod}.
 
 \begin{figure}[H]
   {
     \setlength{\tabcolsep}{3.0pt}
     \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
-    \begin{adjustbox}{width=10cm,center}
+    \begin{adjustbox}{width=7cm,center}
 
-      \begin{tabular}{lll}
+      \begin{tabular}{lllll}
         \toprule
-        Register & Value & Description\\
+	 & Bytes & Sample & Note & Effect \\
         \midrule
-        \icode{a0} & \icode{\$9acb5c} & Address of the 'Excellent' metadata in \icode{samtab}. \\
-        \icode{d1} & \icode{101} & \icode{sfx\_pri}. \\
-        \icode{d2} & \icode{\$ff} & \icode{sfx\_vol}: the volume to play at. \\
-        \icode{d3} & \icode{\$162} & \icode{sfx\_pitch}: the pitch to play at. \\
+	Channel 1 & \icode{007f1000} & 1 & A3 &  \\
+	Channel 2 & \icode{01944f09} & 4 & C\#2 & Set Speed 09\\
+	Channel 3 & \icode{011d5000} & 5 & G2 &  \\
+	Channel 4 & \icode{00000000} & &   &   \\
+      \end{tabular}
+    \end{adjustbox}
+  }\caption*{Decoding the first 16 bytes (4 per channel) in Pattern 000.}
+\end{figure}
+
+One the following page we see the complete decoded set of instructions contained in Pattern 000. As you look through it you can get
+a sense of the note being played on each channel and the instrument used, along with any special instruction (effect)
+specified. 
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=11cm,center}
+      \begin{tabular}{llllllllllll}
+        \toprule
+Channel 1 &  &  & Channel 2 &  &  & Channel 3 &  &  & Channel 4 &  &  \\
+Sample & Note & Effect & Sample & Note & Effect & Sample & Note & Effect & Sample & Note & Effect \\
+        \midrule
+1 & A3 &   & 4 & C\#2 & Set Speed 09 & 5 & G2 &   &   &   &   \\
+8 & A\#3 &   &   &   &   & 5 & G2 & Set Volume 15 &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 &   &   &   \\
+8 & A\#3 &   &   &   &   &   &   &   &   &   &   \\
+8 & A\#3 &   &   &   &   & 5 & G2 & Set Volume 15 &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   &   &   \\
+1 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 &   &   &   \\
+2 & D3 &   &   &   &   &   &   &   &   &   &   \\
+8 & B3 &   &   &   &   & 5 & G2 & Set Volume 15 &   & G2 &   \\
+8 & B3 &   &   &   &   & 5 & G2 &   & 10 & D3 &   \\
+6 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 & 10 & G2 &   \\
+0 &   &   &   &   &   &   &   &   & 10 & D3 &   \\
+8 & B3 &   &   &   &   & 5 & G2 & Set Volume 15 & 10 & G2 &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   & 10 & D\#3 &   \\
+1 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 & 10 & D3 &   \\
+1 & A3 &   &   &   &   &   &   &   &   &   &   \\
+8 & B3 &   &   &   &   & 5 & G2 & Set Volume 15 &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 &   &   &   \\
+8 & A\#3 &   &   &   &   &   &   &   &   &   &   \\
+8 & A\#3 &   &   &   &   & 5 & G2 & Set Volume 15 &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   &   &   \\
+1 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 &   &   &   \\
+2 & D3 &   &   &   &   &   &   &   &   &   &   \\
+0 &   &   &   &   &   & 5 & G2 & Set Volume 15 &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   & F2 &   \\
+6 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 &   &   &   \\
+8 & A\#3 &   &   &   &   &   &   &   &   &   &   \\
+8 & A\#3 &   & 4 & D2 &   & 5 & F2 & Set Volume 15 &   & F2 &   \\
+6 & A3 &   &   &   &   & 5 & F2 &   &   &   &   \\
+1 & A3 &   &   &   &   & 5 & F2 & Set Volume 25 &   &   &   \\
+1 & A3 &   & 4 & C\#2 &   &   &   &   &   & F2 &   \\
+8 & A\#3 &   &   &   &   & 5 & G2 & Set Volume 15 &   & G2 &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 &   &   &   \\
+8 & A\#3 &   &   &   &   &   &   &   &   &   &   \\
+8 & A\#3 &   &   &   &   & 5 & G2 & Set Volume 15 &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   &   &   \\
+1 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 &   &   &   \\
+2 & D3 &   &   &   &   &   &   &   &   &   &   \\
+0 &   &   &   &   &   & 5 & G2 & Set Volume 15 &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   & D3 &   \\
+6 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 &   & G2 &   \\
+8 & A\#3 &   &   &   &   &   &   &   &   & D3 &   \\
+8 & A\#3 &   &   &   &   & 5 & G2 & Set Volume 15 &   & G2 &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   & D\#3 &   \\
+1 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 &   & B2 &   \\
+1 & A3 &   &   &   &   &   &   &   &   &   &   \\
+8 & A\#3 &   &   &   &   & 5 & G2 & Set Volume 15 &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 &   &   &   \\
+8 & A\#3 &   &   &   &   &   &   &   &   &   &   \\
+8 & A\#3 &   &   &   &   & 5 & G2 & Set Volume 15 &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   &   &   \\
+1 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 &   &   &   \\
+2 & D3 &   &   &   &   &   &   &   &   &   &   \\
+0 &   &   &   &   &   & 5 & G2 & Set Volume 15 &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 & Set Volume 25 &   &   &   \\
+8 & A\#3 &   &   &   &   &   &   &   &   &   &   \\
+1 & A3 &   &   &   &   & 5 & G2 & Set Volume 15 &   &   &   \\
+6 & A3 &   &   &   &   & 5 & G2 &   &   &   &   \\
+1 & A3 &   &   &   &   & 5 & G\#2 & Set Volume 25 &   &   &   \\
         \bottomrule
       \end{tabular}
     \end{adjustbox}
-  }
+  }\caption*{Decoding the full instructions for Pattern 000.}
+\end{figure}
+What if we attempted to turn the notes in Pattern 0 into some sheet music? It's just a question
+of representing each channel as a stave and transcribing the notes from the pattern. We can't 
+display the sample that's being used to play the note, but we do get a sense of the music
+that's being played. 
+
+\begin{figure}[H]
+  \centering
+        \includegraphics[width=10cm]{src/titletune/sheet_music/title_no_0_page_1001.png}%
+  \caption*{Pattern 0 rendered as sheet music.}
 \end{figure}
 
-These are the garnish for a choice piece of mystery meat, \icode{PLAYFX2}. \icode{PLAYFX2} is a
-library routine provided to Atari by a crowd called 'Imagitec Designs'. It is not something we have the source
-code for, and nor did Minter when he was writing Tempest 2000. Instead, he was given a binary blob
-called \icode{syn6.o} and a list of routine names to use when he wanted to play one of his samples.
-This list is given at the start of the main \icode{yak.s} source file:
 
-\begin{lstlisting}
-  INIT_SOUND    EQU  $4040  ;jump table for the SFX/Tunes module
-  NT_VBL        EQU  $4046
-  PT_MOD_INIT   EQU  $404c
-  START_MOD     EQU  $4052
-  STOP_MOD      EQU  $4058
-  PLAYFX2       EQU  $405e
-  CHANGE_VOLUME EQU  $4064
-  SET_VOLUME    EQU  $406a
-  NOFADE        EQU  $4070
-  FADEUP        EQU  $4076
-  FADEDOWN      EQU  $407c
-  ENABLE_FX     EQU  $4082
-  DISABLE_FX    EQU  $4088
-  CHANGEFX      EQU  $409a  ;new in syn6
-  HALT_DSP      EQU  $408e
-  RESUME_DSP    EQU  $4094
-  intmask       EQU  $40a0
-\end{lstlisting}
+With a single chunk of music like this we now have the makings of a tune, built up from using our samples in a series of 
+machine-readable sheet music instructions in a pattern.
 
-These are all entry points in the game binary for each routine. So for \icode{PLAYFX2} the entry point is \icode{\$405e}.
-In the source code this routine exists as raw machine code only. Along with all the other Imagitec sound routines it
-lives in a file called \icode{moomoo.dat}:
-\begin{lstlisting}
-  .include "moomoo.dat"
-\end{lstlisting}
-
-This is a slightly modified version of the \icode{syn6.o} sound synthesizer binary provided by Imagitec Designs. With modern
-tooling, it is possible for us to recreate \icode{moomoo.dat} by partially disassembling it, then reassembling and relinking it.
-This will more or less re-enact the build steps Minter would have followed to generate it.
-
-The initial bytes of \icode{moomoo.dat} can be disassembled as follows into a file we'll call \icode{moomoo\_header.s}. 
-\begin{lstlisting}[caption=The contents of \icode{moomoo\_header.s}.]
-; Header for moomoo.s
-;.org $4040
-.include "jaguar.inc"
-
-init_sound    EQU $000041ba
-nt_vbl        EQU $0000425e
-pt_mod_init   EQU $000041d6
-start_mod     EQU $000045e2
-stop_mod      EQU $00004606
-playfx2       EQU $00004370
-change_volume EQU $000044ea
-set_volume    EQU $00004546
-nofade        EQU $00004598
-fadeup        EQU $000045b2
-fadedown      EQU $000045ca
-enable_fx     EQU $0000464e
-disable_fx    EQU $00004660
-resume_dsp    EQU $00004470
-
-INIT_SOUND:    jmp     (init_sound).l
-NT_VBL:        jmp     (nt_vbl).l
-PT_MOD_INIT:   jmp     (pt_mod_init).l
-START_MOD:     jmp     (start_mod).l
-STOP_MOD:      jmp     (stop_mod).l
-PLAYFX2:       jmp     (playfx2).l
-CHANGE_VOLUME: jmp     (change_volume).l
-SET_VOLUME:    jmp     (set_volume).l
-NOFADE:        jmp     (nofade).l
-FADEUP:        jmp     (fadeup).l
-FADEDOWN:      jmp     (fadedown).l
-ENABLE_FX:     jmp     (enable_fx).l
-DISABLE_FX:    jmp     (disable_fx).l
-CHANGEFX:      jmp     (disable_fx).l
-HALT_DSP:      jmp     (disable_fx).l
-RESUME_DSP:    jmp     (resume_dsp).l
-
-intmask:        dc.b 0
-; Address 0x40A2
-return_early:
-                rts
-
-; Address 0x40A4
-update_interrupt:
-                move.w  d0,-(sp)
-                bset    #3,(intmask).l
-                clr.w   d0
-                move.b  (intmask).l,d0
-                move.w  d0,(INT1).l ; RW CPU Interrupt Control Register
-                move.w  (sp)+,d0
-                rts
-\end{lstlisting}
-
-It turns out that the address we're using to invoke \icode{PLAYFX2} simply jumps to another adress in the binary,
-one that contains the actual \icode{playfx2} routine:
-
-\begin{lstlisting}
-PLAYFX2:       jmp     (playfx2).l
-\end{lstlisting}
-
-So to recreate the steps used to generate \icode{moomoo.dat} we first assemble this file:
-
-\begin{lstlisting}
-rmac -fa -i moomoo_header.s -o moomoo_header.o
-\end{lstlisting}
-
-Then we link \icode{moomoo\_header.o} with the \icode{syn6.o} file provided by Imagitec:
-\begin{lstlisting}
-rln -n -z -u -v -a 4040 xd xd -e moomoo_header.o syn6.o -o moomoo.dat
-\end{lstlisting}
-
-Voila, we have our \icode{moomoo.dat}. If you'd like to follow these steps yourself, \href{https://github.com/mwenge/t2k-25easypieces/blob/master/notebooks/Recreate%20moo.dat/Recreate%20moomoo.dat%20using%20syn6.o.ipynb}{\textcolor{blue}{you can use this Python notebook}}.
+ Our next step is to come up with as many of these patterns
+as we need to form a complete tune. In theory we could mix and match the patterns in any sequence we like and play
+them one after the other to form the finished article. In the 
+case of \icode{tune13.mod}, the structure is quite simple. At byte 952 in our \icode{tune13.mod} file we list the
+order in which the patterns are to be played. This also lets us know how many patterns in total the file contains.
+The full list is: 0, 1, 2, 3, 4, 3, 6, 7, 5. With this information we can illustrate the title tune in its
+entirety by piecing together the transcriptions of each of the patterns. 
+ 
+\begin{figure}[H]
+{
+    \begin{subfigure}{0.43\textwidth}
+        \includegraphics[width=6cm]{src/titletune/sheet_music/title_no_0_page_1001.png}%
+      \caption*{Pattern 0}
+    \end{subfigure}
+    \begin{subfigure}{0.43\textwidth}
+        \includegraphics[width=6cm]{src/titletune/sheet_music/title_no_1_page_1001.png}%
+      \caption*{Pattern 1}
+    \end{subfigure}
+    \begin{subfigure}{0.43\textwidth}
+        \includegraphics[width=6cm]{src/titletune/sheet_music/title_no_2_page_1001.png}%
+      \caption*{Pattern 2}
+    \end{subfigure}
+    \begin{subfigure}{0.43\textwidth}
+        \includegraphics[width=6cm]{src/titletune/sheet_music/title_no_3_page_1001.png}%
+      \caption*{Pattern 3}
+    \end{subfigure}
+    \begin{subfigure}{0.43\textwidth}
+        \includegraphics[width=6cm]{src/titletune/sheet_music/title_no_4_page_1001.png}%
+      \caption*{Pattern 4}
+    \end{subfigure}
+    \hspace{1.5cm}
+    \begin{subfigure}{0.43\textwidth}
+        \includegraphics[width=6cm]{src/titletune/sheet_music/title_no_3_page_1001.png}%
+      \caption*{Pattern 3}
+    \end{subfigure}
+}
+\end{figure}
 
 \begin{figure}[H]
 {
-\setlength{\tabcolsep}{1.0pt}
-\setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
-\begin{adjustbox}{width=14cm,center}
-\begin{tabular}{ccc}
-\toprule
-Spectrogram & Amplitude & Sound \\
-\midrule
-  \makecell[l]{
-    \includegraphics[width=6cm]{sounds/22.wav-spec.png}%
-  } &
-  \makecell[l]{
-    \includegraphics[width=6cm]{sounds/22.wav-amp.png}%
-  } &
-  \makecell[l]{
-    \textattachfile{src/sounds/22.wav}{\includegraphics[width=1cm]{sounds/play.png}}
-  } \\
-  \addlinespace
-    \bottomrule
-    \end{tabular}
-  \end{adjustbox}
-}\caption{Spectrogram and Sine Plot of the 'Excellent' sound sample. On a PDF viewer that supports, it you can click 'Play' to hear it.}
+    \begin{subfigure}{0.43\textwidth}
+        \includegraphics[width=6cm]{src/titletune/sheet_music/title_no_6_page_1001.png}%
+      \caption*{Pattern 6}
+    \end{subfigure}
+    \begin{subfigure}{0.43\textwidth}
+        \includegraphics[width=6cm]{src/titletune/sheet_music/title_no_7_page_1001.png}%
+      \caption*{Pattern 7}
+    \end{subfigure}
+    \begin{subfigure}{0.43\textwidth}
+        \includegraphics[width=6cm]{src/titletune/sheet_music/title_no_5_page_1001.png}%
+      \caption*{Pattern 5}
+    \end{subfigure}
+}\caption*{The patterns in the order that they're played, giving the complete tune.}
 \end{figure}
