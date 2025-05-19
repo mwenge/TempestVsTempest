@@ -163,12 +163,104 @@ VORLIT:
 \vspace*{\fill}
 \end{minipage}
 
-Equipped with \icode{VORLIT}
+Equipped with \icode{VORLIT} as a shorthand for drawing the \icode{TEMPEST} title logo onto the
+screen we can use two other Vector Drawing instructions to alter the scale of the logo and colour
+of the logo when we draw it. If we adjust the scale and the colour as we go along we can create the
+effect of a cascading series of differently coloured titles receding into the distance. 
 
+Fortunately there are vector commands that will allow us to do all of this. Each command is a two-byte
+Op Code. There's one for setting the color to be used when drawing, one for setting the scale to use
+when drawing (allowing us to make the title big or small), and one for calling our \icode{VORLIT}
+routine to actually draw the title logo in our selected colour and scale.
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=12cm,center}
+
+      \begin{tabular}{lll}
+        \toprule
+    OpCode Description    &     OpCode      &  How We Use It.\\
+        \midrule
+    New color/intensity   &     0x6000   &  \icode{000} will give the color and intensity.\\
+    New scale             &     0x7000   &  \icode{000} will give the scale to draw at.\\
+    Jump to subroutine    &     0xA000   &  \icode{000} can be populated with an address, e.g. \icode{VORLIT}. \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+
+So we can imagine issuing a series of three vector commands such as the ones given below to draw our
+logo.
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{center}
+      \begin{tabular}[t]{lll}
+        \toprule
+        Op Code & Parsed Data & Written to Screen\\
+
+        \midrule
+          \icode{7220}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{220}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/0.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6800}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & White\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+
+If we repeat these commands, changing the color and reducing the scale as we go, we 
+should expect to achieve the effect we're looking for. And this is exactly what we find
+in \icode{SCARNG}. This routine builds the title rainbow by adding the three commands above
+to the vector list and it does this 19 times, adjusting the color and reducing the scale
+as it goes.
 \begin{lstlisting}
         .SBTTL  LOGO RAINBOW BUILDER
 SCARNG:
-    ; DRAW THE TEMPEST TITLE RAINBOW. THIS CONSISTS OF 24 ITERATIONS
+    ; DRAW THE TEMPEST TITLE RAINBOW. THIS CONSISTS OF 19 ITERATIONS
     ; OF THE TITLE IMAGE IN EVER INCREASING DEPTH AND VARYING COLORS.
     ; A - CONTAINS THE LOW BYTE OF THE ADDRESS FOR VORLIT.
     ; X - CONTAINS THE HI  BYTE OF THE ADDRESS FOR VORLIT.
@@ -245,10 +337,863 @@ SCARNG:
     CSEND              ; OTHERWISE LOOP AND DRAW ANOTHER TITLE.
 \end{lstlisting}
 
+We can see how the commands mutate and slowly build up the rainbow piece by piece
+for all 19 iterations in the table that follows.
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{center}
+      \begin{tabular}[t]{lll}
+        \toprule
+        Vector Commands & Command Meaning & Result on Screen\\
+
+        \midrule
+          \icode{7228}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{228}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/1.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6801}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Yellow\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7230}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{230}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/2.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6801}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Yellow\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7238}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{238}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/3.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6801}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Yellow\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7240}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{240}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/4.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6802}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Magenta\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7248}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{248}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/5.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6802}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Magenta\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7250}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{250}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/6.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6802}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Magenta\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{center}
+      \begin{tabular}[t]{lll}
+        \toprule
+        Vector Commands & Command Meaning & Result on Screen\\
+
+        \midrule
+          \icode{7258}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{258}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/7.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6802}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Magenta\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7260}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{260}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/8.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6803}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Red\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7268}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{268}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/9.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6803}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Red\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7270}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{270}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/10.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6803}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Red\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7278}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{278}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/11.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6803}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Red\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7300}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{300}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/12.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6804}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Cyan\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{center}
+      \begin{tabular}[t]{lll}
+        \toprule
+        Vector Commands & Command Meaning & Result on Screen\\
+
+
+        \midrule
+          \icode{7308}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{308}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/13.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6804}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Cyan\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7310}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{310}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/14.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6804}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Cyan\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7318}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{318}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/15.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6804}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Cyan\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7320}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{320}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/16.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6805}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Green\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7328}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{328}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/17.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6805}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Green\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+
+        \midrule
+          \icode{7330}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Set Scale: & \icode{330}\\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \multirow{3}{*}[-0.1cm]{
+          \makecell[tl]{
+            \includegraphics[height=2.3cm]{titles/rainbow/18.png}%
+          }
+        } \\
+        \addlinespace
+          \icode{6805}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            New Color: & Green\\
+            Intensity: &  \icode{00}\\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \addlinespace
+          \icode{AFA7}
+        &
+        \makecell[tl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{ll}
+            Jump to Routine: & \icode{VORLIT}  \\
+            \icode{} &  \\
+          \end{tabular}
+          \endgroup
+        } &
+        \\
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\clearpage
+
+We now have a sense of how to draw the rainbow, but in a way this is just one iteration
+of the effect. As we know from experience, the logo gets gradually larger approaching
+us from the black depths of the screen. The way this is achieved is by running the 
+process we've described above over and over, while adjusting the values that define
+the nearest and farther point on the screen. These two values (\icode{NEARY} and \icode{FARY}) control the overall 
+maximum and minimum scale that we draw the logo with in \icode{SCARNG}. So by
+incrementing them in the routine \icode{LOGPRO} below, then calling \icode{SCARNG} to
+draw the logo with these values as their limits, we get it to draw the rainbow again, but 
+this time slightly larger. If we do this every frame or two, the logo will appear to get nearer
+and nearer to us.  Since the color we draw with is a function of distance we are drawing at this
+has the added bonus of also gradually changing the colours each instance of the title is drawn with:
+creating the cascading effect, as opposed to a rainbow with static colors.
+
 \begin{lstlisting}
     .SBTTL  LOGO - LOGO RAINBOW ; APPROACHING LOGO PROCESS
 LOGPRO: 
-    ; THE LOGO RAINBOW CONSISTS OF 24 ITERATIONS OF THE TEMPEST
+    ; THE LOGO RAINBOW CONSISTS OF 19 ITERATIONS OF THE TEMPEST
     ; LOGO IN VARYING COLORS. EACH CALL TO THIS ROUTINE MOVES
     ; THE LOGO RAINBOW GRADUALLY CLOSER TO THE VIEWER.
 
@@ -282,3 +1227,4 @@ LOGPRO:
     ENDIF
     RTS                ; WE'RE DONE FOR THIS ROUND, RETURN.
 \end{lstlisting}
+
