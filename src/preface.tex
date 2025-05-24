@@ -1,7 +1,6 @@
 \lhead[]{}
 \rhead[]{}
 \renewcommand{\headrulewidth}{0pt}
-\ % The empty page
 \vspace*{\fill}
 \begin{figure}[H]
   \centering
@@ -53,25 +52,44 @@
   \caption*{Artefacts from Tempest (1981).}
 \end{figure}
 \vspace*{\fill}
-\thispagestyle{empty} % Turn off page number
+\thispagestyle{empty}% Turn off page number
 \clearpage
 
-\chapter*{about tempest} 
-Tempest 2000 was a classic game. To its misfortune it was made for a console that crashed and burned with no
-survivors. The Atari Jaguar was supposed to be gaming's first great leap into the 64 bit era. Instead it 
-promptly tripped over its shoelaces and left a number of great games, Tempest 2000 among them, behind
-as orphans.
+\chapter*{about tempest and tempest 2000} 
+\textit{Tempest} was a coin-operated arcade game released in 1981 by Atari
+Corporation. At the time, its graphics and gameplay were at the very edge of
+what was possible with contemporary hardware.  Its unique appearance was in
+part attributable to its use of vector graphics, a technology that
+drew lines of color, rather than pixels, on the screen and enabled the earliest
+3D graphics in the arcade games of the time.
 
-This is a book about computer code. Each chapter aims to be an easily digested sketch of how
-a specific feature or effect was achieved using a combination of Motorola 68K assembly code and
-the Jaguar's powerful hardware platform.
+Some 15 years later, its successor \textit{Tempest 2000} was likewise a classic
+game. To its misfortune it was made for a console that crashed and burned with
+no survivors, and very few customers. The Jaguar was supposed to be Atari Corporation's first great
+leap into the 64 bit era. Instead it promptly tripped over its shoelaces and
+left a number of great games, Tempest 2000 among them, behind as orphans.
 
-There are lots of fascinating bits and pieces to pore over. These are the 25 easiest I could find.
+This book isn't about the history of \textit{Tempest} or its importance in the history
+of computer games.  This is a book about computer code. Each chapter aims to be
+an easily digested sketch of how a specific feature or effect was achieved. In
+the case of \textit{Tempest} this means sifting through the 6502 assembly code
+David Theurer wrote by hand(!) to create the game, and wrangling with the bits
+and bytes of Atari's Quadrascan Vector Graphics. For \textit{Tempest 2000} it
+means familiarizing ourselves with Motorola 68K assembly code and the Jaguar's
+powerful hardware platform.
+
+There are lots of fascinating bits and pieces to pore over. And it is
+interesting to see how the years that separate the two games leave some things
+unchanged and many other things changed utterly. I've put together this book of
+squibs in the hope they will allow you, the reader, to digest small bite-sized
+insights into each game. And I hope, by interleaving elements from \textit{Tempest} and
+\textit{Tempest 2000}, to enable you to compare the parallel lives in the design
+and execution of separate incarnations of the same classic video game.
 
 Rob Hogan (\href{https://mastodon.social/@mwenge}{\textcolor{blue}{@mwenge}})\\
-Dar es Salaam \the\year{} \\
+\the\year{} \\
 
-\thispagestyle{empty} % Turn off page number
+\thispagestyle{empty}% Turn off page number
 \clearpage
 \vspace*{\fill}
 \begin{figure}[H]
@@ -109,34 +127,14 @@ Dar es Salaam \the\year{} \\
   \caption*{Artefacts from Tempest 2000 (1994).}
 \end{figure}
 \vspace*{\fill}
-\thispagestyle{empty} % Turn off page number
-\clearpage
-\thispagestyle{empty} % Turn off page number
-\chapter*{about tempest 2000} 
-Tempest 2000 was a classic game. To its misfortune it was made for a console that crashed and burned with no
-survivors. The Atari Jaguar was supposed to be gaming's first great leap into the 64 bit era. Instead it 
-promptly tripped over its shoelaces and left a number of great games, Tempest 2000 among them, behind
-as orphans.
-
-This is a book about computer code. Each chapter aims to be an easily digested sketch of how
-a specific feature or effect was achieved using a combination of Motorola 68K assembly code and
-the Jaguar's powerful hardware platform.
-
-There are lots of fascinating bits and pieces to pore over. These are the 25 easiest I could find.
-
-Rob Hogan (\href{https://mastodon.social/@mwenge}{\textcolor{blue}{@mwenge}})\\
-Dar es Salaam \the\year{} \\
-\thispagestyle{empty}%
-\clearpage
-\blankpage
+\thispagestyle{empty}% Turn off page number
 \clearpage
 \vspace*{\fill}
 \begin{figure}[H]
     \centering
-      \includegraphics[width=5cm]{src/cover/title_page.png}%
+      \includegraphics[width=9cm]{src/cover/title_page.png}%
 \end{figure}
 \vspace*{\fill}
-\thispagestyle{empty}%
-\blankpage
-\clearpage
+\thispagestyle{empty}% Turn off page number
+\clearpage % Makes sure no header rule on last page
 
