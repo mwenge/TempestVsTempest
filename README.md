@@ -10,9 +10,8 @@ I'm trying to keep it light and digestible so the book consists of lots of littl
 a hopefully-tasty morsel from one of the games.
 
 Work-in-progress is available for free as a [Work in Progress Edition](out/TempestVsTempest_release.pdf).
-<br>
+
 You can [gift what you want](https://www.paypal.com/paypalme/hoganrobert).
-<br>
 
 You can even [sponsor future work](https://github.com/sponsors/mwenge/).
 <br>
