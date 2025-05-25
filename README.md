@@ -15,7 +15,7 @@ You can [gift what you want](https://www.paypal.com/paypalme/hoganrobert).
 You can even [sponsor future work](https://github.com/sponsors/mwenge/).
 
 ## A Peek Inside
-<img height=460 src="https://github.com/mwenge/t2k-25easypieces/raw/master/out/page1.png"><img height=460 src="https://github.com/mwenge/t2k-25easypieces/raw/master/out/page2.png"><img height=460 src="https://github.com/mwenge/t2k-25easypieces/raw/master/out/page3.png"><img height=460 src="https://github.com/mwenge/t2k-25easypieces/raw/master/out/page4.png"><img height=460 src="https://github.com/mwenge/t2k-25easypieces/raw/master/out/page5.png"><img height=460 src="https://github.com/mwenge/t2k-25easypieces/raw/master/out/page6.png">
+<img width=500 src="https://github.com/mwenge/t2k-25easypieces/raw/master/out/page1.png"><img width=500 src="https://github.com/mwenge/t2k-25easypieces/raw/master/out/page2.png"><img width=500 src="https://github.com/mwenge/t2k-25easypieces/raw/master/out/page3.png"><img width=500 src="https://github.com/mwenge/t2k-25easypieces/raw/master/out/page4.png"><img width=500 src="https://github.com/mwenge/t2k-25easypieces/raw/master/out/page5.png"><img width=500 src="https://github.com/mwenge/t2k-25easypieces/raw/master/out/page6.png">
 
 ## Building
 If you like, you can [build the book from source](BUILD.md).
