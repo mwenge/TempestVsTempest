@@ -174,7 +174,8 @@ pdfkeywords={Tempest Tempest 2000 Atari 68000 assembly 6502 Llamasoft Jeff Minte
 \usepackage{titlesec}
 \usepackage{titling}
 % font declaration and title settings
-\newfontfamily\headingfont[LetterSpace=-5]{RicardoALT-Medium}
+\newfontfamily\headingfont[LetterSpace=-5]{Roboto-Bold}
+%\newfontfamily\headingfont[LetterSpace=-5]{RicardoALT-Medium}
 % Remove Chapter "chapter" and chapter number
 \titleformat{\chapter}[display]
   {\huge\headingfont}{}{20pt}{\Huge}
@@ -250,10 +251,11 @@ pdfkeywords={Tempest Tempest 2000 Atari 68000 assembly 6502 Llamasoft Jeff Minte
    [x86masm]{Assembler} % based on the "x86masm" dialect
    % with these extra keywords:
 	 {
+   deletestring=[d]',
    morekeywords={.BYTE,LDY,LDX,INC,LDA,BEQ,BNE,JSR,DEY,DEX,PHA,PLA,INY,BPL,CPX, %
 									STA,SEC,SBC,BCS,EOR,RTS,SEI,TXA,ASL,TAY,INX,CPY,TAX,RTI,TYA,BRK,.TEXT,
                   movei,store,load,REGEQU,EQU,.WORD,IFNE,VEC,VCTR,LDAH,LXL,.SBTTL,LSR,BEGIN,CSEND,
-                  RTSL,SCDOT,CSTAT,ICVEC,
+                  RTSL,SCDOT,CSTAT,ICVEC,JSRL,.MACRO,.IF,.IFF,.IIF,.IRPC,.ENDC,.ENDM,.ENDR,
                   IFCC,IFCS,.include,.incbin,
                   move, swap,bra,move.l, moved.d,bsr, lea, dc.l,dc.b}
 	 } % etc.
@@ -612,6 +614,8 @@ boxsep=0pt,left=2pt,right=2pt,top=2pt,bottom=.5pt}
 \subfile{src/ntsc_pal} % t2k
 \subfile{src/title_logo} % tempest
 \subfile{src/charges}             % tempest
+\subfile{src/language}             % tempest
+%\subfile{src/selftest}             % tempest
 %\subfile{src/reverse} % t2k: something about yak using the GPU 'in reverse' the wrong way round.
 
 %\printindex
