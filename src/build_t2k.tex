@@ -30,8 +30,8 @@ the three-letter name you use on high score tables.
 
 Assembling this code will be a simple matter of running the \icode{madmac} assembler as follows:
 
-\begin{lstlisting}
-$mac -fb -isrc -l src/yak.s -o yak.dat
+\begin{lstlisting}[language=bash]
+$ mac -fb -isrc -l src/yak.s -o yak.dat
 \end{lstlisting}
 
 We're not done yet though.
@@ -45,7 +45,7 @@ and some of them doing the same things but slightly differently (variations of a
 explosion in \icode{camel.gas} and \icode{xcamel.gas}).
 
 This is roughly what it looks like when we assemble each of our GPU programs.
-\begin{lstlisting}
+\begin{lstlisting}[language=bash]
 $ mac -fr -mtom -l -isrc donky.gas -o donky.dat
 $ mac -fr -mtom -l -isrc camel.gas -o camel.dat
 $ mac -fr -mtom -l -isrc antelope.gas -o antelope.dat
@@ -62,26 +62,26 @@ collates all our GPU programs into one big GPU object. Here's how we do that in 
 
 \begin{lstlisting}
 ;
-;	CONSTANT DATA (GPU PROGRAMS)
+;    CONSTANT DATA (GPU PROGRAMS)
 ;
 fastvector:
-	.include	"llama.dat"
+    .include "llama.dat"
 xvector:
-	.include 	"goat.dat"
+    .include "goat.dat"
 demons:
-	.include	"antelope.dat"
+    .include "antelope.dat"
 parrot:
-	.include	"camel.dat"
+    .include "camel.dat"
 xparrot:
-	.include	"xcamel.dat"
+    .include "xcamel.dat"
 texter:
-	.include 	"stoat.dat"
+    .include "stoat.dat"
 bovine:
-	.include	"ox.dat"
+    .include "ox.dat"
 equine:
-	.include 	"horse.dat"
+    .include "horse.dat"
 equine2:
-	.include 	"donky.dat"
+    .include "donky.dat"
 \end{lstlisting}
 
 And here's how we assemble \icode{YAKGPU.S}:
