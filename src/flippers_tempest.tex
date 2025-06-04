@@ -1,0 +1,172 @@
+\chapter{flipper}
+\label{sec:flipper}
+\lhead[tempest]{}
+\lstset{style=6502Style}
+\begin{figure}[H]
+      \centering
+      \frame{\includegraphics[width=12cm]{src/flippers/flipper.png}}%
+    \caption{The description of the flipper in the Tempest manual.}
+\end{figure}
+\vspace{-0.5cm}
+The graphics in \textit{Tempest} are generated using Atari's 'Quadrascan' vector
+technology. The images are all defined using a series of vectors. A vector in
+this case is a (X,Y) value pair that moves the beam in an X,Y direction to a
+new point on the screen. A series of vectors moving from point to point around
+the screen will eventually form a complete image.
+When we take a look at the data structure defining the player's principle enemy,
+the \textit{Flipper}, we find this. I'm going to speculate that \icode{INVA1S} is short
+for 'Invader 1 Start' and \icode{INVA1E} for 'Invader 1 End':
+\begin{lstlisting}
+INVA1S:
+        VEC 4,1,1
+        VEC 4,-1,1
+        VEC -2,1
+        VEC 1,1
+        VEC -3,-1
+        VEC -3,1
+        VEC 1,-1
+        VEC -2,-1
+INVA1E:
+\end{lstlisting}
+
+The number pairs in the above listing are the vectors we're talking about, and we're going to see how we can use them to build up
+an image of the ship assuming an origin point of zero. Our first step, therefore,
+is to draw a line from (0,0) to (3,-2) as follows:
+
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=7cm,center}
+      \includegraphics[width=12cm]{src/flippers/build_flipper_2_6.png}%
+    \end{adjustbox}
+  \caption{Draw a line from \icode{(0,0)} to \icode{(4,1)}.}
+\end{figure}
+
+Our next step reveals a bit more about the actual nature of the operation we are performing. To
+draw a line from our new position using a vector of \icode{4,-1} we add it to our current
+position of \icode{(4,1)} to draw a line to \icode{8,0}:
+\begin{figure}[H]
+  \centering
+  \begin{adjustbox}{width=7cm,center}
+    \includegraphics[width=12cm]{src/flippers/build_flipper_3_6.png}%
+  \end{adjustbox}
+  \caption{\icode{(4,1)} + 
+         \icode{(4,-1)}.
+          \begin{tikzpicture}
+            \draw[->,line width=0.7pt] (0,0) to (0.5,0);
+          \end{tikzpicture}
+         \icode{(8,0)}
+         }
+\end{figure}
+
+With this as our method, we can start building up our complete image, adding each vector in
+our array to the previous result to define a new line to draw.
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=15cm,center}
+      \begin{subfigure}{0.3\textwidth}
+        \begin{figure}[H]
+          \centering
+          \begin{adjustbox}{width=3cm,center}
+            \includegraphics[width=12cm]{src/flippers/build_flipper_4_6.png}%
+          \end{adjustbox}
+          \caption{\icode{(8,0)} + 
+                 \icode{(-2,1)}.
+                  \begin{tikzpicture}
+                    \draw[->,line width=0.7pt] (0,0) to (0.5,0);
+                  \end{tikzpicture}
+                 \icode{(6,1)}
+                 }
+        \end{figure}
+      \end{subfigure}
+      \begin{subfigure}{0.3\textwidth}
+        \begin{figure}[H]
+          \centering
+          \begin{adjustbox}{width=3cm,center}
+            \includegraphics[width=12cm]{src/flippers/build_flipper_5_6.png}%
+          \end{adjustbox}
+          \caption{\icode{(6,1)} + 
+                 \icode{(1,1)}.
+                  \begin{tikzpicture}
+                    \draw[->,line width=0.7pt] (0,0) to (0.5,0);
+                  \end{tikzpicture}
+                 \icode{(7,2)}
+                 }
+        \end{figure}
+      \end{subfigure}
+      \begin{subfigure}{0.3\textwidth}
+        \begin{figure}[H]
+          \centering
+          \begin{adjustbox}{width=3cm,center}
+            \includegraphics[width=12cm]{src/flippers/build_flipper_6_6.png}%
+          \end{adjustbox}
+          \caption{\icode{(7,2)} + 
+                 \icode{(-3,-1)}.
+                  \begin{tikzpicture}
+                    \draw[->,line width=0.7pt] (0,0) to (0.5,0);
+                  \end{tikzpicture}
+                 \icode{(4,1)}
+                 }
+        \end{figure}
+      \end{subfigure}
+    \end{adjustbox}
+    }\caption[]{Starting to take shape.}
+\end{figure}
+
+Adding our last three vectors completes the picture, and we have a claw.
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=15cm,center}
+      \begin{subfigure}{0.3\textwidth}
+        \begin{figure}[H]
+          \centering
+          \begin{adjustbox}{width=3cm,center}
+            \includegraphics[width=12cm]{src/flippers/build_flipper_7_6.png}%
+          \end{adjustbox}
+          \caption{\icode{(4,1)} + 
+                 \icode{(-3,1)}.
+                  \begin{tikzpicture}
+                    \draw[->,line width=0.7pt] (0,0) to (0.5,0);
+                  \end{tikzpicture}
+                 \icode{(1,2)}
+                 }
+        \end{figure}
+      \end{subfigure}
+      \begin{subfigure}{0.3\textwidth}
+        \begin{figure}[H]
+          \centering
+          \begin{adjustbox}{width=3cm,center}
+            \includegraphics[width=12cm]{src/flippers/build_flipper_8_6.png}%
+          \end{adjustbox}
+          \caption{\icode{(1,2)} + 
+                 \icode{(1,-1)}.
+                  \begin{tikzpicture}
+                    \draw[->,line width=0.7pt] (0,0) to (0.5,0);
+                  \end{tikzpicture}
+                 \icode{(2,1)}
+                 }
+        \end{figure}
+      \end{subfigure}
+      \begin{subfigure}{0.3\textwidth}
+        \begin{figure}[H]
+          \centering
+          \begin{adjustbox}{width=3cm,center}
+            \includegraphics[width=12cm]{src/flippers/build_flipper_9_6.png}%
+          \end{adjustbox}
+          \caption{\icode{(2,1)} + 
+                 \icode{(-2,-1)}.
+                  \begin{tikzpicture}
+                    \draw[->,line width=0.7pt] (0,0) to (0.5,0);
+                  \end{tikzpicture}
+                 \icode{(0,0)}
+                 }
+        \end{figure}
+      \end{subfigure}
+    \end{adjustbox}
+    }\caption[]{Putting the final pieces in place.}
+\end{figure}
+
