@@ -1,0 +1,85 @@
+\chapter{superzapper}
+\lhead[tempest]{}
+\label{sec:if}
+\lstset{style=6502Style}
+
+
+\begin{lstlisting}
+  .SBTTL PROCESS SUPER ZAPPER
+PROSUZ:
+  LDA QSTATUS                      ; GET CURRENT GAME STATE..
+  IFMI                             ; IF WE'RE NOT IN ATTRACT MODE..
+  LDA SUZTIM                       ; CHECK THE SUPERZAP TIMER..
+  IFEQ                             ; IF ITS ZERO..
+    ; ..THEN MAYBE WE NEED TO TURN SUPERZAPPING ON.
+    ; FRST WE CHECK IF PLAYER IS ALIVE AND
+    ; THE SUPERZAP BUTTON HAS BEEN PRESSED.
+    LDA CURSL2                     ; GET PLAYER STATUS.
+    IFPL                           ; IF THE PLAYER IS ALIVE..
+    LDA SWFINA                     ; CHECK BUTTON PRESSES FOR..
+    AND I,MSUZA                    ; THE SUPERZAPPER BUTTON.
+    IFNE                           ; IF ZAP WAS PRESSED..
+    LDA SUZCNT                     ; GET NO. OF ZAPS USED SO FAR.
+    CMP I,CSUMAX                   ; IS IT EQUAL TO THE MAX AVAIL?
+      IFCC                         ; IF NOT..
+      INC SUZCNT                   ; THEN INCREMENT THE ZAPS USED AND..
+      LDA I,1                      ; .. PUT 1 IN THE ..
+      STA SUZTIM                   ; NEW ZAP TIMER
+      ENDIF
+    LDA SWFINA                     ; GET THE BUTTON PRESSES
+    AND I,^C<MSUZA!MFAKE>          ; TURN OFF THE ZAP PRESS..
+    STA SWFINA                     ; SO WE DON'T USE IT AGAIN NEXT TIME.
+    ENDIF
+    ENDIF
+  ELSE  ; THE SUPERZAPPER TIMER IS NON-ZERO SO.. 
+    ; ..WE'RE ALREADY ZAPPING. UPDATE OUR TIMERS AND KILL THINGS.
+    INC SUZTIM                     ; INCREMENT ZAP TIMER BY ONE.
+    LDX SUZCNT                     ; PUT NO. OF ZAPS USED IN X.
+    LDA SUZTIM                     ; GET CURRENT VALUE OF ZAP TIMER.
+    ; TIMAX IS AN ARRAY: .BYTE 00,13,05
+    ; SO THE FIRST ZAP GETS 13 FRAMES, WHILE THE
+    ; SECOND ZAP GETS 5.
+    CMP X,TIMAX                    ; TIMER REACHED MAX TIME YET?
+    IFCS                           ; IF YES..
+    LDA I,0                        ; LOAD 0 TO A REGISTER..
+    STA SUZTIM                     ; .. AND USE IT TO DEACTIVATE ZAP
+    ENDIF
+    ; KILL THINGS!
+    JSR KILENE                     ; WIPE OUT INVADERS & CHARGES
+  ENDIF
+  ENDIF
+    
+  LDA SWFINA                       ; GET THE BUTTON PRESSES
+  AND I,^CMFAKE                    ; TURN OFF THE ZAP PRESS..
+  STA SWFINA                       ; SO WE DON'T USE IT AGAIN NEXT TIME.
+  RTS
+\end{lstlisting}
+
+\begin{lstlisting}
+        .SBTTL SUPER ZAP-WIPE OUT ENEMY
+KILENE: LDA SUZTIM
+        CMP I,CSUSTA
+        IFCS
+        AND I,CSUINT
+        IFEQ                    ;TIME FOR ANOTHER WIPE OUT?
+
+        LDY WINVMX              ;YES.
+
+        BEGIN                   ;LOOP THRU INVADERS
+
+        LDA Y,INVAY
+        BNE EXIKIL              ;SPECIAL EXIT FOR 1ST LIVE ONE
+        DEY                     ;EXIT LOOP IF ALL ARE DEACTIVE
+        MIEND
+        LDA I,0                 ;ALL ARE DEAD. DEACTIVATE ZAP
+        STA SUZTIM
+        ENDIF
+        ENDIF
+        RTS
+
+EXIKIL:
+        LDA Y,INVAC2            ;MAKE SURE IT'S NOT A CARRIER
+        AND I,^C<INVCAR>
+        STA Y,INVAC2
+        JMP INCISQ              ;START EXPLOSION
+\end{lstlisting}

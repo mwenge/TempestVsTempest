@@ -1,0 +1,23 @@
+\chapter{IF .IF .IFF}
+\lhead[tempest]{}
+\label{sec:if}
+\lstset{style=6502Style}
+
+There are at least 12 different flavours of \icode{IF} statement in use in the \textit{Tempest}
+codebase. You may wonder how such a thing is possible, or why it is even necessary. The main
+motivation has to do with the legibility of assembly code. 
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=12.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & OpCode Hex & Bitmap \\
+        \midrule
+        Draw relative vector.      & \icode{0x0\_\_\_ \_\_\_\_}   & \icode{000YYYYY YYYYYYYY IIIXXXXX XXXXXXXX} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}

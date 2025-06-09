@@ -3,6 +3,11 @@
 \label{sec:vector}
 \lstset{style=6502Style}
 
+\textit{Tempest} does its drawing to the screen using a piece of hardware called the 
+\textit{Analog Vector Generator} (AVG). We can make this piece of kit draw stuff by supplying
+it with operation codes (opcodes) that it treats as instructions for drawing lines to the
+screen and updating their colour, position, and size. Most opcodes are a pair of bytes, since
+this is usually enough to convey the necessary information. 
 \begin{figure}[H]
   {
     \setlength{\tabcolsep}{3.0pt}
@@ -29,8 +34,17 @@
     \end{adjustbox}
   }
 \end{figure}
+\vspace{-0.5cm}
+The table above lists all the 
+known available opcodes for the AVG at the time that \textit{Tempest} was released. As you can
+see, various values like the \icode{X} and \icode{Y} position, the color intensity (\icode{I}),
+scale (\icode{S}), and memory address (\icode{A}) are encoded at the bit level in order to pack
+them into the available byte pair. This means that there is a limit, for example, on the values
+we can provide for things like \icode{X} and \icode{Y} positions: 4 bits in the 'Draw Short
+Relative Vector' instruction allows values between 0 and 16 with an additional
+fifth bit to indicate a positive or negative value.
 
-Equipped with the table above, let's imagine we want to start drawing something on the screen. First
+So equipped with this table as our cheat sheet, let's imagine we want to start drawing something on the screen. First
 we will move the beam to the centre of the screen:
 
 \begin{figure}[H]
@@ -384,6 +398,12 @@ OK I think you can see how we're building up our picture here, so let's get it o
 And there it is. We've drawn the 'lives left' symbol used in \textit{Tempest} to indicate the number
 of player lives remaining. Not bad for a handful of bytes.
 
+Before signing off, let's look at the dense little assembler macro used to construct these opcode
+values. This function, called \icode{VCTR}, takes a pair of X and Y values, e.g. (4,2), as well as a color intensity value,
+and converts them into the packed two-byte opcode. It is an object lesson in old-school bit
+manipulation written by Ed Logg in 1979 to support the original version of the Analogue Vector
+Generator. As we read more about \textit{Tempest} we'll find that Dave Theurer's source code
+makes heavy use of it when drawing player and enemy to the screen.
 
 \begin{lstlisting}
 ;
@@ -397,24 +417,35 @@ of player lives remaining. Not bad for a handful of bytes.
 ;
         .SBTTL  VCTR
         .MACRO  VCTR DX,DY,ZZ
-        ...1=DX
-        ...2=DY
-        .IF      LT,...1                ;IF NEGATIVE X
-        ...1=-DX ; CONVERT TO TWO'S COMPLEMENT.
-        .ENDC
-        .IF      LT,...2                ;IF NEGATIVE Y
-        ...2=-DY ; CONVERT TO TWO'S COMPLEMENT.
-        .ENDC
-        ...5=...1!...2
-        .IF     NE,...1+...2                    ;IF X AND Y ARE 0 - SKIP SHORT VECTOR
-        .IF      EQ,...5&^H0FFE1
-        ; Short Vector.
+        ...1=DX                    ; STORE X ARG IN ...1
+        ...2=DY                    ; STORE Y ARG IN ...2
+        .IF      LT,...1           ; IF NEGATIVE X
+        ...1=-DX                   ; CONVERT TO TWO'S COMPLEMENT.
+        .ENDC                      ; END IF
+        .IF      LT,...2           ; IF NEGATIVE Y
+        ...2=-DY                   ; CONVERT TO TWO'S COMPLEMENT.
+        .ENDC                      ; END IF
+        ...5=...1!...2             ; OR X AND Y TOGETHER IN ...5
+    
+        .IF     NE,...1+...2       ; IF X AND Y ARE 0 - SKIP SHORT VECTOR
+        .IF      EQ,...5&^H0FFE1   ; IF WE HAVE AN X OR Y VALUE..
+        ; DRAW IT WITH A SHORT VECTOR OPCODE.
+        ; THE BITMAP FOR THIS IS: 010YYYYY IIIXXXXX
+        ; BRIEF EXPLANATION OF THE BIT MANIPULATIONS:
+        ; ^H4000 - HEX 4000 IS OUR BASE FOR SHORT VECTOR OPCODE.
+        ; <ZZ*^H20> - MOVE THE INTENSITY VALUE TO THE III SLOT ABOVE.
+        ; <DX/2&^H1F> - MOVE THE X VALUE TO THE END OF THE 2ND BYTE.
+        ; <DY*^H80&^H1F00> - MOVE THE Y VALUE TO THE END OF THE 1ST BYTE.
         .WORD   ^H4000+<ZZ*^H20>+<DX/2&^H1F>+<DY*^H80&^H1F00>
-        .MEXIT ; Exit macro.
-        .ENDC ; END IF
-        .ENDC ; END IF
-        ; Draw relative vector. 
-        ; 0x0_______   000YYYYY YYYYYYYY IIIXXXXX XXXXXXXX
+        .MEXIT                     ; EXIT MACRO.
+        .ENDC                      ; END IF
+        .ENDC                      ; OTHERWISE..
+        ; DRAW AS A RELATIVE VECTOR, WHICH ALLOWS FOR LARGER VALUES.
+        ; THE BITMAP FOR THIS IS 4 BYTES LONG:
+        ;   000YYYYY YYYYYYYY IIIXXXXX XXXXXXXX
+        ; DY&^H1FFF - PUT THE Y VALUE IN 2ND BYTE OF 1ST BYTE PAIR.
+        ; <ZZ*^H2000> INTENSITY VALUE AT START OF 1ST BYTE IN 2ND PAIR.
+        ; <DX&^H1FFF> X VALUE IN 2ND BYTE OF 2ND BYTE PAIR.
         .WORD   DY&^H1FFF,<ZZ*^H2000>+<DX&^H1FFF>
-        .ENDM
+        .ENDM                      ; END MACRO
 \end{lstlisting}
