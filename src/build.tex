@@ -143,6 +143,7 @@ bytes themselves. This table shows the first ten or so triplets to give you an i
     \end{adjustbox}
   }\caption*{The triplets in \icode{ALEXEC.LDA} for ROM address \icode{9000} written to ROM Part 136002-237.}
 \end{figure}
+\vspace{-0.5cm}
 Notice how apparently wasteful this file format is: some of the triplets contain only byte! You can also notice
 that the triplets can appear out of order. For example the bytes for address \icode{90A2} are specified after the 
 bytes for \icode{90A1}. So perhaps for some binaries this encoding scheme may be more efficient than just raw bytes,
@@ -154,8 +155,12 @@ will find the final destination for these files in the printed circuit board shi
 are the parts indicated by stars at the top of the board.
 \begin{figure}[H]
       \centering
-      \frame{\includegraphics[width=12cm]{src/build/pcb.jpg}}%
+      \frame{\includegraphics[width=13cm]{src/build/pcb.jpg}}%
     \caption{The circuit board diagram containing the ROM chips that our ROM files are written to..}
 \end{figure}
 
-
+\begin{figure}[H]
+      \centering
+      \frame{\includegraphics[width=13cm]{src/build/PagedOut-TempestBuild.png}}%
+    \caption{Information Card describing the build process on modern systems.}
+\end{figure}
