@@ -189,7 +189,12 @@ game but it also does something important, which is update \icode{QSTATE} to dir
 
 Another way of describing what we have here is a 'state machine'. As the state of the system changes, \icode{EXSTAT} will execute
 a different routine, appropriate to the current state of the game. The one executed most often is the third one listed in our
-\icode{ROUTEAD} table. This is called \icode{PLAY} and its contents, as well as its name, are almost self-explanatory:
+\icode{ROUTEAD} table. This is called \icode{PLAY} and its contents, as well as its name, are almost self-explanatory.
+
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=14cm]{src/mainline/mainline-comic.png}%
+\end{figure}
 
 \begin{lstlisting}
 PLAY:
