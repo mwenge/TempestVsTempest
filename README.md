@@ -1,6 +1,6 @@
 # Tempest vs Tempest
 ## The Making and Remaking of Atari's Iconic Video Game
-[<img align="right" width=40% src="https://github.com/mwenge/t2k-25easypieces/raw/master/src/cover/pdf/cover_front.png">](https://github.com/mwenge/TempestVsTempest/releases/download/v0.02/TempestVsTempest_release.pdf) 
+[<img align="right" width=40% src="https://github.com/mwenge/t2k-25easypieces/raw/master/src/cover/pdf/cover_front.png">](https://raw.githubusercontent.com/mwenge/TempestVsTempest/refs/heads/master/out/TempestVsTempest_release.pdf) 
 In this book I attempt to explore and understand the code and craft of Dave Theurer's 'Tempest' (1981) and Jeff Minter's 'Tempest 2000' (1994).
 
 The idea is to explain how lots of different little things in each of the games actually work, down to the level of
@@ -9,7 +9,7 @@ how they are implemented in the 6502 (Tempest) and 68K Motorola (Tempest 2000) a
 I tried to keep it light and digestible so the book consists of lots of little chapters, each one presenting
 a hopefully-tasty morsel from one of the games.
 
-Work-in-progress is [available for free](https://github.com/mwenge/TempestVsTempest/releases/download/v0.02/TempestVsTempest_release.pdf).
+Work-in-progress is [available for free](https://raw.githubusercontent.com/mwenge/TempestVsTempest/refs/heads/master/out/TempestVsTempest_release.pdf).
 
 
 
