@@ -34,18 +34,21 @@ of the \icode{mainloop routine}:
 ; launches the GPU, then loops waiting for another sync.
 
 mainloop:
-        move #1,sync               ; Reset the sync
-        move #1,screen_ready       ; Reset the screen ready.
-        move pauen,_pauen          ; Reset the pause indicator.
-
-main:   tst sync                   ; loop waiting for another sync
-        bne main                   ; from the interrupt in 'Frame'
-
-        move #1,sync               ; reset the sync so that we wait for a new frame next time around.
-        move.l dscreen,gpu_screen
-
-        move.l mainloop_routine,a0 ; do the actual mainloop work, mainloop_routine
-        jsr (a0)                   ; is usually a reference to the 'draw_objects' routine.
+        move #1,sync      ; Reset the sync
+        move #1,screen_ready ; Signal to 'Frame' screen ready for display.
+        move pauen,_pauen ; Reset the pause indicator.
+    
+main:   tst sync          ; Loop waiting for another sync..
+        bne main          ; from the interrupt in 'Frame'.
+    
+        move #1,sync      ; Reset sync so that we wait for a new frame.
+        ; Use dscreen as the screen that GPU will draw everything to.
+        move.l dscreen,gpu_screen  
+    
+        ; Do the actual mainloop work, mainloop_routine is usually 
+        ; a reference to the 'draw_objects' routine.
+        move.l mainloop_routine,a0 ; Move mainloop_routine to a0. 
+        jsr (a0)         ; Call mainloop_routine. 
 \end{lstlisting}
 
 So instead of doing all the necessary GPU and Blitter operations during a vertical sync interrupt, we do them
@@ -58,12 +61,13 @@ the pixels for display.
 Here we see that when the game is initialized, \icode{draw\_objects} is selected as the destination for
 \icode{mainloop\_routine}, and then we enter the \icode{mainloop}.
 \begin{lstlisting}
+        ; The common entry point for single-player and head-to-head games.
 go_in:  move.l #rotate_web,routine
         move.l #0,warp_count
-        move.l #draw_objects,mainloop_routine  ; Make draw_objects the mainloop_routine
+        move.l #draw_objects,mainloop_routine
         move pauen,_pauen
-        clr db_on
-        bra mainloop
+        clr db_on             ; Enable double-buffering.
+        bra mainloop          ; Enter the mainloop until we lose a life.
 \end{lstlisting}
 
 We will investigate the mechanics of using the GPU and the Blitter in later sections, but for now let's get a
@@ -72,34 +76,34 @@ A quick glance through the top of the routine shows us drawing the starfield (\i
 
 \begin{lstlisting}[escapechar=\%]
 draw_objects:
-        tst h2h                 ; Are we in head to head mode?
-        bne nodraw              ; Yes, go to 'nodraw'.
+        tst h2h                    ; Are we in head to head mode?
+        bne nodraw                 ; Yes, go to 'nodraw'.
         clr h2hor
 stayhalt:
-        tst drawhalt            ; 
+        tst drawhalt               ; Should we stop drawing?
         bsr clearscreen
-        move.b sysflags,d0
-        and.l #$ff,d0
-        move.l d0,_sysflags     ;pass sys flags to GPU
-        tst sf_on               ; Is the starfield active?
-        bne dostarf             ; If yes, go to 'dostarf'.
-        bra gwb                 ; Otherwise do the web.
-
-dostarf:                        ; Prepare the starfield!
-        move.l #3,gpu_mode      ; mode 3 is starfield1
-        move.l vp_x,in_buf+4    ; Put x pos in the in_buf buffer.
-        move.l vp_y,in_buf+8    ; Put y pos in the buffer.
-        move.l vp_z,d0          ; Get the current z pos.
-        add.l vp_sf,d0          ; Increment it. 
-        move.l d0,in_buf+12     ; Add it to the buffer.
-        move.l #field1,d0       ; Get the starfield data structure.
-        move.l d0,in_buf+16     ; And put it in the buffer.
-        move.l warp_count,in_buf+20 ; Add the warp count.
+        move.b sysflags,d0         ; Copy sysflags to d0.
+        and.l #$ff,d0              ; Keep it between 0 and 255.
+        move.l d0,_sysflags        ; pass sys flags to GPU
+        tst sf_on                  ; Is the starfield active?
+        bne dostarf                ; If yes, go to 'dostarf'.
+        bra gwb                    ; Otherwise do the web.
+    
+        ; Prepare the starfield!
+dostarf:
+        move.l #3,gpu_mode         ; mode 3 is starfield1 in llama.gas
+        move.l vp_x,in_buf+4       ; Put x pos in the in_buf buffer.
+        move.l vp_y,in_buf+8       ; Put y pos in the buffer.
+        move.l vp_z,d0             ; Get the current z pos.
+        add.l vp_sf,d0             ; Increment it.
+        move.l d0,in_buf+12        ; Add it to the buffer.
+        move.l #field1,d0          ; Get the starfield data structure.
+        move.l d0,in_buf+16        ; And put it in the buffer.
+        move.l warp_count,in_buf+20   ; Add the warp count.
         move.l warp_add,in_buf+24   ; Add the warp increment.
-        lea fastvector,a0       ; Get the GPU routine to use.
-        jsr gpurun              ; do gpu routine
-        jsr gpuwait             ; Wait until its finished.
-
+        lea fastvector,a0          ; Get GPU routine to use in llama.gas.
+        jsr gpurun                 ; do gpu routine
+        jsr gpuwait                ; Wait until its finished.
 \end{lstlisting}
 
 As you can see 'doing the starfield' involves setting up a number of registers and variables
@@ -118,53 +122,55 @@ up a reasonably complex piece of GPU code. Note that at the end of the listing b
 will run, using all the data set up in the previous lines. So there is much more complexity and detail underneath,
 even here. We will cover this in more detail in the chapter devoted to webs.
 
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=13.7cm]{src/mainloop/mainloop-draw_objects-comic.png}%
+\end{figure}
+
 \begin{lstlisting}[escapechar=\%]
-gwb:
-        move.l vp_x,d3
+gwb:    move.l vp_x,d3
         move.l vp_y,d4
         move.l vp_z,d5
-
-dscud:
-solweb:
-        move #120,d0
-        add palfix2,d0
-        and.l #$ff,d0
+    
+solweb: move #120,d0
+        add palfix2,d0             ; Adjust for PAL screens if required.
+        and.l #$ff,d0              ; Keep it between 0 and 255
         move.l d0,ycent
         tst l_solidweb
         beq vweb
-        cmp #1,webcol           ;our 'transparent' webs...
+        cmp #1,webcol              ; our 'transparent' webs...
         beq vweb
-        lea _web,a6             ;draw a solid poly Web
+        lea _web,a6                ; draw a solid poly Web
         tst 34(a6)
         beq n_wb
-        lea in_buf,a0
+        lea in_buf,a0              ; Point our GPU RAM input buffer at a0.
         move.l 46(a6),d0
         move.l d0,(a0)
-        move.l 4(a6),d0
+        move.l 4(a6),d0            ; Get the source X position.
         sub.l d3,d0
         move.l d0,4(a0)
-        move.l 8(a6),d0
+        move.l 8(a6),d0            ; Get the object's Y position.
         sub.l d4,d0
         move.l d0,8(a0)
-        move.l 12(a6),d0
+        move.l 12(a6),d0           ; Get the object's Z position.
         sub.l d5,d0
         bmi n_wb
         move.l d0,12(a0)
-        move l_solidweb,d0   ; The web data structure.
-        and.l #$ff,d0
+        move l_solidweb,d0
+        and.l #$ff,d0              ; Keep it between 0 and 255
         move.l d0,16(a0)
         move 28(a6),d0
-        and.l #$ff,d0
+        and.l #$ff,d0              ; Keep it between 0 and 255
         move.l d0,24(a0)
-        move frames,d0
-        and.l #$ff,d0
+        move frames,d0             ; Stash the frame count in d0.
+        and.l #$ff,d0              ; Keep it between 0 and 255
         move.l d0,28(a0)
         move.l #w16col,32(a0)
-        move.l #0,gpu_mode
-        lea equine2,a0        ; The GPU shader routine for webs.
-        jsr gpurun
-        jsr gpuwait
-        jsr WaitBlit
+        move.l #0,gpu_mode         ; Select the web3d shader in donky.gas.
+        lea equine2,a0             ; Load the GPU module in donky.gas.
+        jsr gpurun                 ; Run the selected GPU module.
+        jsr gpuwait                ; Wait for the GPU to finish.
+        jsr WaitBlit               ; Wait for the blitter to finish.
 \end{lstlisting}
 You may note at the end that we call a routine called \icode{WaitBlit}. This is because in addition to computing the
 polygons that make up the 3D web, the GPU also 'blits' or writes its results to a buffer that will ultimately be used
@@ -183,61 +189,64 @@ n_wb:   move.l activeobjects,a6 ; activeobjects is a list of things to draw!
         bra odend
 
         ; A loop for processing everything in 'activeobjects'.
-d_obj:  cmpa.l #-1,a6      ; Have we reached the end of activeobjects? 
-        beq oooend         ; If yes, skip to end.
-        move 50(a6),d0     ; Is the object marked for deletion? 
-        beq no_unlink      ; If not, skip to no_unlink and draw it.
-
-        ; This verbose section up until no_unlink is concerned entirely 
+d_obj:  cmpa.l #-1,a6         ; Have we reached the end of activeobjects?
+        beq oooend            ; If yes, skip to end.
+        move 50(a6),d0        ; Is the object marked for deletion?
+        beq no_unlink         ; If not, skip to no_unlink and draw it.
+    
+        ; This verbose section up until no_unlink is concerned entirely
         ; with deleting the dead object from the activeobjects list.
-        move.l 56(a6),d1
-        bmi tlink
-        move.l d1,a5
-        move.l 60(a6),60(a5) ; Make it invisible to the vsync interrupt.
-
-tlink:  move #-1,50(a6)     ; mark it bad
-        move.l 60(a6),-(a7)
-        move d0,-(a7)
+        move.l 56(a6),d1      ; Get address of previous object.
+        bmi tlink             ; 
+        move.l d1,a5          ; Move previous object to a5.
+        move.l 60(a6),60(a5)  ; Make it invisible to the vsync interrupt.
+    
+tlink:  move #-1,50(a6)       ; mark it bad
+        move.l 60(a6),-(a7)   ; Stash the next object address
+        move d0,-(a7)         ; Stash some values in the stack so we can restore them later.
         move.l a6,a0
-        move 32(a6),-(a7)   ;save player ownership tag
-        move (a7)+,d1
-        move (a7)+,d0
-        lea uls,a1
-        asl #2,d0
-        move.l -4(a1,d0.w),a1
-        jmp (a1)
-
-uls: dc.l afinc,ashinc,pshinc
-
-pshinc: tst d1              ;player ownership of an unlinked bullet
+        move 32(a6),-(a7)     ; save player ownership tag
+        move (a7)+,d1         ; Restore stashed values from the stack.
+        move (a7)+,d0         ; Restore stashed values from the stack.
+        lea uls,a1            ; Point a1 at uls.
+        asl #2,d0             ; Multiply it by 4.
+        move.l -4(a1,d0.w),a1 ; Use d0 as an index in to 'uls'.
+        jmp (a1)              ; Jump to the entrypoint below selected by the index.
+    
+        ; Object specific unlinking/deletion routines
+uls:    dc.l afinc,ashinc,pshinc
+    
+pshinc: tst d1                ; player ownership of an unlinked bullet
         beq ulsh1
         add #1,shots+2
-ulo:    move #1,locked
-        bsr unlinkobject        
-        clr locked
-        bra nxt_o
+ulo:    move #1,locked        ; Lock the activeobjects list while we delete from it.
+        bsr unlinkobject      ; Remove the object from the active objects list.
+        clr locked            ; Unlock the activeobjdects list again.
+        bra nxt_o             ; Finished deleting, go the the next object.
 ulsh1:  add #1,shots
         bra ulo
+    
 ashinc: add #1,ashots
-afinc:  add #1,afree
+    
+afinc:  add #1,afree          ; Make the slot available for a new activobject.
         bra ulo
-
+    
         ; Actually draw the object.
         ; No need to remove the object, just draw it.
-no_unlink:      
-        lea draw_vex,a0      ; Get our table of draw routines.
-        move 34(a6),d0       ; Is this object smaller than a pixel?
-        bpl notpxl           ; If not, go to notpxl.
-        move.l #draw_pel,a0  ; Use draw_pex for pixel-size objects.
-        bra apal             ; Jump to the draw call. 
-notpxl: asl #2,d0            ; Multiply the val in d0 by 2.
-        move.l 0(a0,d0.w),a0 ; Use it as an index into draw_vex.
-apal:   move.l 60(a6),-(a7)  ; Store the index of next object in a7. 
-        jsr (a0)             ; But first call the routine in draw_vex.
-        jsr gpuwait          ; Wait for the GPU to finish.
-nxt_o:  clr locked           ; Clear 'locked' just in case.
-nxt_ob: move.l (a7)+,a6      ; Put the index of next object back in a6.
-        bra d_obj            ; Go to the next object.
+no_unlink:
+        lea draw_vex,a0       ; Get our table of draw routines.
+        move 34(a6),d0        ; Is this object smaller than a pixel?
+        bpl notpxl            ; If not, go to notpxl.
+        move.l #draw_pel,a0   ; Use draw_pex for pixel-size objects.
+        bra apal              ; Jump to the draw call.
+notpxl: asl #2,d0             ; Multiply the val in d0 by 4.
+        move.l 0(a0,d0.w),a0  ; Use it as an index into draw_vex.
+apal:   move.l 60(a6),-(a7)   ; Store the index of next object in a7.
+        jsr (a0)              ; But first call the routine in draw_vex.
+        jsr gpuwait           ; Wait for the GPU to finish.
+nxt_o:  clr locked            ; Clear 'locked' just in case.
+nxt_ob: move.l (a7)+,a6       ; Put the index of next object back in a6.
+        bra d_obj             ; Go to the next object.
 oooend: rts
 
 \end{lstlisting}
