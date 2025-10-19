@@ -34,21 +34,21 @@ of the \icode{mainloop routine}:
 ; launches the GPU, then loops waiting for another sync.
 
 mainloop:
-        move #1,sync      ; Reset the sync
-        move #1,screen_ready ; Signal to 'Frame' screen ready for display.
-        move pauen,_pauen ; Reset the pause indicator.
-    
-main:   tst sync          ; Loop waiting for another sync..
-        bne main          ; from the interrupt in 'Frame'.
-    
-        move #1,sync      ; Reset sync so that we wait for a new frame.
-        ; Use dscreen as the screen that GPU will draw everything to.
-        move.l dscreen,gpu_screen  
-    
-        ; Do the actual mainloop work, mainloop_routine is usually 
-        ; a reference to the 'draw_objects' routine.
-        move.l mainloop_routine,a0 ; Move mainloop_routine to a0. 
-        jsr (a0)         ; Call mainloop_routine. 
+      move #1,sync      ; Reset the sync.
+      move #1,screen_ready ; Signal to 'Frame' screen ready for display.
+      move pauen,_pauen ; Reset the pause indicator.
+  
+main: tst sync          ; Loop waiting for another sync..
+      bne main          ; from the interrupt in 'Frame'.
+  
+      move #1,sync      ; Reset sync so that we wait for a new frame.
+      ; Use dscreen as the screen that GPU will draw everything to.
+      move.l dscreen,gpu_screen  
+  
+      ; Do the actual mainloop work, mainloop_routine is usually 
+      ; a reference to the 'draw_objects' routine.
+      move.l mainloop_routine,a0 ; Move mainloop_routine to a0. 
+      jsr (a0)          ; Call mainloop_routine. 
 \end{lstlisting}
 
 So instead of doing all the necessary GPU and Blitter operations during a vertical sync interrupt, we do them
@@ -74,14 +74,10 @@ We will investigate the mechanics of using the GPU and the Blitter in later sect
 sense of the kind of things the \icode{draw\_objects} routine uses the GPU and Blitter for.
 A quick glance through the top of the routine shows us drawing the starfield (\icode{dostarf}).
 
+\section*{drawing objects}
 \begin{lstlisting}[escapechar=\%]
 draw_objects:
-        tst h2h                    ; Are we in head to head mode?
-        bne nodraw                 ; Yes, go to 'nodraw'.
-        clr h2hor
-stayhalt:
-        tst drawhalt               ; Should we stop drawing?
-        bsr clearscreen
+        bsr clearscreen            ; Clear the screen.
         move.b sysflags,d0         ; Copy sysflags to d0.
         and.l #$ff,d0              ; Keep it between 0 and 255.
         move.l d0,_sysflags        ; pass sys flags to GPU
@@ -280,7 +276,7 @@ Each object in the \icode{activeobjects} list has the following structure:
         28-30 & XZ Orientation \& XZ orientation  \\
         30-32 & Y Rotation \\
         32-34 & Z Rotation \\
-        34-36 & Index into draw routine in \icode{draw\_vex}.
+        34-36 & Index into draw routine in \icode{draw\_vex}.\\
         36-38 & Start address of pixel data. \& Delta Z \\
         38-40 & Y & Colour change value\\
         40-42 & Colour \\
@@ -427,7 +423,7 @@ soldraw:
 \end{lstlisting}
 
 
-\section*{The \icode{Frame} Routine}
+\section*{creating and updating objects}
 We set up our frame interrupt handler near the very start of initialisation:
 
 \begin{lstlisting}
@@ -446,141 +442,178 @@ We set up our frame interrupt handler near the very start of initialisation:
         move.w  d0,sr           ;interrupts on
 \end{lstlisting}
 
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=13.7cm]{src/mainloop/mainloop-run_objects-comic.png}%
+\end{figure}
+
 \begin{lstlisting}
 Frame:
-;       add #1,frames
-
-;       move.l #$FFFFFFFF,BORD1
-        movem.l d0-d5/a0-a2,-(a7)       ;simple thang to make
-
-; vertical blank code goes here
-
-
-
+        movem.l d0-d5/a0-a2,-(a7)   ; Stash values in d0-d5 and a0-a2
+    
+        ; Check if we're in a vertical blank or not.
 fr:     move INT1,d0
-        move d0,-(a7)
-        btst #0,d0
-        beq CheckTimer          ;go do Music thang
-
-
-        movem.l d6-d7/a3-a6,-(a7)
-        move.l blist,a0
-        move.l dlist,a1
-        move.l #$30,d0
-xlst:   move.l (a0)+,(a1)+      ;copy built list to displayed list
-        dbra d0,xlst
-
-        bsr RunBeasties         ;build the next one
-
-
-setdb:          
-;
-; this code writes the proper screen address to double buffered objects in the display list
-
-;       lea 32(a0),a0           ;skip background object
-
-        tst screen_ready        ;is GPU ready with a new screen
-        beq no_new_screen       ;no
-;       tst pawsed
-;       bne no_new_screen
-        tst sync
-        beq no_new_screen
-        move.l cscreen,d1
-        move.l dscreen,cscreen
-        move.l d1,dscreen       ;swap screens
-        clr screen_ready
-        clr sync
+        move d0,-(a7)              ; Stash some values in the stack so we can restore them later.
+        btst #0,d0                 ; Are we in a vertical blank?
+        beq CheckTimer             ; If not, skip everything and check for input only.
+    
+        ; We're in a vertical blank so can update some state.
+        ; Copy the display list we built in 'blist' to 'dlist'. The
+        ; display list will be used by the Objects Processor to paint
+        ; the next frame. The pixel data for all the objects in the display
+        ; list was generated by the most recent run of 'draw_objects' in
+        ; 'mainloop'.
+        movem.l d6-d7/a3-a6,-(a7)   ; Stash data and address registers.
+        move.l blist,a0            ; Stash blist in a0.
+        move.l dlist,a1            ; Stash dlist in a1.
+        ; Copy all bytes in blist to dlist.
+        move.l #$30,d0             ; 0x30 units of 4 bytes each to be copied.
+xlst:   move.l (a0)+,(a1)+         ; Copy 4 bytes from blist to dlist.
+        dbra d0,xlst               ; Keep copying until we run out of bytes.
+    
+        ; Build the display list for the next frame.
+        bsr RunBeasties            ; build the next one
+    
+        ; Minter: "this code writes the proper screen address to double buffered objects in the display list."
+        ; In 'main_loop' we prepare dscreen (double-buffered screen) with objects drawn by the GPU/Blitter. Once it's ready
+        ; we set screen_ready. Here we check if screen_ready is set and if so, we swap dscreen into
+        ; 'cscreen' (current screen). We will then update the main screen object in the Display List to
+        ;  reference this new address.
+        ; Check if we can swap in the new screen prepared in 'mainloop'.
+setdb:  tst screen_ready           ; has 'mainloop' finished preparing a new screen?
+        beq no_new_screen          ; If no, go to no_new_screen.
+        tst sync                   ; Has mainloop signalled it safe to swap screens?
+        beq no_new_screen          ; If no, go to new_screen.
+    
+        ; Swap dscreen into cscreen so that the new screen can be used in the Object List.
+        move.l cscreen,d1          ; Stash cscreen in d1.
+        move.l dscreen,cscreen     ; Overwrite cscreen with dscreen.
+        move.l d1,dscreen          ; Overwrite dscreen with stashed cscreen.
+        clr screen_ready           ; Signal that a new screen is required before we come here again.
+        clr sync                   ; Signal to mainloop it can build a new screen.
+    
+        ; Check if we have a new screen to display.
 no_new_screen:
-
-        move.l dlist,a0
-        move db_on,d7           ;check for double buffer on (d7 holds # of contiguous DB'ed screens)
-        bmi no_db
-
-
-
-stdb:   move.l cscreen,d6       ;get address of current displayed screen
-        and.l #$fffffff8,d6     ;lose three LSB's
-        lsl.l #8,d6             ;move to correct bit position
-        move.l (a0),d1          ;get first word of the BMO
-        and.l #$7ff,d1          ;clear data pointer
-        or.l d6,d1              ;mask in new pointer
-        move.l d1,(a0)          ;replace in OL
-        lea 32(a0),a0           ;skip to nxt object
-;       dbra d7,stdb            ;loop for all DB backgrounds
-
-
-no_db:  
-        jsr dowf
-
-        tst pal
-        bne dtoon
-        add #1,tuntime          ;do NTSC interrupts only 5/6 times
-        cmp #4,tuntime
-        ble dtoon
-        cmp #6,tuntime
-        bne ntoon
-        clr tuntime     
-dtoon:  tst modstop
-        bne ntoon
-        jsr NT_VBL
-ntoon:
-
-
-;       bsr readpad                     ;get joy values
-        tst pawsed
-        bne zial
-        add #1,frames 
-        move.l fx,a0
-        jsr (a0)                ;for plaette changes etc
-zial:
-        tst locked
-        beq doframe
-;       move #1,drawhalt
-        bra loseframe
-doframe: 
-        move.l routine,a0
-        jsr (a0)                ;call do thangs routine
-        clr drawhalt
-
+        move.l dlist,a0            ; Point a0 at the display list.
+        move db_on,d7              ; Is double-buffering enabled?
+        bmi no_db                  ; If not, skip to warp flash.
+    
+        ; Update the main screen item in the Object List with the address of the new screen contained
+        ; in cscreen. This has the effect of ensuring all the objects we drew with the GPU
+        ; and Blitter in 'mainloop' are actually written to the screen by the Object Processor.
+stdb:   move.l cscreen,d6          ; Get address of current displayed screen
+        and.l #$fffffff8,d6        ; lose three LSB's
+        lsl.l #8,d6                ; move to correct bit position
+        move.l (a0),d1             ; get first word of the BMO
+        and.l #$7ff,d1             ; clear data pointer
+        or.l d6,d1                 ; mask in new pointer
+        move.l d1,(a0)             ; replace in OL
+        lea 32(a0),a0              ; This skips to the next object but is unnecessary since we are
+                            ; only updating one item (the main screen) in the Object List with
+                            ; our new screen pointer.
+    
+        ; Do the warp flash effect.
+no_db:  jsr dowf                   ; Call the warp flash effect.
+    
+        ; Now do some magic for NTSC displays. If this is an NTSC display we want to skip playing
+        ; sounds every 5th and 6th interrupt for some reason.
+        tst pal                    ; Are we a PAL display?
+        bne dtoon                  ; If no, we can skip this part.
+        add #1,tuntime             ; Increment our visit count.
+        cmp #4,tuntime             ; Less than 4?
+        ble dtoon                  ; If less than 4, go ahead and play a sound.
+        cmp #6,tuntime             ; Is it 6?
+        bne ntoon                  ; If not, skip playing a sound this time.
+        clr tuntime                ; If it is 6, reset to zero.
+    
+        ; Something to do with the Imagitec sound chip. Probably whether we should play
+        ; a sound during the interrupt?
+dtoon:  tst modstop                ; Is sound turned off?
+        bne ntoon                  ; If yes, don't play a sound.
+        jsr NT_VBL                 ; If no, play the next sound using the Imagitec sound synth.
+    
+        ; Do any in-game effects.
+ntoon:  tst pawsed                 ; Are we paused?
+        bne zial                   ; If so, skip.
+        add #1,frames              ; Add to the number of frames.
+        move.l fx,a0               ; Stash the current 'fx' routine in a0.
+        jsr (a0)                   ; Run the routine.
+    
+        ; 'mainloop' might be busy processing stuff in the 'activeobjects' list. If it is,
+        ; we will have to skip doing anything in this frame.
+zial:   tst locked                 ; Are we in the middle of adding stuff to activeobjects?
+        beq doframe                ; If not, do our context-specific per-frame routine.
+        bra loseframe              ; If we're busy, skip this frame.
+    
+        ;
+        ; Perform any context specific updates for this frame.
+        ; 'routine' can be any one of:
+        ;  - rrts, pauson, pausing, budb, pausoff, paws, zoom1, zoomto,
+        ;    waitfor, zprev, znext, zshow, oselector, seldb, tunrun, text_o_run,
+        ;    m7run, vicrun, failcount, viccount, txen, tgoto, rotate_web,
+        ;    zoom3, zap_player, take_me_to_your_leader, snatch_it_away,
+        ;    moveclaw, zoom2
+        ;
+        ; rotate_web -> moveclaw -> zoom1 -> zoom2 ->
+        ; zoomto -> waitfor -> zprev -> zshow -> waitfor
+        ;                   -> znext -> zshow
+        ;                   -> rrts
+        ; oselector ->seldb -> oselector
+        ; _tunn -> tunrun ->
+        ;
+        ; The main update to the state of all objects is called from moveclaw.
+        ; This calls run_objects which will update the state of everything in the
+        ; activeobjects list.
+doframe:
+        move.l routine,a0          ; Stash the current 'routine' in a0.
+        jsr (a0)                   ; Run it.
+        clr drawhalt               ; This is redundant, it is never set anywhere.
+    
 loseframe:
-        bsr checkpause       ;do pause and overriding reset command
-        bsr domod               ;do music handling      
-        btst.b #0,sysflags
-        bne chit                ;check for no h.interlace
-        move frames,d0
-        and #$01,d0
-        add #SIDE,d0
-        sub palside,d0
-        move d0,beasties        ;H. Interlace mode
-chit:   movem.l (a7)+,d6-d7/a3-a6
-
-CheckTimer: move (a7)+,d0       ;get back int status
-        move d0,-(a7)
-        btst #3,d0
-        beq exxit
-
-        tst roconon             ;Rotary Controller enabled?
-        bne roco
-        jsr dopad
-        bra exxit               ;Yeah, interrupts at 8x normal speed, go do special stuff
-
-roco:   move pitcount,d1
-        and #$07,d1
-        bne rotonly
-        jsr dopad
-rotonly: add #1,pitcount
-        bsr readrotary
-
-
-
-exxit:  move (a7)+,d0
-        lsl #8,d0
-        move.b intmask,d0
-        move d0,INT1
-        move d0,INT2 
-        movem.l (a7)+,d0-d5/a0-a2
-;       move.l #0,BORD1
-;       move.w #$101,INT1       ;do interrupt stuff
-;       move.w  #0,INT2
-        rte
+        bsr checkpause             ; Check if the player has requested to pause the game.
+        bsr domod                  ; Play a frame of music in the Imagitec synth.
+        btst.b #0,sysflags         ; Check for hardware interlacing.
+        bne chit                   ; If not enabled, skip.
+    
+        ; Some kind of fixing up for hardware interlace mode.
+        move frames,d0             ; Stash frames in d0.
+        and #$01,d0                ; Get the lsb.
+        add #SIDE,d0               ; Add SIDE.
+        sub palside,d0             ; Subtract PAL side.
+        move d0,beasties           ; Store in beasties.
+    
+chit:   movem.l (a7)+,d6-d7/a3-a6   ; Restore values to data and address registers we stashed at the start.
+    
+CheckTimer:
+        move (a7)+,d0              ; Restore stashed d0.
+        move d0,-(a7)              ; Stash it again.
+        btst #3,d0                 ; Do we need to check for joypad in put?
+        beq exxit                  ; No, we can exit the interrupt.
+    
+        ; Check for joypad input. The logic for rotary controllers was added to support
+        ; the potential release of a rotary controller for the Jaguar, but this never happened.
+        ; So all rotary controller logic in Tempest 2000 is unused.
+        tst roconon                ; Is Rotary Controller enabled?
+        bne roco                   ; Yes, do the rotary controller.
+        jsr dopad                  ; No, check for normal joypad in put.
+        bra exxit                  ; We're done - so exit interrupt.
+    
+        ; Logic for reading input from the never-built and never-released rotary controller.
+roco:   move pitcount,d1           ; Get the rotary input interval counter.
+        and #$07,d1                ; Do a modulus 7 on the counter.
+        bne rotonly                ; If non-zero, read the rotary control only.
+        jsr dopad                  ; Otherwise, look for button presses too.
+rotonly:
+        add #1,pitcount            ; Increment the interval counter.
+        bsr readrotary             ; Read input from the rotary controller.
+    
+        ; Minter: "Yeah, interrupts at 8x normal speed, go do special stuff."
+exxit:
+        move (a7)+,d0              ; Restore stashed d0.
+        lsl #8,d0                  ; Shift left 8 bits.
+        move.b intmask,d0          ; Add our interrupt mask.
+        move d0,INT1               ; Add to INT1.
+        move d0,INT2               ; Add to INT2.
+        movem.l (a7)+,d0-d5/a0-a2   ; Restore stashed values.
+        rte                        ; Return from the interrupt.
 \end{lstlisting}
