@@ -1,0 +1,142 @@
+\chapter{jump}
+\lhead[tempest 2000]{}
+\label{sec:listing}
+\lstset{style=68KStyle}
+
+Jumping off the web was a new game feature introduced by Tempest 2000. It allows the
+player to pop off the web and avoid colliding with enemies. This behaviour is managed
+by the routine responsible for updating the player's claw, \icode{claw\_con1}. We encountered
+this routine briefly in
+\hyperref[sec:updating]{\textcolor{blue}{'mainloop'}}.
+Here is the part concerned with detecting if the player has pressed the 'Fire 2' button, which
+intiates a jump.
+
+\begin{lstlisting}
+chek4jump:
+        cmp #-2,wave_tim           ; Is the enemy wave over?
+        beq cce                    ; If so, don't jump.
+        tst jenable                ; Is jumping allowed?
+        beq cce                    ; If not, don't jump.
+        move.l fire_2,d0           ; Get the 'fire 2' button.
+        and.l pad_now,d0           ; Check if it's been pressed.
+        beq cce                    ; If not, skip to cce, otherwise..
+        move.l #-$20000,cjump      ; .. start a jump
+        move #6,sfx                ; Select the 'Player Jump' sound effect.
+        jsr fox                    ; Make a v. silly noise
+cce:    move.l pad_now,d0          ; Get currently pressed buttons.
+        bra clawcon                ; Do the rest of the claw update routine.
+\end{lstlisting}
+
+From looking at the above, maybe you can divine that processing the jump is going to be
+managed by a single variable called \icode{cjump}. All we do here is initialize it
+to the slightly eye-watering value of \icode{-\$20000}, which is -131072 in decimal. As we
+shall see, there is a trick to this number that allows the jump to be implemented nice
+and compactly.
+
+\clearpage
+Before we see how the magic was achieved, let's briefly consider what is actually required
+to achieve a jump-like effect. We visualize this in the simplified sequence of diagrams 
+below: the claw moves gradually off the top of the web along its Z axis. That's it.
+
+\begin{minipage}[c]{0.31\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5.5cm,center}
+      \includegraphics[width=12cm]{src/jump/web_29.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.31\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5.5cm,center}
+      \includegraphics[width=12cm]{src/jump/web_15.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.31\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5.5cm,center}
+      \includegraphics[width=12cm]{src/jump/web_1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+So to achieve a jump, we just have to adjust the Z position of the claw every time we
+are updating its position in \icode{claw\_con1}. There is one added complication of course,
+the claw has to come back down to earth again.
+
+\begin{minipage}[c]{0.31\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5.5cm,center}
+      \includegraphics[width=12cm]{src/jump/web_1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.31\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5.5cm,center}
+      \includegraphics[width=12cm]{src/jump/web_15.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.31\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5.5cm,center}
+      \includegraphics[width=12cm]{src/jump/web_29.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+This is where the slightly magic value of \icode{-\$20000} starts to come in handy. It has the
+property of being negative. In assembler arithmetic, negative values have a very useful property
+if you keep adding positive values to them. At first they keep getting smaller, but when they reach
+zero any future additions will mean they start getting bigger again. In other words, they cycle
+around like a clock. So in our case if we keep adding some value to \icode{-\$20000} it will eventually
+reach \icode{\$00000} and then start climbing to \icode{\$20000} again. 
+
+This means that all we have to do to implement our jump is to choose a value to add to \icode{cjump} and
+set that as the claw's Z position every time we're updating the claw object in \icode{claw\_con1}. At first
+the claw will get nearer to us, but once \icode{cjump} becomes positive again it will start receding from us 
+once more. In this case, the value we choose to add each time is \icode{\$c11} (3089 in decimal). This results
+in approximately 42 steps on the way up and 42 on the way down.
+
+\begin{lstlisting}
+        ; Process a claw jump if necessary.
+cc2:    tst t2k                    ; Are we playing T2K?
+        beq cce                    ; If not, skip to clawcon.
+        ; Process a claw jump.
+        move.l cjump,d0            ; Store the jump var in d0.
+        beq chek4jump              ; Skip if not currently jumping..
+        add.l d0,12(a6)            ; Otherwise set the claw's new Z position.
+        move.l 12(a6),d1           ; Store the claw's Z position in d1.
+        move #webz-80,d2           ; Store the web's Z position in d2.
+        swap d2                    ; Swap first 2 bytes with last 2 bytes.
+        clr d2                     ; Clear the last 2 bytes of d2.
+        sub.l d2,d1                ; Subtract the web's Z from the claw's Z.
+        add.l vp_zbase,d1          ; Add the base viewpoint to the claw's Z.
+        move.l d1,vp_z             ; Store as the new player's Z viewpoint.
+        move.l d1,vp_ztarg         ; Store as the new player's Z viewpoint.
+        add.l #$c11,cjump          ; Add 3089 to cjump.
+\end{lstlisting}
+
+Of course we also have to test for when the jump is over. We've 'hit the ground' when
+the claw finally reaches the same Z position as the web again, or event slightly past it.
+When this happens we clamp the claw to the web and reset everything so that the claw and
+the player's viewpoint are back to normal again. That was easy.
+
+\begin{lstlisting}
+        tst.l d0                   ; Test prev val of cjump.
+        bmi cce                    ; If less than 0, jump is still active.
+        cmp #webz-80,12(a6)        ; If web Z less than claw Z..
+        blt cce                    ; .. then jump is still active.
+        move #webz-80,12(a6)       ; Otherwise jump over, attach claw to web.
+        clr 14(a6)                 ; Clear the lower 2 bytes of claw's Z. 
+        clr.l cjump                ; Clear the jump variable.
+        and.l #$fffc0000,vp_z      ; Restore the player's viewpoint.
+        and.l #$fffc0000,vp_ztarg  ; Restore the player's viewpoint.
+\end{lstlisting}
