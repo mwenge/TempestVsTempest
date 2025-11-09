@@ -1,52 +1,83 @@
-\chapter{superzapper}
+\chapter{superzap}
 \lhead[tempest]{}
 \label{sec:if}
 \lstset{style=6502Style}
 
+Casting our minds back to 
+\hyperref[sec:mainline]{\textcolor{blue}{our discussion of the mainline routine,}} you may recall 
+that one of the things we do during each 'tick' of the game's clock is update the progress
+of any 'super zap' that is in progress:
+\begin{lstlisting}
+PLAY:
+        JSR MOVCUR              ;MOVE CURSOR AROUND
+        JSR FIREPC              ;FIRE PLAYER CHARGE
+        JSR PROSUZ              ;PROCESS SUPER ZAP
+        ...
+\end{lstlisting}
 
+In case you're not familiar with what a \icode{SUPER ZAP} is when it's at home, this is when
+the player presses the 'kill everything' button on the \textit{Tempest} console and the game
+logic dutifully annihilates your enemies for you. It can only be used twice on each level,
+so must be applied sparingly. The first press will kill all enemies and enemy bullets, with the
+exception of tankers. While the second press will kill just one additional enemy.
+
+\begin{lstlisting}
+CSUMAX=2                        ; MAX USES OF SUPER ZAP IS 2.
+CSUINT=1                        ; KILL ENEMIES AT EVERY 2ND TICK OF TIMER.
+CSUSTA=3                        ; CONTROLS NUMBER OF ENEMIES TO KILL. 
+        .SBTTL INITIALIZE SUPER ZAP
+INISUZ:
+        LDA I,0                 ; STORE 0 IN THE 'A' REGISTER.
+        STA SUZCNT              ; SET SUPER ZAP USE COUNTER TO 0.
+        STA SUZTIM              ; SET SUPER ZAP TIMER TO 0.
+        RTS
+\end{lstlisting}
+
+\clearpage
 \begin{lstlisting}
   .SBTTL PROCESS SUPER ZAPPER
 PROSUZ:
   LDA QSTATUS                      ; GET CURRENT GAME STATE..
   IFMI                             ; IF WE'RE NOT IN ATTRACT MODE..
-  LDA SUZTIM                       ; CHECK THE SUPERZAP TIMER..
-  IFEQ                             ; IF ITS ZERO..
-    ; ..THEN MAYBE WE NEED TO TURN SUPERZAPPING ON.
-    ; FRST WE CHECK IF PLAYER IS ALIVE AND
-    ; THE SUPERZAP BUTTON HAS BEEN PRESSED.
-    LDA CURSL2                     ; GET PLAYER STATUS.
-    IFPL                           ; IF THE PLAYER IS ALIVE..
-    LDA SWFINA                     ; CHECK BUTTON PRESSES FOR..
-    AND I,MSUZA                    ; THE SUPERZAPPER BUTTON.
-    IFNE                           ; IF ZAP WAS PRESSED..
-    LDA SUZCNT                     ; GET NO. OF ZAPS USED SO FAR.
-    CMP I,CSUMAX                   ; IS IT EQUAL TO THE MAX AVAIL?
+    LDA SUZTIM                     ; CHECK THE SUPERZAP TIMER..
+    IFEQ                           ; IF ITS ZERO..
+      ; ..THEN MAYBE WE NEED TO TURN SUPERZAPPING ON.
+      ; FRST WE CHECK IF PLAYER IS ALIVE AND
+      ; THE SUPERZAP BUTTON HAS BEEN PRESSED.
+      LDA CURSL2                   ; GET PLAYER STATUS.
+      IFPL                         ; IF THE PLAYER IS ALIVE..
+      LDA SWFINA                   ; CHECK BUTTON PRESSES FOR..
+      AND I,MSUZA                  ; THE SUPERZAPPER BUTTON.
+      IFNE                         ; IF ZAP WAS PRESSED..
+      LDA SUZCNT                   ; GET NO. OF ZAPS USED SO FAR.
+      CMP I,CSUMAX                 ; IS IT EQUAL TO THE MAX AVAIL (2)?
       IFCC                         ; IF NOT..
-      INC SUZCNT                   ; THEN INCREMENT THE ZAPS USED AND..
-      LDA I,1                      ; .. PUT 1 IN THE ..
-      STA SUZTIM                   ; NEW ZAP TIMER
+        INC SUZCNT                 ; THEN INCREMENT THE ZAPS USED AND..
+        LDA I,1                    ; .. PUT 1 IN THE ..
+        STA SUZTIM                 ; NEW ZAP TIMER
       ENDIF
-    LDA SWFINA                     ; GET THE BUTTON PRESSES
-    AND I,^C<MSUZA!MFAKE>          ; TURN OFF THE ZAP PRESS..
-    STA SWFINA                     ; SO WE DON'T USE IT AGAIN NEXT TIME.
+      LDA SWFINA                   ; GET THE BUTTON PRESSES
+      AND I,^C<MSUZA!MFAKE>        ; TURN OFF THE ZAP PRESS..
+      STA SWFINA                   ; SO WE DON'T USE IT AGAIN NEXT TIME.
+      ENDIF
+      ENDIF
+    ELSE  ; THE SUPERZAPPER TIMER IS NON-ZERO SO.. 
+      ; ..WE'RE ALREADY ZAPPING. UPDATE OUR TIMERS AND KILL THINGS.
+      INC SUZTIM                   ; INCREMENT ZAP TIMER BY ONE.
+      LDX SUZCNT                   ; PUT NO. OF ZAPS USED IN X.
+      LDA SUZTIM                   ; GET CURRENT VALUE OF ZAP TIMER.
+      ; TIMAX IS AN ARRAY: .BYTE 00,13,05
+      ; SUZCNT IS USED AS AN INDEX INTO TIMAX TO GET THE NUMBER OF TICKS
+      ; FOR THIS ZAP.THIS MEANS THE FIRST ZAP GETS 13 FRAMES, WHILE THE
+      ; SECOND ZAP GETS 5.
+      CMP X,TIMAX                  ; TIMER REACHED MAX TIME YET?
+      IFCS                         ; IF YES..
+      LDA I,0                      ; LOAD 0 TO A REGISTER..
+      STA SUZTIM                   ; .. AND USE IT TO DEACTIVATE ZAP
+      ENDIF
+      ; KILL THINGS!
+      JSR KILENE                   ; WIPE OUT INVADERS & CHARGES
     ENDIF
-    ENDIF
-  ELSE  ; THE SUPERZAPPER TIMER IS NON-ZERO SO.. 
-    ; ..WE'RE ALREADY ZAPPING. UPDATE OUR TIMERS AND KILL THINGS.
-    INC SUZTIM                     ; INCREMENT ZAP TIMER BY ONE.
-    LDX SUZCNT                     ; PUT NO. OF ZAPS USED IN X.
-    LDA SUZTIM                     ; GET CURRENT VALUE OF ZAP TIMER.
-    ; TIMAX IS AN ARRAY: .BYTE 00,13,05
-    ; SO THE FIRST ZAP GETS 13 FRAMES, WHILE THE
-    ; SECOND ZAP GETS 5.
-    CMP X,TIMAX                    ; TIMER REACHED MAX TIME YET?
-    IFCS                           ; IF YES..
-    LDA I,0                        ; LOAD 0 TO A REGISTER..
-    STA SUZTIM                     ; .. AND USE IT TO DEACTIVATE ZAP
-    ENDIF
-    ; KILL THINGS!
-    JSR KILENE                     ; WIPE OUT INVADERS & CHARGES
-  ENDIF
   ENDIF
     
   LDA SWFINA                       ; GET THE BUTTON PRESSES
@@ -54,32 +85,218 @@ PROSUZ:
   STA SWFINA                       ; SO WE DON'T USE IT AGAIN NEXT TIME.
   RTS
 \end{lstlisting}
+\clearpage
+
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=13.7cm]{src/superzapper/superzap-comic.png}%
+\end{figure}
+\vspace{-0.2cm}
+
+\icode{PROSUZ}, the routine opposite responsible for processing the super zapping
+decision making, does one of two things: it either turns superzapping on or off, or it
+determines that superzapping is already on and kills an enemy. 
+
+The main control unit in \icode{PROSUZ} is \icode{SUZTIM}, which tells us if we are in the
+middle of killing enemies with a superzap or not. If we are not then the first branch in
+\icode{PROSUZ} figures out if the superzap button has been pressed and sets things up for 
+a superzap session if it hasn't been used twice already.
+
+The second branch handles a 'tick' in an ongoing superzap. This 'tick' is \icode{SUZTIM}, which
+we increment every time we visit the branch: and every time we visit this branch we kill an enemy \icode{KILENE}.
+
+An important feature of this branch is figuring out if the zap has killed its maximum number of enemies yet.
+The way we do this is by figuring out how many times the superzapper button has been pressed so far,
+something we keep track of in \icode{SUZCNT}. When
+used as an index into the \icode{TIMAX} array it gives us what we're looking for.
+The \icode{TIMAX} array contains \icode{13} for the first button
+press and \icode{5} for the second. Through some indirect logic this means that we will kill
+7 enemies at the first press and 1 for the second. This slightly oblique result is achieved
+by setting a lower cut off of 3 (\icode{CSUSTA}) before anything is killed and from then
+on only killing an enemy when our kill counter \icode{SUZTIM} is an odd value. We eventually
+stop killing enemies when we exceed the value for this button press in the \icode{TIMAX} array.
+
+If we take a look at the \icode{KILENE} routine - the one actually responsible for zapping our enemies -
+we find the rate limiting using the minimum cutoff on our timer given by \icode{CSUSTA} and the logic
+that only kills when \icode{SUZTIM} is an odd number. All the other zap-management overhead is done by \icode{PROSUZ}.
+Notice that killing an enemy just means looping through the enemy list and killing the first one that has a positive
+Y position (a proxy for it being active and sitting on the web).
 
 \begin{lstlisting}
         .SBTTL SUPER ZAP-WIPE OUT ENEMY
-KILENE: LDA SUZTIM
-        CMP I,CSUSTA
-        IFCS
-        AND I,CSUINT
-        IFEQ                    ;TIME FOR ANOTHER WIPE OUT?
-
-        LDY WINVMX              ;YES.
-
-        BEGIN                   ;LOOP THRU INVADERS
-
-        LDA Y,INVAY
-        BNE EXIKIL              ;SPECIAL EXIT FOR 1ST LIVE ONE
-        DEY                     ;EXIT LOOP IF ALL ARE DEACTIVE
-        MIEND
-        LDA I,0                 ;ALL ARE DEAD. DEACTIVATE ZAP
-        STA SUZTIM
+        ; FIND ENEMIES THAT ARE ON THE PLAYFIELD (I.E. HAVE A 
+        ; NON-ZERO Y POSITION) AND KILL THEM.
+KILENE: LDA SUZTIM              ; CHECK THE SUPERZAP TIMER..
+        CMP I,CSUSTA            ; HAS IT REACHED 3 YET?
+        IFCS                    ; IF YES THEN..
+        AND I,CSUINT            ; IS SUZTIM AN ODD VALUE (LAST BIT IS A 1)?
+        IFEQ                    ; IF YES THEN..
+          LDY WINVMX            ; PUT NO OF INVADERS IN Y.
+          BEGIN                 ; LOOP THRU INVADERS
+          LDA Y,INVAY           ; GET Y POSITION OF INVADER.
+          BNE EXIKIL            ; IF IT HAS A Y POS, KILL IT, AND EXIT.
+          DEY                   ; OTHERWISE IT'S NOT ACTIVE SO TRY NEXT ONE.
+          MIEND                 ; KEEP LOOPING TILL WE KILL ONE.
+          ; IF WE REACH HERE, ALL ARE DEAD. DEACTIVATE ZAP.
+          LDA I,0               ; STORE 0 IN THE A REGISTER.
+          STA SUZTIM            ; AND USE IT TO CLEAR SUPERZAP TIMER.
         ENDIF
         ENDIF
         RTS
 
-EXIKIL:
-        LDA Y,INVAC2            ;MAKE SURE IT'S NOT A CARRIER
-        AND I,^C<INVCAR>
-        STA Y,INVAC2
+        ; IF IT'S A CARRIER/TANKER CONVERT IT TO A NORMAL ENEMY FIRST.
+EXIKIL: LDA Y,INVAC2            ; STORE INVADER STATUS BYTE IN 'A'.           
+        AND I,^C<INVCAR>        ; 'AND' IT WITH 1's COMPLEMENT OF INVCAR.
+        STA Y,INVAC2            ; STORE RESULT IN INVADER STATUS BYTE.
         JMP INCISQ              ;START EXPLOSION
 \end{lstlisting}
+
+Let's take a quick look at what we are doing in the last few lines above with \icode{INVAC2}, a byte array that
+governs the type, firepower, and movement direction of each active invader. With \icode{Y}
+as an index into the array, we pick out the \icode{INVAC2} byte for the invader we're
+about to kill. The table below gives you a sense of how each invader's byte in \icode{INVAC2}
+is used to determine its behaviour:
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=6cm,center}
+
+      \begin{tabular}{llll}
+        \toprule
+        Byte              & Movement & Firepower & Carrier?\\
+        \midrule
+        \icode{00000000}  & Up       & No Fire   & No       \\
+        \icode{10000001}  & Down     & No Fire   & Flippers \\                            
+        \icode{11000010}  & Down     & Fire      & Pulsars  \\                            
+        \icode{01000011}  & Up       & Fire      & Fuses    \\                            
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\vspace{-0.5cm}
+
+Here is the last entry in the table above, but prettier. As you can see above it represents
+a fuse carrier, that moves up and also fires.
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\lightrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=5cm,center}
+      \begin{tikzpicture}
+      \def\BACKGROUNDTWO{lightblue}
+      \def\BACKGROUNDONE{lightgreen}
+      \fill[\BACKGROUNDTWO] (0,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDONE] (1,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDTWO] (2,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDTWO] (3,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDTWO] (4,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDTWO] (5,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDONE] (6,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDONE] (7,0) rectangle ++ (1,1);
+        \draw[step=1.0,gray,thin] (0,0) grid (1,1);
+        \node[matrix of math nodes,anchor=south west,inner sep=0pt,
+        nodes={draw,minimum size=1cm,anchor=center},
+        column sep=-\pgflinewidth,row sep=-\pgflinewidth,font=\huge\ttfamily]
+        {
+          \icode{0} & \icode{1}  & \icode{0} & \icode{0} & \icode{0} & \icode{0} & \icode{1} & \icode{1} \\
+        };
+      \end{tikzpicture}
+    \end{adjustbox}
+  }
+\end{figure}
+\vspace{-0.7cm}
+Our aim is to turn this invader into a normal enemy before we destroy it, so that
+killing it doesn't unleash its fuse contents. To do this we need a handy way of clearing the last two bits
+that specify it as a 'carrier' without affecting the other bits. Like this: 
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\lightrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=5cm,center}
+      \begin{tikzpicture}
+      \def\BACKGROUNDTWO{lightblue}
+      \def\BACKGROUNDONE{lightgreen}
+      \fill[\BACKGROUNDTWO] (0,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDONE] (1,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDTWO] (2,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDTWO] (3,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDTWO] (4,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDTWO] (5,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDTWO] (6,0) rectangle ++ (1,1);
+      \fill[\BACKGROUNDTWO] (7,0) rectangle ++ (1,1);
+        \draw[step=1.0,gray,thin] (0,0) grid (1,1);
+        \node[matrix of math nodes,anchor=south west,inner sep=0pt,
+        nodes={draw,minimum size=1cm,anchor=center},
+        column sep=-\pgflinewidth,row sep=-\pgflinewidth,font=\huge\ttfamily]
+        {
+          \icode{0} & \icode{1}  & \icode{0} & \icode{0} & \icode{0} & \icode{0} & \icode{0} & \icode{0} \\
+        };
+      \end{tikzpicture}
+    \end{adjustbox}
+  }
+\end{figure}
+\vspace{-0.7cm}
+
+One way we can achieve this is with an \icode{AND} operation on our \icode{INVAC2} value and a byte with the carrier
+bits unset and everything else set (i.e. \icode{11111100}):
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=10cm,center}
+
+      \begin{tabular}{rllllllll}
+        \toprule
+        Byte & Bit 7 & Bit 6 & Bit 5 & Bit 4 & Bit 3 & Bit 2 & Bit 1 & Bit 0        \\
+        \midrule
+        \icode{INVAC2} & \icode{0} & \icode{1} & \icode{0} & \icode{0} & \icode{0} & \icode{0} & \icode{1} & \icode{1} \\
+        \icode{AND} & \icode{1} & \icode{1} & \icode{1} & \icode{1} & \icode{1} & \icode{1} & \icode{0} & \icode{0} \\
+        \midrule
+        New \icode{INVAC2}: & \icode{0} & \icode{1} & \icode{0} & \icode{0} & \icode{0} & \icode{0} & \icode{0} & \icode{0} \\
+        \addlinespace
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }\caption*{AND'ing \icode{INVAC2} with a value to clear the 'carrier' bits.}
+\end{figure}
+\vspace{-0.5cm}
+
+So how do we come up with a value of \icode{11111100} to use in this \icode{AND} operation? One way of doing it is
+to take a value we already have, \icode{INVCAR}, and flip it.
+
+\icode{INVCAR} has a value of \icode{00000011}. So if
+we flip every bit in it we get its polar opposite \icode{11111100}, which is the desired value for use in our \icode{AND}
+operation above. This is what \icode{\string^C<INVCAR>} does: it flips \icode{00000011} to \icode{11111100}, which we call the
+\textit{one's complement}. 
+
+This means that our full instruction \icode{AND I,\string^C<INVCAR>} will perform a logical \icode{AND} operation between the \icode{INVAC2}
+value we've stored in the \icode{A} register and this flipped value to give us a new value with just the 'carrier' bits
+reset to zero, as desired.
+
+One final note, the web flashes while we're superzapping. How is that achieved? It turns out very simply: we take
+the frame counter in \icode{QFRAME} and use that to give us a value between 0 and 7. We ignore 7, because that's the
+color value for black, and use white instead. This means that every time we draw the web while a superzap is active
+we effectively get a 'random' value for the color of the web, resulting in the flashing effect.
+
+\begin{lstlisting}
+        .SBTTL DISPLAY-WELL
+DSPWEL:
+        ..
+        LDY SUZTIM   ; GET THE SUPERZAP TIMER.
+        IFNE         ; IS IT NON-ZERO?
+          IFPL       ; IF SO IS IT POSITIVE?
+          LDA QFRAME ; IF YES, USE QFRAME TO GIVE A COLOR..
+          AND I,7    ; TAKE JUST THE LAST 3 BITS FOR A COLOR VALUE.
+          CMP I,7    ; IS IT 7 (I.E. BLACK)?
+            IFEQ     ; IF YES, THEN..
+            LDA I,1  ; WE'LL SET IT TO WHITE.
+            ENDIF
+          ENDIF
+        ENDIF
+        STA TEMP0   ; STORE OUR CHOSEN COLOR.
+\end{lstlisting}
+
