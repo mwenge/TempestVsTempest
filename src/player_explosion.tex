@@ -1,0 +1,337 @@
+\chapter{splat control}
+\lhead[tempest]{}
+\label{sec:if}
+\lstset{style=6502Style}
+
+When the player is hit, he must die. And that means a good splat is required
+to ram the point home. \textit{Tempest} achieves this with a simple but colorful
+effect that smears the remains of the player's cursor across the screen. We give
+an abbreviated extract of the full splat cycle below, ending in a white shell.
+\begin{figure}[H]
+    \centering
+    \centerline{
+      \frame{\includegraphics[width=3.6cm]{src/splat/screenshots/1.png}}%
+      \hspace{0.02cm}
+      \frame{\includegraphics[width=3.6cm]{src/splat/screenshots/4.png}}%
+      \hspace{0.02cm}
+      \frame{\includegraphics[width=3.6cm]{src/splat/screenshots/7.png}}%
+    }%
+    \vspace{0.05cm}
+    \centerline{
+      \frame{\includegraphics[width=3.6cm]{src/splat/screenshots/12.png}}%
+      \hspace{0.02cm}
+      \frame{\includegraphics[width=3.6cm]{src/splat/screenshots/17.png}}%
+      \hspace{0.02cm}
+      \frame{\includegraphics[width=3.6cm]{src/splat/screenshots/22.png}}%
+    }%
+\end{figure}
+
+\clearpage
+\begin{minipage}[c]{0.28\linewidth}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+SPLAT6: SCAL 2,40
+        JMPL SPLAT
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \includegraphics[width=12cm]{src/splat/vec_image_splat_0_0.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.28\linewidth}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+SPLAT5: SCAL 2,0
+        JSRL SPLAT
+SPLAT6: SCAL 2,40
+        JMPL SPLAT
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \includegraphics[width=12cm]{src/splat/vec_image_splat_1_1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.28\linewidth}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+SPLAT4: SCAL 1,40
+        JSRL SPLAT
+SPLAT5: SCAL 2,0
+        JSRL SPLAT
+SPLAT6: SCAL 2,40
+        JMPL SPLAT
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \includegraphics[width=12cm]{src/splat/vec_image_splat_2_1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\clearpage
+The full course of the player's explosion is described by what the \textit{Tempest} source
+code rather quaintly describes as an \icode{EXPLOSION DATABASE}. This is a list of nine entries
+that the game will invoke, one after another, to render each phase of the explosion. To help
+visualize it I've given each the 9 phases on the opposite page here and in the pages following.
+
+\begin{lstlisting}
+;EXPLOSION DATABASE FOR PLAYER CHARGE COLLISION
+;
+    JSRL SPLAT6   ; SMALLEST SPLAT
+    JSRL SPLAT5   ; SECOND SMALLEST SPLAT
+    JSRL SPLAT4   ; THIRD SMALLEST SPLAT
+    JSRL SPLAT3   ; THIRD BIGGEST SPLAT
+    JSRL SPLAT2   ; SECOND BIGGEST SPLAT
+    JSRL SPLAT1   ; BIGGEST SPLAT OF ALL
+    JSRL SPLAT3   ; THIRD BIGGEST SPLAT
+    JSRL SPLAT5   ; SECOND SMALLEST SPLAT
+    JSRL SPLAT6   ; SMALLEST SPLAT
+\end{lstlisting}
+
+The ingenuity of this little table lies in how it takes advantage of the way each entry has been
+ordered to draw the simple splat polygon in ever decreasing concentric scales. For example you'll
+notice that calling \icode{SPLAT6} results in a single splat shape being drawn. But when we call
+\icode{SPLAT5} for the second phase of the eplosion we will end up drawing two splat shapes: a small one, plus an even smaller one
+inside it. You can see how this is achieved in the \icode{SPLAT CONTROL} listing below. The larger
+one, \icode{SPLAT5}, is drawn first and then the smaller one, \icode{SPLAT6}, is drawn after it.
+
+\begin{lstlisting}
+        .SBTTL  SPLAT CONTROL
+SPLAT1: SCAL 0,0    ; SET SCALING TO 0.
+        JSRL SPLAT  ; DRAW THE SPLAT.
+SPLAT2: SCAL 0,40   ; DECREASE THE SCALING.
+        JSRL SPLAT  ; DRAW THE SPLAT.
+SPLAT3: SCAL 1,0    ; DECREASE THE SCALING.
+        JSRL SPLAT  ; DRAW THE SPLAT.
+SPLAT4: SCAL 1,40   ; DECREASE THE SCALING.
+        JSRL SPLAT  ; DRAW THE SPLAT.
+SPLAT5: SCAL 2,0    ; DECREASE THE SCALING.
+        JSRL SPLAT  ; DRAW THE SPLAT.
+SPLAT6: SCAL 2,40   ; DECREASE THE SCALING.
+        JMPL SPLAT  ; DRAW THE SPLAT.
+\end{lstlisting}
+
+Still on the opposite page we can see the third phase in the explosion is rendered by calling \icode{SPLAT4}
+and falling through to execute \icode{SPLAT5} and \icode{SPLAT6} giving us three concentric, scaled splat shapes - each
+one smaller than the last.
+We see this pattern continue on the following page where we continue growing the explosion by entering the 
+\icode{SPLAT CONTROL} table earlier and earlier until we start at \icode{SPLAT1}.
+
+\clearpage
+\begin{minipage}[c]{0.28\linewidth}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+SPLAT3: SCAL 1,0
+        JSRL SPLAT
+SPLAT4: SCAL 1,40
+        JSRL SPLAT
+SPLAT5: SCAL 2,0
+        JSRL SPLAT
+SPLAT6: SCAL 2,40
+        JMPL SPLAT
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \includegraphics[width=12cm]{src/splat/vec_image_splat_3_0.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.28\linewidth}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+SPLAT2: SCAL 0,40
+        JSRL SPLAT
+SPLAT3: SCAL 1,0
+        JSRL SPLAT
+SPLAT4: SCAL 1,40
+        JSRL SPLAT
+SPLAT5: SCAL 2,0
+        JSRL SPLAT
+SPLAT6: SCAL 2,40
+        JMPL SPLAT
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \includegraphics[width=12cm]{src/splat/vec_image_splat_4_1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.28\linewidth}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+SPLAT1: SCAL 0,0
+        JSRL SPLAT
+SPLAT2: SCAL 0,40
+        JSRL SPLAT
+SPLAT3: SCAL 1,0
+        JSRL SPLAT
+SPLAT4: SCAL 1,40
+        JSRL SPLAT
+SPLAT5: SCAL 2,0
+        JSRL SPLAT
+SPLAT6: SCAL 2,40
+        JMPL SPLAT
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \includegraphics[width=12cm]{src/splat/vec_image_splat_5_1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\clearpage
+
+Our explanation so far has glossed over the actual drawing of the splat shape - the heavy lifting
+achieved by \icode{JSRL SPLAT}. This is a common-or-garden set of vector instructions, similar to
+those we've seen elsewhere when discussing the rendering of claws and flippers.
+\begin{lstlisting}
+        .SBTTL  SPLAT PIC
+SPLAT:  ICVEC           ; SET VECTOR POSITION TO CENTRE.
+        CSTAT PDIWHI    ; SET LINE COLOR TO WHITE.
+        SCVEC 18,-8,0   ; DRAW A BLANK LINE (NO COLOR).
+        SCVEC 38,8,7    ; DRAW A WHITE LINE.
+        SCVEC 20,0C,7   ; DRAW A WHITE LINE.
+        CSTAT PDIRED    ; SET LINE COLOR TO RED.
+        SCVEC 24,14,7   ; DRAW A RED LINE.
+        SCVEC 1C,15,7   ; DRAW A RED LINE.
+        CSTAT PDIYEL    ; SET LINE COLOR TO YELLOW.
+        SCVEC 22,20,7   ; DRAW A YELLOW LINE.
+        SCVEC 10,16,7   ; DRAW A YELLOW LINE.
+        CSTAT PDIWHI    ; SET LINE COLOR TO WHITE.
+        SCVEC 12,30,7   ; DRAW A WHITE LINE.
+        SCVEC 4,28,7    ; DRAW A WHITE LINE.
+        CSTAT PDIRED    ; SET LINE COLOR TO RED.
+        SCVEC -0A,2D,7  ; DRAW A RED LINE.
+        SCVEC -0C,12,7  ; DRAW A RED LINE.
+        CSTAT PDIYEL    ; SET LINE COLOR TO YELLOW.
+        SCVEC -2E,18,7  ; DRAW A YELLOW LINE.
+        SCVEC -1C,0,7   ; DRAW A YELLOW LINE.
+        CSTAT PDIWHI    ; SET LINE COLOR TO WHITE.
+        SCVEC -26,-8,7  ; DRAW A WHITE LINE.
+        SCVEC -20,-0A,7 ; DRAW A WHITE LINE.
+        CSTAT PDIRED    ; SET LINE COLOR TO RED.
+        SCVEC -26,-17,7 ; DRAW A RED LINE.
+        SCVEC -0D,-0E,7 ; DRAW A RED LINE.
+        CSTAT PDIWHI    ; SET LINE COLOR TO WHITE.
+        SCVEC -10,-22,7 ; DRAW A WHITE LINE.
+        SCVEC -0C,-20,7 ; DRAW A WHITE LINE.
+        CSTAT PDIYEL    ; SET LINE COLOR TO YELLOW.
+        SCVEC -8,-2C,7  ; DRAW A YELLOW LINE.
+        SCVEC 4,-20,7   ; DRAW A YELLOW LINE.
+        CSTAT PDIRED    ; SET LINE COLOR TO RED.
+        SCVEC 10,-2C,7  ; DRAW A RED LINE.
+        SCVEC 12,-18,7  ; DRAW A RED LINE.
+        CSTAT PDIYEL    ; SET LINE COLOR TO YELLOW.
+        SCVEC 22,-1E,7  ; DRAW A YELLOW LINE.
+        SCVEC 18,-8,7   ; DRAW A YELLOW LINE.
+        SCVEC 0,0,0     ; DRAW A BLANK LINE.
+        RTSL            ; RETURN
+\end{lstlisting}
+The key is that
+this \icode{SPLAT} routine doesn't need to worry about the scale or size of the vectors its drawing, 
+just the dimensions. The actual size of the splat figure, which will determine where in the nested
+sequence of splats it sits, is controlled by setting the scale used by the vector hardware.
+
+\clearpage
+
+\begin{minipage}[c]{0.28\linewidth}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+SPLAT3: SCAL 1,0
+        JSRL SPLAT
+SPLAT4: SCAL 1,40
+        JSRL SPLAT
+SPLAT5: SCAL 2,0
+        JSRL SPLAT
+SPLAT6: SCAL 2,40
+        JMPL SPLAT
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \includegraphics[width=12cm]{src/splat/vec_image_splat_3_0.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.28\linewidth}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+SPLAT5: SCAL 2,0
+        JSRL SPLAT
+SPLAT6: SCAL 2,40
+        JMPL SPLAT
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \includegraphics[width=12cm]{src/splat/vec_image_splat_1_1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.28\linewidth}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+SPLAT6: SCAL 2,40
+        JMPL SPLAT
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8cm,center}
+      \includegraphics[width=12cm]{src/splat/vec_image_splat_white_0_1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\clearpage
+
+This scaling is set by the preliminary calls to the \icode{SCAL} macro. This generates a scaling vector
+instruction that tells the hardware how large or small to draw the final product. This instruction
+is a byte pair of the form \icode{7000}. So for example, \icode{SCAL 0,40} will translate into a vector
+bytcode instruction of\icode{7040},
+while \icode{SCAL 2,40} will translate into \icode{7240}. The two parameters act as power and linear
+scales respectively. The power scale acts as a broad brush, reducing the size by a half, or three quarters for example.
+The linear scale allows for fine tuning the result so that we're not limited to large step changes in size.
+
+\begin{lstlisting}
+;  SCAL - SET VECTOR GENERATOR SCALE
+;  THE FIRST PARAMETER IS THE POWER OF 2 SCALE.  A VALUE OF 0 MEANS
+;  FULL SIZE, 1=1/2 SIZE, 2=1/4, ..., 7=1/128 SIZE.  THE SECOND
+;  PARAMETER IS THE LINEAR SCALE (OPTIONAL).  A VALUE OF 0 MEANS
+;  FULL SIZE, 80=1/2 SIZE, FF=1/256 SIZE.
+  .MACRO SCAL S,LS
+  ...1=0                      ; LINEAR SCALE DEFAULTS TO 0.
+  .IIF NB,LS,...1=LS          ; UNLESS A VALUE IS PASSED IN 'LS'.
+  .WORD ^H7000+...1+<S*^H100> ; BUILD THE VECTOR INSTRUCTION FROM S AND LS.
+  .ENDM
+\end{lstlisting}
+
