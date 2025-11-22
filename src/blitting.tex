@@ -314,9 +314,9 @@ has finished:
 
 \begin{lstlisting}[escapechar=\%]
 WaitBlit:
-  move.l BLIT_CMD,d7 ;get Blitter status regs
-  btst #0,d7      ;check if d7 is still zero
-  beq WaitBlit    ;loop if d7 is zero
+  move.l BLIT_CMD,d7 ; Get Blitter status regs
+  btst #0,d7         ; Check if d7 is still zero
+  beq WaitBlit       ; Loop if d7 is zero
   rts
 \end{lstlisting}
 
@@ -335,19 +335,19 @@ Here we find a slightly different order of business in setting up the blitting c
 
 \begin{lstlisting}[escapechar=\%]
 WaitBlit:
-  move #4,d0         ; x position in pic5
-  move #84,d1        ; y position in pic5
-  move #197,d2       ; width to copy
-  move #65,d3        ; height to copy
-  move #92,d4        ; x pos of write to
-  move #120-15,d5    ; y pos to write to
-  tst pal            ; are we PAL or NTSC?
-  beq mypal
-  add #10,d5         ; we're NTSC so offset the y pos by 10 pixels
+  move #4,d0         ; X position in pic5.
+  move #84,d1        ; Y position in pic5.
+  move #197,d2       ; Width to copy.
+  move #65,d3        ; Height to copy.
+  move #92,d4        ; X pos of write to.
+  move #120-15,d5    ; Y pos to write to.
+  tst pal            ; Are we PAL or NTSC?
+  beq mypal          ; If PAL, skip to mypal.
+  add #10,d5         ; We're NTSC so offset Y pos by 10.
 mypal:
   move.l #pic5,a0a   ; file 'images/beasty7.cry' again
   move.l #screen3,a1 ; destination we're copying to
-  jsr CopyBlock  
+  jsr CopyBlock      ; Copy the pixels.
 \end{lstlisting}
 
 Can you guess the piece of \icode{beasty7.cry} we're copying here? It's this:
@@ -356,13 +356,13 @@ Can you guess the piece of \icode{beasty7.cry} we're copying here? It's this:
 \begin{figure}[H]
     \centering
     \begin{adjustbox}{width=12cm,center}
-      \frame{\includegraphics[width=4cm]{src/cry/beasty7.png}}%
+      \frame{\includegraphics[width=3cm]{src/cry/beasty7.png}}%
       \hspace{0.5cm}
-      \begin{tikzpicture}
+      \begin{tikzpicture}[baseline={(current bounding box.south)}]
         \draw[->,line width=4pt] (0,0) to (1,0);
       \end{tikzpicture}
       \hspace{0.5cm}
-      \frame{\includegraphics[width=4cm]{src/blitting/2000.png}}%
+      \frame{\includegraphics[width=5cm]{src/blitting/2000.png}}%
     \end{adjustbox}
   \caption{Extracting the '2000' chunk from \icode{beasty7.cry}.}
 \end{figure}

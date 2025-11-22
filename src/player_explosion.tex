@@ -197,7 +197,7 @@ SPLAT6: SCAL 2,40
 \begin{figure}[H]
     \centering
     \begin{adjustbox}{width=8cm,center}
-      \includegraphics[width=12cm]{src/splat/vec_image_splat_5_1.png}%
+      \includegraphics[width=12cm]{src/splat/vec_image_splat_5_0.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
@@ -335,3 +335,179 @@ The linear scale allows for fine tuning the result so that we're not limited to 
   .ENDM
 \end{lstlisting}
 
+One thing you might be wondering is how the colors of the explosion are managed. If you've looked closely
+at our diagrams you will have noticed that the line colors cycle rather than remain static. This rapid
+color rotation creates a glowing, pulsing effect to the explosion when run at full speed. But from what we've seen in the definition
+of \icode{SPLAT} each segment of the splat seems to have its color determined statically by the variables
+\icode{PDIWHI} (white), \icode{PDIRED} (red), and \icode{PDIYEL} (yellow). So how is the color rotation achieved?
+
+The answer lies in sneakily shifting the underlying values in the color ROM (\icode{COLPOR}) that each of our color variables references. 
+This color ROM is the table used by the vector instruction to determine the color of the line it is about to draw. When
+we initialize the player explosion we set up this ROM to contain our red, yellow, and white colors:
+\begin{lstlisting}
+    ; SET UP THE SPLAT COLORS
+    ; COLRAM: A HELPER BUFFER STORING THE CURRENT COLORS.
+    ; COLPOR: THE COLOR ROM USED BY VECTOR DRAWING.
+ALTCOL: 
+    LDA I,ZRED         ; GET THE RED COLOR.
+    STA COLPOR+PDIRED  ; STORE IN THE 'RED' POSITION IN COLOR ROM.
+    STA COLRAM+PDIRED  ; STORE IN THE 'RED' POSITION IN COLOR RAM.
+    LDA I,ZYELLOW      ; GET THE YELLOW COLOR.
+    STA COLPOR+PDIYEL  ; STORE IN THE 'YELLOW' POSITION IN COLOR ROM.
+    STA COLRAM+PDIYEL  ; STORE IN THE 'YELLOW' POSITION IN COLOR RAM.
+    LDA I,ZWHITE       ; GET THE WHITE COLOR.
+    STA COLRAM+PDIWHI  ; STORE IN THE 'WHITE' POSITION IN COLOR RAM.
+    STA COLPOR+PDIWHI  ; STORE IN THE 'WHITE' POSITION IN COLOR ROM.
+    RTS
+\end{lstlisting}
+
+Later, when it comes time to draw the explosion we will occasionally update the color RAM by moving the 
+color values along one position: moving white to the red slot, red to the yellow slot, and yellow to the
+white slot, for example.
+\begin{lstlisting}
+    ; ROTATE COLORS FOR PLAYER EXPLOSION
+ROTCOL:
+  LDY COLRAM+PDIWHI   ; STORE 1ST COLOR IN HELPER BUFFER IN Y.
+  LDX I,2             ; WE'RE GOING TO LOOP THROUGH THREE COLORS.
+  BEGIN               ; LOOP FROM 2 to 0, USING X AS OUR COUNTER.
+  LDA X,COLRAM+PDIWHI ; GET THE COLOR VALUE AT CURRENT POS IN COLOR RAM.
+  PHA                 ; STORE IT ON THE STACK.
+  STY X,COLRAM+PDIWHI ; STORE THE COLOR IN Y AT CURRENT POS IN COLOR RAM.
+  TYA                 ; MOVE THE COLOR IN Y TO A.
+  STA X,COLPOR+PDIWHI ; STORE THE COLOR IN THE CURRENT POS IN COLOR ROM.
+  PLA                 ; GET THE OLD COLOR AT THE CURRENT POS FROM THE STACK.
+  TAY                 ; STORE IN Y SO WE CAN USE IT IN NEXT ITERATION.
+  DEX                 ; LOOP UNTIL X IS 0.
+  MIEND               ; END LOOP
+  RTS
+\end{lstlisting}
+
+If we imagine we start with the colors in their initial position in Color ROM, after the first iteration in the loop in \icode{ROTCOL}, the color ROM \icode{COLPOR} will look like this. White has been moved to the end:
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6cm,center}
+      \begin{tikzpicture}[baseline={(current bounding box.center)}]
+      \def\WHITE{white}
+      \def\YELLOW{yellow}
+      \def\RED{lightred}
+      \fill[\WHITE] (0,0) rectangle ++ (1,1);
+      \fill[\YELLOW] (1,0) rectangle ++ (1,1);
+      \fill[\RED] (2,0) rectangle ++ (1,1);
+        \draw[step=1.0,gray,thin] (0,0) grid (1,1);
+        \node[matrix of math nodes,anchor=south west,inner sep=0pt,
+        nodes={draw,minimum size=1cm,anchor=center},
+        column sep=-\pgflinewidth,row sep=-\pgflinewidth,font=\huge\ttfamily]
+        {
+          01 & 00  & 03 \\
+        };
+      \end{tikzpicture}
+      \hspace{0.5cm}
+      \begin{tikzpicture}[baseline={(current bounding box.center)}]
+        \draw[->,line width=3pt] (0,0) to (1,0);
+      \end{tikzpicture}
+      \hspace{0.5cm}
+      \begin{tikzpicture}[baseline={(current bounding box.center)}]
+      \def\WHITE{white}
+      \def\YELLOW{yellow}
+      \def\RED{lightred}
+      \fill[\WHITE] (0,0) rectangle ++ (1,1);
+      \fill[\YELLOW] (1,0) rectangle ++ (1,1);
+      \fill[\WHITE] (2,0) rectangle ++ (1,1);
+        \draw[step=1.0,gray,thin] (0,0) grid (1,1);
+        \node[matrix of math nodes,anchor=south west,inner sep=0pt,
+        nodes={draw,minimum size=1cm,anchor=center},
+        column sep=-\pgflinewidth,row sep=-\pgflinewidth,font=\huge\ttfamily]
+        {
+          01 & 00  & 01 \\
+        };
+      \end{tikzpicture}
+    \end{adjustbox}
+\end{figure}
+
+After the second iteration we have moved red to the middle position in \icode{COLPOR}:
+
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6cm,center}
+      \begin{tikzpicture}[baseline={(current bounding box.center)}]
+      \def\WHITE{white}
+      \def\YELLOW{yellow}
+      \def\RED{lightred}
+      \fill[\WHITE] (0,0) rectangle ++ (1,1);
+      \fill[\YELLOW] (1,0) rectangle ++ (1,1);
+      \fill[\WHITE] (2,0) rectangle ++ (1,1);
+        \draw[step=1.0,gray,thin] (0,0) grid (1,1);
+        \node[matrix of math nodes,anchor=south west,inner sep=0pt,
+        nodes={draw,minimum size=1cm,anchor=center},
+        column sep=-\pgflinewidth,row sep=-\pgflinewidth,font=\huge\ttfamily]
+        {
+          01 & 00  & 01 \\
+        };
+      \end{tikzpicture}
+      \hspace{0.5cm}
+      \begin{tikzpicture}[baseline={(current bounding box.center)}]
+        \draw[->,line width=3pt] (0,0) to (1,0);
+      \end{tikzpicture}
+      \hspace{0.5cm}
+      \begin{tikzpicture}[baseline={(current bounding box.center)}]
+      \def\WHITE{white}
+      \def\YELLOW{yellow}
+      \def\RED{lightred}
+      \fill[\WHITE] (0,0) rectangle ++ (1,1);
+      \fill[\RED] (1,0) rectangle ++ (1,1);
+      \fill[\WHITE] (2,0) rectangle ++ (1,1);
+        \draw[step=1.0,gray,thin] (0,0) grid (1,1);
+        \node[matrix of math nodes,anchor=south west,inner sep=0pt,
+        nodes={draw,minimum size=1cm,anchor=center},
+        column sep=-\pgflinewidth,row sep=-\pgflinewidth,font=\huge\ttfamily]
+        {
+          01 & 03  & 01 \\
+        };
+      \end{tikzpicture}
+    \end{adjustbox}
+\end{figure}
+
+And after the third and final iteration we have moved yellow to the first position in \icode{COLPOR}. The end
+result being that we have shifted the underlying colors left by one position. 
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6cm,center}
+      \begin{tikzpicture}[baseline={(current bounding box.center)}]
+      \def\WHITE{white}
+      \def\YELLOW{yellow}
+      \def\RED{lightred}
+      \fill[\WHITE] (0,0) rectangle ++ (1,1);
+      \fill[\RED] (1,0) rectangle ++ (1,1);
+      \fill[\WHITE] (2,0) rectangle ++ (1,1);
+        \draw[step=1.0,gray,thin] (0,0) grid (1,1);
+        \node[matrix of math nodes,anchor=south west,inner sep=0pt,
+        nodes={draw,minimum size=1cm,anchor=center},
+        column sep=-\pgflinewidth,row sep=-\pgflinewidth,font=\huge\ttfamily]
+        {
+          01 & 03  & 01 \\
+        };
+      \end{tikzpicture}
+      \hspace{0.5cm}
+      \begin{tikzpicture}[baseline={(current bounding box.center)}]
+        \draw[->,line width=3pt] (0,0) to (1,0);
+      \end{tikzpicture}
+      \hspace{0.5cm}
+      \begin{tikzpicture}[baseline={(current bounding box.center)}]
+      \def\WHITE{white}
+      \def\YELLOW{yellow}
+      \def\RED{lightred}
+      \fill[\YELLOW] (0,0) rectangle ++ (1,1);
+      \fill[\RED] (1,0) rectangle ++ (1,1);
+      \fill[\WHITE] (2,0) rectangle ++ (1,1);
+        \draw[step=1.0,gray,thin] (0,0) grid (1,1);
+        \node[matrix of math nodes,anchor=south west,inner sep=0pt,
+        nodes={draw,minimum size=1cm,anchor=center},
+        column sep=-\pgflinewidth,row sep=-\pgflinewidth,font=\huge\ttfamily]
+        {
+          00 & 03  & 01 \\
+        };
+      \end{tikzpicture}
+    \end{adjustbox}
+\end{figure}
+
+This is what allows the colors to rotate each time we draw the splat.
