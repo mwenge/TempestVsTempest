@@ -1,0 +1,503 @@
+\chapter{star planes}
+\lhead[tempest]{}
+\label{sec:star_planes}
+\lstset{style=6502Style}
+
+Between levels in \textit{Tempest}, the player flies through a starfield 
+as they travel to the next level. The game successfully creates the impression
+of stars passing above and below the player as they dive towards a well in the distance.
+We're going to look at how this effect is constructed from relatively simple elements. We
+can start by a head on view of a starfield in the distance.
+
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=9cm,center}
+      \includegraphics[width=12cm]{src/starfield_tempest/starfield_headon.png}%
+    \end{adjustbox}
+\caption*{Starfield viewed head on.}
+\end{figure}
+
+\clearpage
+\begin{minipage}[c]{0.22\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+  .MACRO MSTAR1
+  ICVEC
+  SCDOT -8,0
+  SCDOT 8,0C
+  SCDOT 10,0
+  SCDOT 8,30
+  SCDOT -30,20
+  SCDOT -34,-20
+  SCDOT -8,-48
+  SCDOT 48,-20
+  SCDOT 44,28
+  SCDOT 18,50
+  SCDOT -38,44
+  SCDOT -48,-8
+  SCDOT -40,-50
+  SCDOT 10,-70
+  SCDOT 58,-50
+  SCDOT 68,-8
+  SCDOT 58,50
+  SCDOT 8,70
+  SCDOT -40,68
+  SCDOT -78,28
+  SCDOT -70,-28
+  SCDOT -70,-68
+  SCVEC 0,0,0
+  RTSL
+  .ENDM
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\hspace{0.6cm}
+\begin{minipage}[c]{0.78\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=11cm,center}
+      \includegraphics[width=12cm]{src/starfield_tempest/vec_image_MSTAR1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.22\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+  .MACRO MSTAR2
+  ICVEC
+  SCDOT 8,8
+  SCDOT -8,10
+  SCDOT -18,-10
+  SCDOT 8,-28
+  SCDOT 28,-8
+  SCDOT 20,20
+  SCDOT 8,38
+  SCDOT -20,30
+  SCDOT -40,8
+  SCDOT -28,-40
+  SCDOT 34,-44
+  SCDOT 58,18
+  SCDOT 38,50
+  SCDOT -10,68
+  SCDOT -58,28
+  SCDOT -58,-30
+  SCDOT -38,-68
+  SCDOT 0,-78
+  SCDOT 60,-68
+  SCDOT 68,-30
+  RTSL
+  .ENDM
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\hspace{0.6cm}
+\begin{minipage}[c]{0.78\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=10.8cm,center}
+      \includegraphics[width=12cm]{src/starfield_tempest/vec_image_MSTAR2.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\clearpage
+
+Hopefully this diagram gives you an appropriate idea of stars in a deep field receding
+into the distance. In this toy rendering we are actually faithful to the method used
+in \textit{Tempest}. We can begin to get a sense of what the method is if we rotate
+our view of the field to the right so that we're looking at it side on.
+
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6cm,center}
+      \includegraphics[width=3cm]{src/starfield_tempest/starfield_headon.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6cm,center}
+      \includegraphics[width=3cm]{src/starfield_tempest/starfield_sideon.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+As you can see the star field in this instance consists of four layers of stars, one behind
+the other. Tempest defines each of these layers separately and we've rendered each in full
+2-dimensional mode in the facing and following pages.
+
+\begin{lstlisting}
+STAR1:  MSTAR1
+STAR2:  MSTAR2
+STAR3:  MSTAR3
+STAR4:  MSTAR4
+\end{lstlisting}
+
+This gives us the general idea of how the starfield is constructed but it has been simplified
+quite a bit. As it turns out, there are not four layers to \icode{Tempest}'s starfield, but eight.
+We find this defined here as \icode{NPLANE}, which is used to create an array of eight bytes that
+will hold the current Z position (or depth in field) of each starfield. This array is confusingly
+named \icode{PLANEY}.
+
+\begin{lstlisting}
+	.SBTTL	CONSTANTS-COUNTS
+NPLANE=	8
+PLANEY:	.BLKB NPLANE	;STAR FIELD PLANES
+\end{lstlisting}
+
+I say confusingly, because we might reasonably have expected it to be called \icode{PLANEZ}, as the
+Z axis is the one typically used to represent depth. But the co-ordinate system used in Tempest thought
+of the Y axis as representing depth and treated X and Z as representing the horizontal and vertical axis
+respectively. For the sake of simplicity, I've not adopted this quirk in our descriptions here. So for us,
+\icode{PLANEY} contains the Z positions of all 8 layers in our starfield.
+
+\clearpage
+\begin{minipage}[c]{0.22\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+  .MACRO MSTAR3
+  ICVEC
+  SCDOT 10,10
+  SCDOT 0,18
+  SCDOT -30,8
+  SCDOT -18,-2C
+  SCDOT 28,-18
+  SCDOT 30,8
+  SCDOT 38,38
+  SCDOT 0,48
+  SCDOT -38,28
+  SCDOT -40,-8
+  SCDOT -20,-58
+  SCDOT 20,-58
+  SCDOT 50,-30
+  SCDOT 60,20
+  SCDOT 2C,64
+  SCDOT -20,68
+  SCDOT -64,38
+  SCDOT -68,-8
+  SCDOT -60,-48
+  SCDOT -28,-78
+  SCDOT 40,-78
+  RTSL
+  .ENDM
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\hspace{0.6cm}
+\begin{minipage}[c]{0.78\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=11cm,center}
+      \includegraphics[width=12cm]{src/starfield_tempest/vec_image_MSTAR3.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.22\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+  .MACRO MSTAR4
+  ICVEC
+  SCDOT -8,-10
+  SCDOT 20,-10
+  SCDOT 20,18
+  SCDOT -18,20
+  SCDOT -30,-10
+  SCDOT 10,-38
+  SCDOT 40,0
+  SCDOT 20,38
+  SCDOT -20,48
+  SCDOT -50,10
+  SCDOT -38,-40
+  SCDOT 18,-4C
+  SCDOT 40,-38
+  SCDOT 68,10
+  SCDOT 28,58
+  SCDOT -38,50
+  SCDOT -70,18
+  SCDOT -68,-18
+  SCDOT -58,-78
+  SCDOT 40,-60
+  RTSL
+  .ENDM
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+\hspace{0.6cm}
+\begin{minipage}[c]{0.78\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=11cm,center}
+      \includegraphics[width=12cm]{src/starfield_tempest/vec_image_MSTAR4.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\clearpage
+
+As it happens the 8 layers build on our simple example by repeating the 4 layers of \icode{MSTAR1}, \icode{MSTAR2},
+ \icode{MSTAR3}, and \icode{MSTAR4} twice over. So with all eight in play our full starfield will look something
+ like this.
+
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6cm,center}
+      \includegraphics[width=3cm]{src/starfield_tempest/starfield_8_headon.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6cm,center}
+      \includegraphics[width=3cm]{src/starfield_tempest/starfield_8_sideon.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+Drawing these starfields is a simple loop through the \icode{PLANEY} array. We do
+this in \icode{DSTARF}.
+
+\begin{lstlisting}
+.SBTTL  DISPLAY STAR FIELD
+DSTARF: LDA PLAGRO      ; ARE WE STILL DRAWING THE STARFIELD?
+        IFNE            ; IF NOT, SKIP EVERYTHING BELOW.
+        LDX I,NPLANE-1  ; PUT NO. OF PLANES (8) IN X.
+        STX INDEX1      ; STORE X AS THE LOOP INDEX
+        BEGIN           ; BEGIN THE LOOP FOR EACH PLANE OF STARS.
+          LDX INDEX1    ; LOAD INDEX TO X.
+          LDA X,PLANEY  ; GET THE Z-POS FOR THIS PLANE.
+          IFNE          ; IF NON-ZERO IT IS ACTIVE..
+          STA PYL       ; STORE IT AS THE 'Z' POSITION.
+          LDA I,80      ; USE 128 AS THE X POSITION (CENTER).
+          STA PXL       ; STORE IT AS THE 'X' POSITION.
+          LDA I,80      ; USE 128 AS THE Y POSITION (CENTER).
+          STA PZL       ; STORE IT AS THE 'Y' POSITION.
+          LDA I,BLUE    ; STORE BLUE COLOR IN A.
+          STA COLOR     ; AND USE IT AS OUR COLOR.
+          LDA I,MZCOLO  ; CLEAR THE VECTOR COLOR. 
+          JSR VGSTAT    ; RESET THE VECTOR DRAWER.
+          LDA INDEX1    ; GET THE CURRENT INDEX.
+          AND I,3       ; CLAMP IT TO A VALUE BETWEEN 0 AND 3.
+          ASL           ; SHIFT LEFT..
+          ADC I,PTSTR1  ; AND ADD THE TABLE OFFSET..
+          STA OBJIND    ; TO GIVE US A POINTER TO MSTAR1/2/3/4.
+          JSR SCAPI2    ; DRAW THE SELECTED STARFIELD PICTURE.
+          ENDIF         ; END OF NON-ZERO CHECK.
+          DEC INDEX1    ; GO TO THE NEXT ENTRY IN PLANEY.
+        MIEND           ; KEEP LOOPING UNTIL WE DO THEM ALL.
+        ENDIF           ; END OF SKIP EVERYTHING CHECK.
+        RTS
+\end{lstlisting}
+
+This means that in order to control the display of the starfield we just
+have to manage the contents of the \icode{PLANEY} array. Each byte in this
+array will give the Z co-ordinate position of each plane in the starfield. Where a byte
+is zero, the plane is not displayed, otherwise its value is treated as the position
+of the plane in the depth of field.
+
+\icode{PRSTAR}, given below, is the slightly chunky routine that takes care of this task.
+But it's bulk is largely a function of the verbosity inherent in assembly language. For example,
+a full 10 lines are occupied solely with getting an index to the element in the array previous
+to the current one in the routine's main loop. 
+
+The overall approach for managing the starfield planes is to add one to the field at Z-position 240
+and move it forward in steps of 7. The next one gets added when the one before it has reached Z-position
+213. All 8 planes are added in this way and moved forward until they reach position 16. At this point
+they either start again at the beginning or, if the starfield has been turned off by resetting \icode{PLAGRO}
+to 0, deactivated.
+
+This is what the first few steps of this process looks like, with the value of each byte in
+\icode{PLANEY} given in square brackets.
+
+\begin{minipage}[c]{0.34\linewidth}
+\vspace{-0.5cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics{src/starfield_tempest/starfield_0_growing.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.34\linewidth}
+\vspace{-0.5cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics{src/starfield_tempest/starfield_1_growing.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.34\linewidth}
+\vspace{-0.5cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics{src/starfield_tempest/starfield_2_growing.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.34\linewidth}
+\vspace{-1cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics{src/starfield_tempest/starfield_3_growing.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.34\linewidth}
+\vspace{-1cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics{src/starfield_tempest/starfield_4_growing.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.34\linewidth}
+\vspace{-1cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics{src/starfield_tempest/starfield_5_growing.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\clearpage
+\begin{lstlisting}
+PRSTAR: LDA PLAGRO           ; ARE WE STILL DRAWING THE STARFIELD?
+        IFNE                 ; IF NOT, SKIP EVERYTHING BELOW.
+          LDA I,0            ; YES. PROCESS PLANES
+          STA TEMP0          ; CLEAR COUNT OF ACTIVE PLANES
+          LDX I,NPLANE-1     ; PUT NO. OF PLANES (8) IN X.
+          STX INDEX1         ; STORE X AS THE LOOP INDEX
+          BEGIN              ; BEGIN THE LOOP FOR EACH PLANE OF STARS
+            LDX INDEX1       ; LOAD INDEX TO X.
+            LDA X,PLANEY     ; GET THE Z-POS FOR THIS PLANE.
+            IFNE             ; IF NON-ZERO IT IS ACTIVE..
+              SEC            ; RESET THE CARRY BIT.
+              SBC I,07       ; DECREMENT THE PLANE'S Z-POS BY 7.
+              IFCS           ; IF STILL A POSTIVE VALUE..
+              CMP I,10       ; HAS IT REACHED 16 YET?
+              ENDIF
+              IFCC           ; IF IT HAS THEN..
+              LDY PLAGRO     ; IS THE STARFIELD STILL GROWING?
+              IFMI           ; IF IT IS THEN..
+              LDA I,0F0      ; START IT AGAIN AT THE BACK..
+              ELSE           ; OTHERWISE WE ARE NO LONGER GROWING SO..
+              LDA I,0        ; DEACTIVATE IT.
+              ENDIF
+              ENDIF
+            ELSE             ; OTHERWISE IT'S NOT ACTIVE SO CHECK
+              LDY PLAGRO     ; IS THE STARFIELD STILL GROWING?
+              IFMI           ; IF IT IS THEN..
+                ; GET THE INDEX FOR THE PREVIOUS PLANE BY..
+                TXA          ; PUTTING CURRENT INDEX IN A. 
+                CLC          ; PREPARE FOR AN ADDITION.
+                ADC I,1      ; ADD 1 TO INDEX TO GET PREVIOUS PLANE.
+                CMP I,NPLANE ; IS THE PREVIOUS ONE THE ZERO INDEX?
+                IFCS         ; IF IT IS..
+                LDA I,0      ; THEN SET PREVIOUS PLANE INDEX TO 0.
+                ENDIF
+                TAY          ; PUT PREVIOUS PLANE INDEX IN Y.
+                LDA Y,PLANEY ; GET Z-POS OF PREVIOUS PLANE.
+                IFNE         ; IF IT'S ACTIVE THEN..
+                CMP I,0D5    ; HAS IT REACHED Z-POS 213?
+                IFCC         ; IF SO THEN..
+                LDA I,0F0    ; ACTIVATE THIS PLANE AT Z-POS 240.
+                ELSE         ; OTHERWISE
+                LDA I,0      ; IT REMAINS INACTIVE.
+                ENDIF
+                ENDIF
+              ENDIF
+            ENDIF
+            STA X,PLANEY     ; STORE THE UPDATED Z-POS FOR THE PLANE
+            ORA TEMP0        ; IF NOT ALREADY IN BITMAP OF ACTIVE PLANES..
+            STA TEMP0        ; THEN ADD IT.
+            DEC INDEX1       ; DECREMENT OUR INDEX...
+          MIEND              ; AND LOOP UNTIL INDEX REACHES 0.
+        ENDIF
+        RTS
+\end{lstlisting}
+
+And if we flip forward a few dozen interations we get a sense of what it looks like
+in full flow.
+
+\begin{minipage}[c]{0.34\linewidth}
+\vspace{-0.5cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics{src/starfield_tempest/starfield_36_growing.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.34\linewidth}
+\vspace{-0.5cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics{src/starfield_tempest/starfield_37_growing.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.34\linewidth}
+\vspace{-0.5cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics{src/starfield_tempest/starfield_38_growing.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.34\linewidth}
+\vspace{-1cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics{src/starfield_tempest/starfield_39_growing.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.34\linewidth}
+\vspace{-1cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics{src/starfield_tempest/starfield_40_growing.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.34\linewidth}
+\vspace{-1cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics{src/starfield_tempest/starfield_41_growing.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+This process never really dies: we have to kill it by resetting \icode{PLAGRO} to a value
+that no longer looks like a negative value. Anything that does not set the first bit of \icode{PLAGRO}
+will do, for example a 1 or a 0. This is what we find in the 'new wave' routine. Once the well has been
+moved into position, we can turn off the tap and the starfield will no longer be displayed.
+\begin{lstlisting}
+        LDA I,1                 ;TURN OFF STAR FIELD
+        STA PLAGRO
+\end{lstlisting}
