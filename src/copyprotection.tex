@@ -1,0 +1,212 @@
+\chapter{copy protection}
+\label{sec:copyprotection}
+\lhead[tempest]{}
+\lstset{style=6502Style}
+
+\section*{\icode{QT1}: Copyright Atari}
+\begin{lstlisting}
+ZATLIS: ASCVH <^ MCMLXXX ATARI>
+\end{lstlisting}
+
+\begin{lstlisting}
+ZATLIV: CLC           ; CLEAR THE CARRY BIT.
+        LDY I,ZATLIC  ; GET POS OF LAST CHAR IN STRING.
+        LDA I,085     ; INITIALIZE QT1.
+        BEGIN         ; LOOP THROUGH COPYRIGHT STRING.
+        ADC Y,ZATLIS  ; ADD VALUE OF CURRENT CHARACTER.
+        DEY           ; GO TO NEXT CHAR IN STRING.
+        MIEND         ; KEEP LOOPING UNTIL END.
+        STA QT1       ; VERIFY ATARI LITERAL
+        RTS
+\end{lstlisting}
+
+The punishment: make the game impossibly fast.
+\begin{lstlisting}
+ZQATLI: LDA QT1       ; GET QT1.
+        IFNE          ; IF IT'S NON ZERO..
+        LDA WAVEN1    ; CHECK THE CURRENT LEVEL..
+        CMP I,10.     ; IF IT'S GREATER THAN 10..
+        IFCS          ; THEN..
+        LDA I,7A      ; SET AN IMPOSSIBLE TO PLAY
+        STA FRTIMR    ; FRAMERATE.
+        ENDIF
+        ENDIF
+\end{lstlisting}
+
+\section*{\icode{QT2}: Copyright Atari}
+Check that the Atari credit message is being displayed. This checks that
+the code at \icode{ZATC4S}, which displays the Atari copyright message,
+has not been modified.
+
+\begin{lstlisting}
+ZATC4S: LDX I,MATARI  ; GET THE ATARI (C) MESSAGE.
+        JSR MSGS      ; DISPLAY IT.
+        LDX I,MCREDI  ; GET THE 'CREDITS' MESSAGE.
+        JSR MSGS		  ; DISPLAY IT.
+ZATC4E:
+ZATC4C==ZATC4E-ZATC4S
+\end{lstlisting}
+Notice how we identify the end of the code block by adding a label \icode{ZATC4E}
+and then used that and the label at the start of the block (\icode{ZATC4S}) to calculate
+the length of the code block and store it as \icode{ZATC4C}.
+This comes in handy when we want to iterate through
+the code at runtime and verify that it hasn't been altered:
+\begin{lstlisting}
+ZATC4V: LDY I,ZATC4C		; GET THE LENGTH OF THE CODEBLOCK.
+        LDA I,0A7       ; INITIALIZE OUR CHECKSUM. 
+        BEGIN           ; LOOP THROUGH EACH BYTE IN THE CODEBLOCK.
+        EOR Y,ZATC4S    ; XOR VAL OF CURRENT BYTE WITH CHECKSUM.
+        DEY             ; GO TO NEXT BYTE
+        MIEND           ; LOOP THROUGH FULL CODE BLOCK.
+        STA QT2         ; STORE CHECKSUM IN Q2.
+\end{lstlisting}
+
+\section*{\icode{QT3}: The Display List}
+This one checks the contents of the vector display list used to render
+the Atari copyright message (as well as everything else the game writes to the screen).
+Since the copyright message is displayed on a few different
+screens, with different colors, the contents of the display list can vary,
+even when the Atari copyright banner is correctly displayed, so our checksum
+has to tolerate a bit of variety.
+
+Every time a message is written, the \icode{MSGS} routine checks if the
+copyright message has been passed to it: if so, it stores the current
+location in the display list in \icode{SECUVG} for checking later.
+
+\begin{lstlisting}
+ZSECL0: CPX I,MATARI
+        IFEQ                    ;COPYRIGHT MSG?
+        LDA VGLIST              ;YES. SAVE START LOC
+        STA SECUVG
+        LDA VGLIST+1
+        STA SECUVG+1
+        ENDIF
+\end{lstlisting}
+
+When the \icode{DISPLAY} routine runs, we are processing the contents
+of the display list contained in \icode{VGLIST}. It's time for us to check
+the portion that contains our hallowed copyright message. 
+\begin{lstlisting}
+ZATVG2::
+  LDA SECUVY      ; ARE WE DISPLAYING ONE OF THE TITLE SCREENS?
+  IFNE            ; IF WE ARE THEN:
+  LDY I,27        ; FOR ALL 27 BYTES IN THE ROW.
+  LDA I,0E        ; INITIALIZE OUR CHECKSUM VALUE
+  SEC             ; CLEAR THE CARRY BIT SO IT DOESN'T INTERFERE
+  ; LOOP THROUGH EACH CHARACTER IN THE LINE POINTED TO BY SECUVG
+  ; THIS SHOULD CONTAIN '(C) MCMLXXX ATARI', OTHERWISE WE WILL GET
+  ; AN INVALID CHECKSUM.
+  BEGIN           ; LOOP FROM 27 TO 0
+  SBC NY,SECUVG   ; SUBTRACT VALUE IN THE CURRENT CHAR FROM 'A' REGISTER.
+  DEY             ; DECREMENT Y TO GO TO THE PREVIOUS CHARACTER.
+  MIEND           ; LOOP UNTIL Y IS 0.
+  TAY             ; STORE THE RESULT IN A IN Y.
+  IFNE            ; IF THE RESULT IS ZERO, THE CHECKSUM PASSES OTHERWISE:
+  EOR I,0E5       ; CHECK IT AGAINST THE CHECKSUM FOR ANOTHER SCREEN
+  ENDIF           
+  IFNE            ; IF THAT PASSES WE'RE DONE OTHERWISE:
+  EOR I,02A       ; CHECK IT AGAINST THE CHECKSUM FOR ANOTHER SCREEN
+  ENDIF           
+  STA QT3         ; STORE THE RESULT OF OUR CHECK IN QT3.
+  ENDIF
+  ENDIF
+\end{lstlisting}
+
+\begin{lstlisting}
+ZQVAVG::
+  LDA QT3     ; CHECK THAT BOTH QT3 AND
+  ORA QT6     ; QT6 ARE ZERO.
+  IFNE        ; IF THEY ARE NOT THEN
+  LDA I,17    ; CHECK IF THE PLAYER' SCORE IS GREATER THAN 170,000
+  CMP LSCORH  ; LSCORH CONTAINS THE FIRST 2 DIGITS OF THE PLAYER SCORE
+  IFCC        ; IF IT IS GREATER THAN OR EQUAL TO 17..
+  LDX LSCORL  ; LOAD WHATEVER IS IN THE LSCORL BYTE
+  INC X,0     ; AND USE THAT TO INCREMENT ONE OF OUR 'ZERO-PAGE' BYTES.
+  ENDIF       ; IN THE HOPE OF CAUSING SOME HAVOC.
+  ENDIF       ; HAVOC SECURED.
+\end{lstlisting}
+
+\section*{\icode{QT4}: Sound}
+This tests the sound chips (known as 'pokeys') for expected behaviour. There are two sound chips on the 
+board and each has a hardware-based random number generator. Retrieving a random number
+from each, one after the other, should return matching values. If they don't, something is wrong.
+The check is looking out for signs of the pokeys temporarily stopping when queried for a random
+number. Don't know why this is bad.
+
+\begin{lstlisting}
+ZPOKST: LDX I,4     ; QUERY THE POKEYS 4 TIMES.
+        LDA RANDOM  ; GET A RANDOM NUMBER FROM POKEY 1.
+        LDY RANDO2  ; GET A RANDOM NUMBER FROM POKEY 2.
+        BEGIN       ; LOOP AND COMPARE SUBSEQUENT VALUES 4 TIMES.
+        CMP RANDOM  ; GET A NEW VALUE FROM POKEY 1 AND COMPARE TO ORIGINAL.
+        IFEQ        ; IF IT MATCHES..
+        CPY RANDO2  ; GET A NEW VALUE FROM POKEY 2 AND COMPARE TO ORIGINAL.
+        ENDIF
+        IFNE        ; IF NEITHER MATCHED, THEN STORE THE FAILURE..
+        STA QT4     ; IN OUR QT4 CHECKSUM VALUE.
+        LDX I,0     ; SKIP TO END BY SETTING X TO 0.
+        ENDIF
+        DEX         ; DECREMENT X
+        MIEND       ; LOOP UNTIL X IS -1
+\end{lstlisting}
+
+If this check fails, then we are going to ruin the player's day by corrupting
+the computer's stack. We do this in the \icode{DSPEXP} routine, so as long as you
+never hit anything on your bootlegged version of \textit{Tempest}, you should be OK.
+
+\begin{lstlisting}
+ZQPOKS: LDA QT4     ; CHECK THE SOUND CHIP CHECKSUM.
+        IFNE        ; IF IT FAILED THEN SET UP A BOMB..
+        LDA CURWAV  ; GET THE CURRENT LEVEL..
+        CMP I,13.   ; COMPARE IT TO 13.
+        IFCS        ; IF IT IS GREATER THAN 13..
+        STA 1FF     ; KILL TOP OF STACK
+        ENDIF
+        ENDIF
+        RTS
+\end{lstlisting}
+
+\section*{\icode{QT5}: Sound}
+
+\begin{lstlisting}
+        .SBTTL  DISPLAY HIGH SCORE LADDER
+LDRDSP: JSR INFO                ;DISPLAY SCORE & LIVES INFO
+ZPONTS: SEI          ; DISABLE INTERRUPTS.
+        LDA RANDOM
+        LDY RANDOM
+        STY TEMP0
+        LSR
+        LSR
+        LSR
+        LSR
+        EOR TEMP0
+        STA TEMP0
+        LDA RANDO2
+        LDY RANDO2
+        CLI         ; ALLOW INTERRUPTS AGAIN.
+        EOR TEMP0
+        AND I,0F0
+        EOR TEMP0
+        STA TEMP0
+        TYA
+        ASL
+        ASL
+        ASL
+        ASL
+        EOR TEMP0
+        STA QT5     ; STORE THE RESULT IN QT5.
+\end{lstlisting}
+
+Randomly tagged on to the end of the display starfield routine (\icode{DSTARF}).
+\begin{lstlisting}
+ZQPONS: LDA QT5
+        IFNE
+        LDX LSCORH
+        CPX I,15
+        IFCS
+        LDX LSCORL
+        INC X,200
+        ENDIF
+        ENDIF
+        RTS
+\end{lstlisting}
