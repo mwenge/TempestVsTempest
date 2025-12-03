@@ -6,22 +6,19 @@ There is more than one version of Tempest because some time after the game's
 release in October 1981 players discovered a juicy little bug that hit arcade
 owners where it hurts: in the pocketbook.
 
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=11cm,center}
+      \frame{\includegraphics[width=12cm]{src/tempest_program_bug/bug.png}}%
+    \end{adjustbox}
+\end{figure}
+
 If you managed to reach a score of 170,000 or more there was a roughly one-in-eight chance that the next coin you
 popped in the cabinet would give you a whopping forty credits to play with. The run-up
 to Christmas was thoroughly ruined for Dave Theurer as this little heisenbug evolved
 from impossible and easily-dismissed reports from arcade owners into something that the
 Atari hardware technicians could reproduce in the lab. Theurer finally had to admit that
 something was wrong somewhere, and it was probably his fault.
-
-
-
-\begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=11cm,center}
-      \frame{\includegraphics[width=12cm]{src/tempest_program_bug/bug.png}}%
-    \end{adjustbox}
-  \caption{Field Service Bulletin December 1981.}
-\end{figure}
 
 Whatever the culprit was, the end result was that the number of credits available to the player was
 magically inflated to 40 when they reached game over. So the only possible place to start is by first
@@ -43,7 +40,6 @@ QTMPAUS: .BLKB 1    ;PAUSE TIMER (IN SECOND UNITS)
 QSTATUS: .BLKB 1    ;STATUS FLAGS
 ;
 ;OTHER OVERHEAD
-;
 $$CRDT:  .BLKB 1    ;# OF CREDITS
 $INTCT:  .BLKB 1    ;INTERRUPT COUNT
 $COINA:  .BLKB 1    ;COIN MECHS
@@ -80,16 +76,16 @@ game's screens? What was it we did again?
 
 \begin{lstlisting}
 ZQVAVG::
-        LDA QT3     ; CHECK THAT BOTH QT3 AND
-        ORA QT6     ; QT6 ARE ZERO.
-        IFNE        ; IF THEY ARE NOT THEN
-        LDA I,17    ; CHECK IF THE PLAYER' SCORE IS GREATER THAN 170,000
-        CMP LSCORH  ; LSCORH CONTAINS THE FIRST 2 DIGITS OF THE PLAYER SCORE
-        IFCC        ; IF IT IS GREATER THAN OR EQUAL TO 17..
-        LDX LSCORL  ; LOAD WHATEVER IS IN THE LSCORL BYTE
-        INC X,0     ; AND USE THAT TO INCREMENT ONE OF OUR 'ZERO-PAGE' BYTES.
-        ENDIF       ; IN THE HOPE OF CAUSING SOME HAVOC.
-        ENDIF       ; HAVOC SECURED.
+  LDA QT3     ; CHECK THAT BOTH QT3 AND
+  ORA QT6     ; QT6 ARE ZERO.
+  IFNE        ; IF THEY ARE NOT THEN
+  LDA I,17    ; CHECK IF THE PLAYER' SCORE IS GREATER THAN 170,000
+  CMP LSCORH  ; LSCORH CONTAINS THE FIRST 2 DIGITS OF THE PLAYER SCORE
+  IFCC        ; IF IT IS GREATER THAN OR EQUAL TO 17..
+  LDX LSCORL  ; LOAD WHATEVER IS IN THE LSCORL BYTE
+  INC X,0     ; AND USE THAT TO INCREMENT ONE OF OUR 'ZERO-PAGE' BYTES.
+  ENDIF       ; IN THE HOPE OF CAUSING SOME HAVOC.
+  ENDIF       ; HAVOC SECURED.
 \end{lstlisting}
 
 A realization is beginning to dawn in the Tempest lab. We have discovered another magic number from the frantic bug reports. If the
@@ -113,27 +109,27 @@ We take a look at the routine responsible for performing the copyright protectio
 
 \begin{lstlisting}
 ZATVG2::
-      LDA SECUVY      ; ARE WE DISPLAYING ONE OF THE TITLE SCREENS?
-      IFNE            ; IF WE ARE THEN:
-      LDY I,27        ; FOR ALL 39 BYTES IN THE VECTOR DISPLAYING THE ATARI COPYRIGHT
-      LDA I,0E        ; STARTING FROM OUR HARD-CODE LITERAL OF '0E'
-      SEC             ; CLEAR THE CARRY BIT SO IT DOESN'T INTERFERE
-      ; LOOP THROUGH EACH CHARACTER IN THE LINE THAT CONTAINS '(C) MCMLXXX
-      ; ATARI TO CALCULATE A FINAL CHECKSUM VALUE.
-      BEGIN           ; LOOP FROM 27 TO 0
-      SBC NY,SECUVG   ; SUBTRACT THE VALUE IN THE CURRENT CHARACTER FROM 'A'.
-      DEY             ; DECREMENT Y TO GO TO THE PREVIOUS CHARACTER.
-      MIEND           ; LOOP UNTIL Y IS 0.
-      TAY             ; STORE THE RESULT IN A IN Y.
-      IFNE            ; IF THE RESULT IS ZERO, THE CHECKSUM PASSES OTHERWISE:
-      EOR I,0E5       ; CHECK IT AGAINST THE CHECKSUM FOR ANOTHER SCREEN
-      ENDIF           
-      IFNE            ; IF THAT PASSES WE'RE DONE OTHERWISE:
-      EOR I,02A       ; CHECK IT AGAINST THE CHECKSUM FOR ANOTHER SCREEN
-      ENDIF           
-      STA QT3         ; STORE THE RESULT OF OUR CHECK IN QT3.
-      ENDIF
-      ENDIF
+  LDA SECUVY      ; ARE WE DISPLAYING ONE OF THE TITLE SCREENS?
+  IFNE            ; IF WE ARE THEN:
+  LDY I,27        ; FOR ALL 39 BYTES IN THE THE ATARI COPYRIGHT STRING..
+  LDA I,0E        ; STARTING FROM OUR HARD-CODE LITERAL OF '0E'
+  SEC             ; CLEAR THE CARRY BIT SO IT DOESN'T INTERFERE
+  ; LOOP THROUGH EACH CHARACTER IN THE LINE THAT CONTAINS '(C) MCMLXXX
+  ; ATARI' TO CALCULATE A FINAL CHECKSUM VALUE.
+  BEGIN           ; LOOP FROM 27 TO 0
+  SBC NY,SECUVG   ; SUBTRACT VALUE IN THE CURRENT CHAR FROM 'A' REGISTER.
+  DEY             ; DECREMENT Y TO GO TO THE PREVIOUS CHARACTER.
+  MIEND           ; LOOP UNTIL Y IS 0.
+  TAY             ; STORE THE RESULT IN A IN Y.
+  IFNE            ; IF THE RESULT IS ZERO, THE CHECKSUM PASSES OTHERWISE:
+  EOR I,0E5       ; CHECK IT AGAINST THE CHECKSUM FOR ANOTHER SCREEN
+  ENDIF           
+  IFNE            ; IF THAT PASSES WE'RE DONE OTHERWISE:
+  EOR I,02A       ; CHECK IT AGAINST THE CHECKSUM FOR ANOTHER SCREEN
+  ENDIF           
+  STA QT3         ; STORE THE RESULT OF OUR CHECK IN QT3.
+  ENDIF
+  ENDIF
 \end{lstlisting}
 
 It comes back to us now. We iterate through all the characters on a particular line in the screen and use them to calculate
