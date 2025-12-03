@@ -1,4 +1,4 @@
-\chapter{copy protection}
+\chapter{copyright atari}
 \label{sec:copyprotection}
 \lhead[tempest]{}
 \lstset{style=6502Style}
@@ -197,7 +197,13 @@ ZPONTS: SEI          ; DISABLE INTERRUPTS.
         STA QT5     ; STORE THE RESULT IN QT5.
 \end{lstlisting}
 
-Randomly tagged on to the end of the display starfield routine (\icode{DSTARF}).
+Randomly tagged on to the end of the display starfield routine (\icode{DSTARF}). 
+If the score is greater than 150,000 then use the last few digits of the score
+to randomly increment a byte in memory at position 200 or above. Like the damage
+wrought in \icode{QT3} this will be done every time the starfield display is updated
+during a level change so will inevitably, and promptly, bring the game to a crashing
+halt.
+
 \begin{lstlisting}
 ZQPONS: LDA QT5
         IFNE
@@ -210,3 +216,38 @@ ZQPONS: LDA QT5
         ENDIF
         RTS
 \end{lstlisting}
+
+\section*{\icode{QT6}: Atari Again!}
+This is the same check as \icode{QT3} but is run in attract mode. The display list
+is inspected and a checksum calculated on the line where the Atari copyright message
+is expected to be.
+\begin{lstlisting}
+ZATVG1: LDA QSTATUS      ; ARE WE IN ATTRACT MODE?
+        IFPL             ; IF YES THEN.. ATARI BETTER BE ON SCREEN
+        LDA I,0F2        ; INITIALIZE THE CHECKSUM VALUE TO F2.
+        CLC              ; CLEAR THE CARRY BIT.
+        LDY I,39.        ; ITERATE OVER ALL 39 BYTES ON THE LINE
+        BEGIN            ; LOOP THROUGH ALL 39 BYTES..
+        ADC NY,SECUVG    ; ADDING THE VALUE AT EACH BYTE TO OUR CHECKSUM
+        DEY              ; KEEP LOOPING FOR ALL 39.
+        MIEND            ; END LOOP
+        STA QT6          ; SAVE THE RESULT (WHICH SHOULD BE 0)
+        ENDIF
+\end{lstlisting}
+
+Like \icode{QT3}, an invalid checksum in \icode{QT3}, will cause rapid corruption
+of bytes in the zero-page area of the machine's memory. 
+\begin{lstlisting}
+ZQVAVG::
+  LDA QT3     ; CHECK THAT BOTH QT3 AND
+  ORA QT6     ; QT6 ARE ZERO.
+  IFNE        ; IF THEY ARE NOT THEN
+  LDA I,17    ; CHECK IF THE PLAYER' SCORE IS GREATER THAN 170,000
+  CMP LSCORH  ; LSCORH CONTAINS THE FIRST 2 DIGITS OF THE PLAYER SCORE
+  IFCC        ; IF IT IS GREATER THAN OR EQUAL TO 17..
+  LDX LSCORL  ; LOAD WHATEVER IS IN THE LSCORL BYTE
+  INC X,0     ; AND USE THAT TO INCREMENT ONE OF OUR 'ZERO-PAGE' BYTES.
+  ENDIF       ; IN THE HOPE OF CAUSING SOME HAVOC.
+  ENDIF       ; HAVOC SECURED.
+\end{lstlisting}
+
