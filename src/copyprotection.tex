@@ -3,10 +3,39 @@
 \lhead[tempest]{}
 \lstset{style=6502Style}
 
-\section*{\icode{QT1}: Copyright Atari}
+Making arcade games was an expensive business. The outlay in time and 
+money expended on \textit{Tempest} was premised on selling enough units
+to arcades in the United States and Europe to justify the investment. And once
+the game became successful, Atari could fully expect unscrupulous actors to
+cash in on \textit{Tempest's} success by doing something much more profitable
+than developing a game of their own from scratch. This shortcut to riches
+involved patching the ROM boards to rename the game, apply some minimal
+changes to the game's graphical assets, and rebadge it as their own product.
+
+Atari laid a number of traps in the game's code to catch these guys out. The 
+primary focus of nearly all of them was in ensuring that the copyright message
+displayed throughout the game had not been tampered with. Each of these checks
+consists of calculating a checksum value on some segment of data in the game and
+ensuring that it contains the expected value.
+
+\section*{\icode{QT1}: copyright atari}
+An obvious place to check for tampering is in the copyright literal itself. This
+is defined in \icode{ALLANG.MAC}:
 \begin{lstlisting}
 ZATLIS: ASCVH <^ MCMLXXX ATARI>
+ZATLIE:
+ZATLIC==ZATLIE-ZATLIS
 \end{lstlisting}
+
+Note that that the \copyright~  symbol is given as a circumflex. Also note that we've used
+the labels \icode{ZATLIS} and \icode{ZATLIE} to identify the beginning and end of the
+copyright literal - this allows us to calculate the length of the message at assembly
+time and store it in \icode{ZATLIC}. We need this value because our check will be
+to initialize the accumulator (\icode{A}) with a value of \icode{85}, iterate through the copyright
+string in reverse order adding the value of each character to the accumulator, and store the result 
+(which should be \icode{00}) in \icode{QT1}. The idea is that the cumulative additions will keep
+wrapping around each time we reach 255 in the accumulator and when they are all complete our final
+result will be zero, as long as the copyright message has not been tampered with.
 
 \begin{lstlisting}
 ZATLIV: CLC           ; CLEAR THE CARRY BIT.
@@ -20,7 +49,57 @@ ZATLIV: CLC           ; CLEAR THE CARRY BIT.
         RTS
 \end{lstlisting}
 
-The punishment: make the game impossibly fast.
+Here is a rough visualization of the process. At each step we take in the value of the current
+byte and add it to our accumulator giving us an updated value.
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=10cm,center}
+      \begin{tabular}{lcc}
+        \toprule
+    String So Far    &     Byte Value      &  Updated Accumulator.\\
+        \midrule
+        \includegraphics[width=4cm]{copyprotection/atari_14.png} & \icode{A6}  &  \icode{2B} \\
+        \includegraphics[width=4cm]{copyprotection/atari_13.png} & \icode{38}  &  \icode{64} \\
+        \includegraphics[width=4cm]{copyprotection/atari_12.png} & \icode{16}  &  \icode{7A} \\
+        \includegraphics[width=4cm]{copyprotection/atari_11.png} & \icode{3C}  &  \icode{B6} \\
+        \includegraphics[width=4cm]{copyprotection/atari_10.png} & \icode{16}  &  \icode{CC} \\
+        \includegraphics[width=4cm]{copyprotection/atari_9.png}  & \icode{00}  &  \icode{CC} \\
+        \includegraphics[width=4cm]{copyprotection/atari_8.png}  & \icode{44}  &  \icode{10} \\
+        \includegraphics[width=4cm]{copyprotection/atari_7.png}  & \icode{44}  &  \icode{55} \\
+        \includegraphics[width=4cm]{copyprotection/atari_6.png}  & \icode{44}  &  \icode{99} \\
+        \includegraphics[width=4cm]{copyprotection/atari_5.png}  & \icode{2C}  &  \icode{C5} \\
+        \includegraphics[width=4cm]{copyprotection/atari_4.png}  & \icode{2E}  &  \icode{F3} \\
+        \includegraphics[width=4cm]{copyprotection/atari_3.png}  & \icode{1A}  &  \icode{0D} \\
+        \includegraphics[width=4cm]{copyprotection/atari_2.png}  & \icode{2E}  &  \icode{3C} \\
+      \end{tabular}                                                             
+    \end{adjustbox}
+  }
+\end{figure}
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=10cm,center}
+      \begin{tabular}{lcc}
+        \toprule
+    String So Far    &     Byte Value      &  Updated Accumulator.\\
+        \midrule
+        \includegraphics[width=4cm]{copyprotection/atari_1.png}  & \icode{00}  &  \icode{3C} \\
+        \includegraphics[width=4cm]{copyprotection/atari_0.png}  & \icode{50}  &  \icode{8C} \\
+        \includegraphics[width=4cm]{copyprotection/atari_0.png}  & \icode{D3}  &  \icode{00} \\
+      \end{tabular}                                                             
+    \end{adjustbox}
+  }
+\end{figure}
+The question now is what happens if we get a non-zero value, i.e. the checksum fails. The answer
+is that we lie in wait and at some point make the game unplayable. Every time the display state
+of the game's enemies is updated we check the value of \icode{QT1}. If it's not zero and the
+player has advanced past the tenth level we set an impossibly high framerate. This will result
+in enemies updating too quickly and will render the game unplayable.
+
 \begin{lstlisting}
 ZQATLI: LDA QT1       ; GET QT1.
         IFNE          ; IF IT'S NON ZERO..
@@ -33,10 +112,14 @@ ZQATLI: LDA QT1       ; GET QT1.
         ENDIF
 \end{lstlisting}
 
-\section*{\icode{QT2}: Copyright Atari}
-Check that the Atari credit message is being displayed. This checks that
-the code at \icode{ZATC4S}, which displays the Atari copyright message,
-has not been modified.
+
+\section*{\icode{QT2}: copyright atari II}
+We've checked the literal value in \icode{QT1}, but it's possible an enterprising pirate will find
+another way of altering the copyright message displayed to the player. For example, they
+could create an entirely new message instead of altering the existing one. Then all they
+would have to do is updated the routine that displays the message to point at it. 
+This code lives in the routine \icode{ZATC4S}. All we would have to do is change \icode{MATARI}
+to reference our own pirated version, for example \icode{MPIRAT}. 
 
 \begin{lstlisting}
 ZATC4S: LDX I,MATARI  ; GET THE ATARI (C) MESSAGE.
@@ -46,7 +129,9 @@ ZATC4S: LDX I,MATARI  ; GET THE ATARI (C) MESSAGE.
 ZATC4E:
 ZATC4C==ZATC4E-ZATC4S
 \end{lstlisting}
-Notice how we identify the end of the code block by adding a label \icode{ZATC4E}
+So what we need to do to prevent this is to come up with a way of checking that this routine
+itself has not been modified.
+As before, notice how we identify the end of the code block by adding a label \icode{ZATC4E}
 and then used that and the label at the start of the block (\icode{ZATC4S}) to calculate
 the length of the code block and store it as \icode{ZATC4C}.
 This comes in handy when we want to iterate through
@@ -61,7 +146,65 @@ ZATC4V: LDY I,ZATC4C		; GET THE LENGTH OF THE CODEBLOCK.
         STA QT2         ; STORE CHECKSUM IN Q2.
 \end{lstlisting}
 
-\section*{\icode{QT3}: The Display List}
+To give us an idea of what 'iterating through a codeblock' actually means, we have
+to assemble the instructions at \icode{ZATC4S} to see the byte values that they 
+correspond to. We list them below, side by side with the routine itself. As you can
+see, the \icode{LDX} instruction maps to \icode{A2}, while the address for \icode{MATARI}
+corresponds to a pair of bytes \icode{08} and \icode{92}, and so on.
+
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+ZATC4S::                                         
+        LDX I,MATARI             
+        JSR MSGS                  
+        LDX I,MCREDI             
+        JSR MSGS                  
+ZATC4E:                                                                       
+\end{lstlisting}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+ZATC4S::                                         
+        A2  0892
+        20  0264
+        A2  0456
+        20  0264
+ZATC4E:                                                                       
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+With this in hand we can reconstruct the activity of \icode{ZATC4V} as it processes
+each byte in the code block, in reverse order, computing a checksum for \icode{QT2}:
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=12cm,center}
+      \begin{tabular}{lcc}
+        \toprule
+    Bytes So Far    &     Byte Value      &  Updated Checksum.\\
+        \midrule
+        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~64} & \icode{A6}  &  \icode{2B} \\
+        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~02, 64} & \icode{A6}  &  \icode{2B} \\
+        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~20, 02, 64} & \icode{A6}  &  \icode{2B} \\
+        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
+        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
+        \icode{~~~~~~~~~~~~~~~~~~~~~~~~A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
+        \icode{~~~~~~~~~~~~~~~~~~~~64, A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
+        \icode{~~~~~~~~~~~~~~~~02, 64, A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
+        \icode{~~~~~~~~~~~~20, 02, 64, A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
+        \icode{~~~~~~~~92, 20, 02, 64, A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
+        \icode{~~~~08, 92, 20, 02, 64, A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
+        \icode{A2, 08, 92, 20, 02, 64, A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
+      \end{tabular}                                                             
+    \end{adjustbox}
+  }
+\end{figure}
+
+\section*{\icode{QT3}: copyright atari III}
 This one checks the contents of the vector display list used to render
 the Atari copyright message (as well as everything else the game writes to the screen).
 Since the copyright message is displayed on a few different
@@ -126,7 +269,7 @@ ZQVAVG::
   ENDIF       ; HAVOC SECURED.
 \end{lstlisting}
 
-\section*{\icode{QT4}: Sound}
+\section*{\icode{QT4}: sound check}
 This tests the sound chips (known as 'pokeys') for expected behaviour. There are two sound chips on the 
 board and each has a hardware-based random number generator. Retrieving a random number
 from each, one after the other, should return matching values. If they don't, something is wrong.
@@ -166,7 +309,7 @@ ZQPOKS: LDA QT4     ; CHECK THE SOUND CHIP CHECKSUM.
         RTS
 \end{lstlisting}
 
-\section*{\icode{QT5}: Sound}
+\section*{\icode{QT5}: sound check II}
 
 \begin{lstlisting}
         .SBTTL  DISPLAY HIGH SCORE LADDER
@@ -217,7 +360,7 @@ ZQPONS: LDA QT5
         RTS
 \end{lstlisting}
 
-\section*{\icode{QT6}: Atari Again!}
+\section*{\icode{QT6}: copyright atari, one last time}
 This is the same check as \icode{QT3} but is run in attract mode. The display list
 is inspected and a checksum calculated on the line where the Atari copyright message
 is expected to be.
