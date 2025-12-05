@@ -6,7 +6,7 @@
 Making arcade games was an expensive business. The outlay in time and 
 money expended on \textit{Tempest} was premised on selling enough units
 to arcades in the United States and Europe to justify the investment. And once
-the game became successful, Atari could fully expect unscrupulous actors to
+the game became successful, Atari could fully expect unscrupulous entrepreneurs to
 cash in on \textit{Tempest's} success by doing something much more profitable
 than developing a game of their own from scratch. This shortcut to riches
 involved patching the ROM boards to rename the game, apply some minimal
@@ -50,7 +50,11 @@ ZATLIV: CLC           ; CLEAR THE CARRY BIT.
 \end{lstlisting}
 
 Here is a rough visualization of the process. At each step we take in the value of the current
-byte and add it to our accumulator giving us an updated value.
+byte and add it to our accumulator giving us an updated value. Note that the start position of
+our check is not the last character of the copyright string, but the byte after it (\icode{A0}). This may
+have been intentional but it does look like a lurking off-by-one error, since we are including
+a value in our checksum that does not strictly belong to the copyright literal.
+
 \begin{figure}[H]
   {
     \setlength{\tabcolsep}{3.0pt}
@@ -60,22 +64,21 @@ byte and add it to our accumulator giving us an updated value.
         \toprule
     String So Far    &     Byte Value      &  Updated Accumulator.\\
         \midrule
-        \includegraphics[width=4cm]{copyprotection/atari_14.png} & \icode{A6}  &  \icode{2B} \\
-        \includegraphics[width=4cm]{copyprotection/atari_13.png} & \icode{38}  &  \icode{64} \\
-        \includegraphics[width=4cm]{copyprotection/atari_12.png} & \icode{16}  &  \icode{7A} \\
-        \includegraphics[width=4cm]{copyprotection/atari_11.png} & \icode{3C}  &  \icode{B6} \\
-        \includegraphics[width=4cm]{copyprotection/atari_10.png} & \icode{16}  &  \icode{CC} \\
-        \includegraphics[width=4cm]{copyprotection/atari_9.png}  & \icode{00}  &  \icode{CC} \\
-        \includegraphics[width=4cm]{copyprotection/atari_8.png}  & \icode{44}  &  \icode{10} \\
-        \includegraphics[width=4cm]{copyprotection/atari_7.png}  & \icode{44}  &  \icode{55} \\
-        \includegraphics[width=4cm]{copyprotection/atari_6.png}  & \icode{44}  &  \icode{99} \\
-        \includegraphics[width=4cm]{copyprotection/atari_5.png}  & \icode{2C}  &  \icode{C5} \\
-        \includegraphics[width=4cm]{copyprotection/atari_4.png}  & \icode{2E}  &  \icode{F3} \\
-        \includegraphics[width=4cm]{copyprotection/atari_3.png}  & \icode{1A}  &  \icode{0D} \\
-        \includegraphics[width=4cm]{copyprotection/atari_2.png}  & \icode{2E}  &  \icode{3C} \\
-      \end{tabular}                                                             
-    \end{adjustbox}
-  }
+        \includegraphics[width=4cm]{copyprotection/atari_14.png} & \icode{A0}  &  \icode{25} \\
+        \includegraphics[width=4cm]{copyprotection/atari_14.png} & \icode{A6}  &  \icode{CB} \\
+        \includegraphics[width=4cm]{copyprotection/atari_13.png} & \icode{38}  &  \icode{04} \\
+        \includegraphics[width=4cm]{copyprotection/atari_12.png} & \icode{16}  &  \icode{1A} \\
+        \includegraphics[width=4cm]{copyprotection/atari_11.png} & \icode{3C}  &  \icode{56} \\
+        \includegraphics[width=4cm]{copyprotection/atari_10.png} & \icode{16}  &  \icode{6C} \\
+        \includegraphics[width=4cm]{copyprotection/atari_9.png}  & \icode{00}  &  \icode{6C} \\
+        \includegraphics[width=4cm]{copyprotection/atari_8.png}  & \icode{44}  &  \icode{B0} \\
+        \includegraphics[width=4cm]{copyprotection/atari_7.png}  & \icode{44}  &  \icode{F4} \\
+        \includegraphics[width=4cm]{copyprotection/atari_6.png}  & \icode{44}  &  \icode{39} \\
+        \includegraphics[width=4cm]{copyprotection/atari_5.png}  & \icode{2C}  &  \icode{65} \\
+        \includegraphics[width=4cm]{copyprotection/atari_4.png}  & \icode{2E}  &  \icode{93} \\
+      \end{tabular}                                                                      
+    \end{adjustbox}                                                                      
+  }                                                                                      
 \end{figure}
 
 \begin{figure}[H]
@@ -87,8 +90,10 @@ byte and add it to our accumulator giving us an updated value.
         \toprule
     String So Far    &     Byte Value      &  Updated Accumulator.\\
         \midrule
-        \includegraphics[width=4cm]{copyprotection/atari_1.png}  & \icode{00}  &  \icode{3C} \\
-        \includegraphics[width=4cm]{copyprotection/atari_0.png}  & \icode{50}  &  \icode{8C} \\
+        \includegraphics[width=4cm]{copyprotection/atari_3.png}  & \icode{1A}  &  \icode{AD} \\
+        \includegraphics[width=4cm]{copyprotection/atari_2.png}  & \icode{2E}  &  \icode{DB} \\
+        \includegraphics[width=4cm]{copyprotection/atari_1.png}  & \icode{00}  &  \icode{DB} \\
+        \includegraphics[width=4cm]{copyprotection/atari_0.png}  & \icode{50}  &  \icode{2C} \\
         \includegraphics[width=4cm]{copyprotection/atari_0.png}  & \icode{D3}  &  \icode{00} \\
       \end{tabular}                                                             
     \end{adjustbox}
@@ -135,7 +140,7 @@ As before, notice how we identify the end of the code block by adding a label \i
 and then used that and the label at the start of the block (\icode{ZATC4S}) to calculate
 the length of the code block and store it as \icode{ZATC4C}.
 This comes in handy when we want to iterate through
-the code at runtime and verify that it hasn't been altered:
+the codeblock at runtime and verify that it hasn't been altered:
 \begin{lstlisting}
 ZATC4V: LDY I,ZATC4C		; GET THE LENGTH OF THE CODEBLOCK.
         LDA I,0A7       ; INITIALIZE OUR CHECKSUM. 
@@ -146,7 +151,7 @@ ZATC4V: LDY I,ZATC4C		; GET THE LENGTH OF THE CODEBLOCK.
         STA QT2         ; STORE CHECKSUM IN Q2.
 \end{lstlisting}
 
-To give us an idea of what 'iterating through a codeblock' actually means, we have
+To give us an idea of what 'iterating through the codeblock' actually means, we have
 to assemble the instructions at \icode{ZATC4S} to see the byte values that they 
 correspond to. We list them below, side by side with the routine itself. As you can
 see, the \icode{LDX} instruction maps to \icode{A2}, while the address for \icode{MATARI}
@@ -166,17 +171,20 @@ ZATC4E:
 \begin{minipage}[c]{0.40\linewidth}
 \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
 ZATC4S::                                         
-        A2  0892
-        20  0264
-        A2  0456
-        20  0264
+        A2  2C
+        20  AB14
+        A2  2E
+        20  AB14
 ZATC4E:                                                                       
 \end{lstlisting}
 \vspace*{\fill}
 \end{minipage}
 
-With this in hand we can reconstruct the activity of \icode{ZATC4V} as it processes
-each byte in the code block, in reverse order, computing a checksum for \icode{QT2}:
+With this in hand we can reconstruct the activity of \icode{ZATC4V} as it performs
+an exclusive OR on each byte in the code block, in reverse order, computing a checksum for \icode{QT2}.
+As with the computation of \icode{QT1} checksum, the 'off by one' nature of the loop means that
+we actually pick up an extra byte (\icode{A5}), after the position \icode{ZATC4E} at the very 
+start of our loop.
 
 \begin{figure}[H]
   {
@@ -187,22 +195,38 @@ each byte in the code block, in reverse order, computing a checksum for \icode{Q
         \toprule
     Bytes So Far    &     Byte Value      &  Updated Checksum.\\
         \midrule
-        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~64} & \icode{A6}  &  \icode{2B} \\
-        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~02, 64} & \icode{A6}  &  \icode{2B} \\
-        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~20, 02, 64} & \icode{A6}  &  \icode{2B} \\
-        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
-        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
-        \icode{~~~~~~~~~~~~~~~~~~~~~~~~A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
-        \icode{~~~~~~~~~~~~~~~~~~~~64, A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
-        \icode{~~~~~~~~~~~~~~~~02, 64, A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
-        \icode{~~~~~~~~~~~~20, 02, 64, A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
-        \icode{~~~~~~~~92, 20, 02, 64, A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
-        \icode{~~~~08, 92, 20, 02, 64, A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
-        \icode{A2, 08, 92, 20, 02, 64, A2, 04, 56, 20, 02, 64} & \icode{A6}  &  \icode{2B} \\
+        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~A5} & \icode{A5}  &  \icode{02} \\
+        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~14, A5} & \icode{14}  &  \icode{16} \\
+        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~AB, 14, A5} & \icode{AB}  &  \icode{BD} \\
+        \icode{~~~~~~~~~~~~~~~~~~~~~~~~~~~~20, AB, 14, A5} & \icode{20}  &  \icode{9D} \\
+        \icode{~~~~~~~~~~~~~~~~~~~~~~~~2E, 20, AB, 14, A5} & \icode{2E}  &  \icode{B3} \\
+        \icode{~~~~~~~~~~~~~~~~~~~~A2, 2E, 20, AB, 14, A5} & \icode{A2}  &  \icode{11} \\
+        \icode{~~~~~~~~~~~~~~~~14, A2, 2E, 20, AB, 14, A5} & \icode{14}  &  \icode{05} \\
+        \icode{~~~~~~~~~~~~AB, 14, A2, 2E, 20, AB, 14, A5} & \icode{AB}  &  \icode{AE} \\
+        \icode{~~~~~~~~20, AB, 14, A2, 2E, 20, AB, 14, A5} & \icode{20}  &  \icode{8E} \\
+        \icode{~~~~2C, 20, AB, 14, A2, 2E, 20, AB, 14, A5} & \icode{2C}  &  \icode{A2} \\
+        \icode{A2, 2C, 20, AB, 14, A2, 2E, 20, AB, 14, A5} & \icode{A2}  &  \icode{00  } \\
       \end{tabular}                                                             
     \end{adjustbox}
   }
 \end{figure}
+
+As we can see, the expected end result for our checksum, which we store in \icode{QT2}, is \icode{00}.
+What delights are in store if the checksum is not zero? A brutal end: we use the \icode{SED}
+instruction to switch the 6502 CPU to Binary Coded Decimal (BCD) mode. This has a fundamental impact
+on how data is stored and calculations are performed. Any future computation will yield highly
+unexpected values and result in all kinds of chaos, probably a very rapid and complete crash.
+
+\begin{lstlisting}
+ZQAT4C: LDA QT2    ; LOAD THE QT2 CHECKSUM.
+        IFNE       ; IF IT'S NOT ZERO..
+        LDA I,19.  ; LOAD 19 TO THE ACCUMULATOR. 
+        CMP CURWAV ; IF THE CURRENT LEVEL..
+        IFCC       ; IS GREATER THAN 19..
+        SED        ; SWITCH THE CPU TO BINARY DECIMAL MODE.
+        ENDIF
+        ENDIF
+\end{lstlisting}
 
 \section*{\icode{QT3}: copyright atari III}
 This one checks the contents of the vector display list used to render
