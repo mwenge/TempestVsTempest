@@ -1,0 +1,155 @@
+\chapter{attract mode admin}
+\label{sec:attract_mode}
+\lhead[tempest]{}
+\lstset{style=6502Style}
+
+There is naturally a bit of administrative overhead associated with operating
+a game in 'attract mode'. For the uninitiated, 'attract mode' is when a cabinet
+is sitting there attempting to attract customers. The most effective way of doing
+this is to show the game being played. In the absence of anyone to play it for you,
+this means introducing some rudimentary intelligence in the game logic that will
+mimic the activity of a fairly competent paying customer. As it turns out there are only
+two things that a player actually does: move and shoot. This means our task is simpler
+than it might first appear, we can at least split it out into separate concerns, solve 
+each, and we have an artificial player that can help bring in some business.
+
+Set number of lives to 1, and choose a random level from the first eight.
+\begin{lstlisting}
+        BIT QSTATUS
+        IFPL                    ;ATTRACT?
+        LDY I,1
+        STY LIVES1
+        LDA RANDOM              ;YES. CHOOSE FROM 1ST 8 LEVELS
+        AND I,7
+        ENDIF
+        STA X,WAVEN1
+        STA CURWAV
+\end{lstlisting}
+
+\section*{movement admin}
+Decide whether to move the player cursor automatically or not.
+\begin{lstlisting}
+        .SBTTL PLAY - MOVE CURSOR (MAINLINE)
+        LDX I,0
+        LDA QSTATUS
+        IFPL                    ;ATTRACT?
+        JSR AUTOCU              ;YES, AUTO MOVEMENT
+\end{lstlisting}
+
+Routine for moving the cursor automatically.
+\begin{lstlisting}
+        .SBTTL  PLAY-AUTO MOVE OF CURSOR
+AUTOCU: LDA I,-1
+        STA TEMP0
+        STA TEMP1
+        LDX WINVMX
+        BEGIN                   ;LOOP FOR ALL INVADERS
+        LDA X,INVAY
+        IFNE                    ;ALIVE?
+        CMP TEMP0               ;YES.
+        IFCC                    ;HIGHEST?
+        STA TEMP0               ;YES.
+        STX TEMP1
+        ENDIF
+        ENDIF
+        DEX
+        MIEND
+        LDX TEMP1
+        IFPL
+        LDA X,INVAL1
+        LDY CURSL1
+        JSR POLDEL              ;HOW FAR & BEST DIRECTION?
+        TAY
+        IFNE                    ;ALREADY THERE?
+        IFPL                    ;YES. WHICH WAY?
+        LDA I,-9
+        ELSE
+        LDA I,9
+        ENDIF
+        ENDIF
+        ENDIF
+        RTS
+\end{lstlisting}
+
+\section*{shooting admin}
+Routine for firing a charge automatically.
+\begin{lstlisting}
+        .SBTTL PLAY - FIRE PLAYER CHARGE
+FIREPC:
+        LDA CURSL2
+        IFPL                    ;PLAYER ALIVE
+        LDA QSTATUS
+        IFPL                    ;ATTRACT?
+        LDA CURMOD              ;YES. AUTO FIRE
+        STA TEMP0
+        LDX I,NICHARG+NINVAD-1
+        BEGIN                   ;LOOP FOR EACH INVADER & SHOT UNTIL EXHAUSTED OR CLOSE 1 IS FOUND
+        LDA X,CHARY+NPCHAR
+        IFNE                    ;ACTIVE?
+        LDA X,CHARL1+NPCHAR     ;YES CALUCLATE ABSOLUTE VALUE OF LINE DELTA
+        SEC                     ;
+        SBC CURSL1
+        IFMI
+        EOR I,0FF
+        CLC
+        ADC I,1
+        ENDIF
+        CMP I,2
+        IFCC                    ;TOO CLOSE?
+        INC TEMP0               ;YES. FIRE
+        ENDIF
+        ENDIF
+        DEX
+        MIEND
+        LDA TEMP0
+        ELSE
+        LDA SWSTAT
+        AND I,MFIRE
+        ENDIF
+        IFNE                    ;FIRE CHARGE?
+        LDX I,NPCHARG-1         ;YES
+        BEGIN                   ;LOOP UNTIL VACANCY IS FOUND
+        LDA X,CHARY
+        IFEQ                    ;VACANCY?
+                                ;YES FIRE CHARGE
+        INC CHACOU
+        LDA CURSY               ;START AT CURSOR
+        STA X,CHARY
+        LDA CURSL1
+        STA X,CHARL1            ;STARTS AT SAME LINE AS CURSOR
+        LDA CURSL2
+        STA X,CHARL2
+        LDA I,0                 ;0 COLLISION COUNTER
+        STA X,CHARCO
+        JSR SLAUNC              ;LAUNCH SOUND
+        LDA CURSY
+        JSR COLCHK              ;CHECK FOR COLLISION
+        LDX I,0                 ;EXIT LOOP
+        ENDIF
+        DEX
+        MIEND
+        ENDIF
+        ENDIF
+        RTS
+\end{lstlisting}
+
+Put the game into attract mode when displaying the high score table.
+\begin{lstlisting}
+DLADR:  LDA QSTATUS
+        AND I,^C<MATRACT!MGTMOD>
+                        ;PUT INTO ATTRACT
+        STA QSTATUS             ;REQUEST DISPLAY OF LADDER
+        LDA I,0                 ;
+        STA NUMPLA              ;RETURN TO PLAYER
+        LDA I,CLOGO
+        STA QNXTSTA             ;REQUEST NEW GAME AFTER
+        LDA I,CPAUSE            ;A LONG DELAY
+        STA QSTATE
+        LDA I,0A0
+        STA QTMPAUS
+        LDA I,1                 ;DOUBLE TIME
+        STA PSCALE
+        LDA I,CDHITB
+        STA QDSTATE
+        RTS
+\end{lstlisting}
