@@ -238,16 +238,19 @@ has to tolerate a bit of variety.
 
 Every time a message is written, the \icode{MSGS} routine checks if the
 copyright message has been passed to it: if so, it stores the current
-location in the display list in \icode{SECUVG} for checking later.
+location in the display list in \icode{SECUVG} for checking later. Note
+that this is an address, so is two bytes long. We make sure to save both
+bytes of the address in \icode{SECUVG} so we can use it later.
 
 \begin{lstlisting}
-ZSECL0: CPX I,MATARI
-        IFEQ                    ;COPYRIGHT MSG?
-        LDA VGLIST              ;YES. SAVE START LOC
-        STA SECUVG
-        LDA VGLIST+1
-        STA SECUVG+1
-        ENDIF
+ZSECL0:
+  CPX I,MATARI  ; IS THIS THE COPYRIGHT MSG?
+  IFEQ          ; IF IT IS THEN..
+  LDA VGLIST    ; GET CURRENT ADDRESS IN VGLIST
+  STA SECUVG    ; SAVE THE LOW BYTE IN SECUVG.
+  LDA VGLIST+1  ; GET THE HIGH BYTE OF VGLIST ADDRESS.
+  STA SECUVG+1  ; SAVE IT IN SECUVG+1
+  ENDIF
 \end{lstlisting}
 
 When the \icode{DISPLAY} routine runs, we are processing the contents
@@ -278,6 +281,21 @@ ZATVG2::
   ENDIF
   ENDIF
 \end{lstlisting}
+
+The consequences of failing the \icode{QT3} are even more devious than the ones
+we have encountered so far. Rather than corrupting gameplay nearly instantaneously,
+Dave Theurer devised somthing much more playful and unpredictable. If the player
+has a score exceeding 170,000, the program will take the lower digits of their score
+and use these as an index into an area in memory which contains a wide variety of 
+parameters that control the game's behaviour. Commonly referred to as the 'zero page',
+this is the region of 256 bytes at the very start of the program's addressable memory.
+Changing values at random in this area will lead to increasingly strange unbehaviour,
+rendering the game unplayable in a way that will vary from player to player and guaranteed
+to puzzle the owner of the pirated arcade cabinet. Unfortunately, if there is a mistake
+in the calculation of the checksum then the same result will obtain for perfectly legitimate
+owners of Atari cabinets. And this is exactly what happened to owners of the first edition
+of Tempest in the final months of 1980. A devious bug that 
+\hyperref[sec:tempest_program_bug]{\textcolor{blue}{'we cover in detail in a later chapter.'}} 
 
 \begin{lstlisting}
 ZQVAVG::
@@ -335,53 +353,64 @@ ZQPOKS: LDA QT4     ; CHECK THE SOUND CHIP CHECKSUM.
 
 \section*{\icode{QT5}: sound check II}
 
+A similar, but more elaborate check, of the game's sound board is performed
+when displaying the high score tables. Again, we query the \textit{pokey}'s random
+number generators in quick succession. We bitshift the results around a bit (in a way that is quite
+hard to follow), and after a bix of X-OR'ing expect a zero byte to store in \icode{QT5}.
+What all of this is doing is ensuring that successive requests to each random number
+generator return the same result - an expected behaviour of the Atari sound ROM board which
+presumably was not known to its pirate competitors.
+
 \begin{lstlisting}
         .SBTTL  DISPLAY HIGH SCORE LADDER
-LDRDSP: JSR INFO                ;DISPLAY SCORE & LIVES INFO
-ZPONTS: SEI          ; DISABLE INTERRUPTS.
-        LDA RANDOM
-        LDY RANDOM
-        STY TEMP0
-        LSR
-        LSR
-        LSR
-        LSR
-        EOR TEMP0
-        STA TEMP0
-        LDA RANDO2
-        LDY RANDO2
-        CLI         ; ALLOW INTERRUPTS AGAIN.
-        EOR TEMP0
-        AND I,0F0
-        EOR TEMP0
-        STA TEMP0
-        TYA
-        ASL
-        ASL
-        ASL
-        ASL
-        EOR TEMP0
-        STA QT5     ; STORE THE RESULT IN QT5.
+LDRDSP: 
+  JSR INFO     ; DISPLAY SCORE & LIVES INFO
+ZPONTS:
+  SEI          ; DISABLE INTERRUPTS.
+  LDA RANDOM   ; PUT A RANDOM NUMBER FROM POKEY 1 IN A. 
+  LDY RANDOM   ; PUT A RANDOM NUMBER FROM POKEY 1 IN Y. 
+  STY TEMP0    ; STORE Y IN TEMP0.
+  LSR          ; SHIFT ACCUMULATOR RIGHT 1 BIT.
+  LSR          ; SHIFT ACCUMULATOR RIGHT 1 BIT.
+  LSR          ; SHIFT ACCUMULATOR RIGHT 1 BIT.
+  LSR          ; SHIFT ACCUMULATOR RIGHT 1 BIT.
+  EOR TEMP0    ; X-OR ACCUMULATOR WITH TEMP0.
+  STA TEMP0    ; STORE RESULT IN TEMP0.
+  LDA RANDO2   ; PUT A RANDOM NUMBER FROM POKEY 1 IN A. 
+  LDY RANDO2   ; PUT A RANDOM NUMBER FROM POKEY 1 IN Y. 
+  CLI          ; ALLOW INTERRUPTS AGAIN.
+  EOR TEMP0    ; X-OR ACCUMULATOR WITH TEMP0.
+  AND I,0F0    ; AND TOP 4 BITS OF ACCUMULATOR.
+  EOR TEMP0    ; X-OR ACCUMULATOR WITH TEMP0. 
+  STA TEMP0    ; STORE RESULT IN TEMP0.
+  TYA          ; TRANSFER VALUE IN Y TO ACCUMULATOR.
+  ASL          ; SHIFT ACCUMULATOR LEFT 1 BIT.
+  ASL          ; SHIFT ACCUMULATOR LEFT 1 BIT.
+  ASL          ; SHIFT ACCUMULATOR LEFT 1 BIT.
+  ASL          ; SHIFT ACCUMULATOR LEFT 1 BIT.
+  EOR TEMP0    ; X-OR ACCUMULATOR WITH TEMP0. 
+  STA QT5      ; STORE THE RESULT IN QT5.
 \end{lstlisting}
 
-Randomly tagged on to the end of the display starfield routine (\icode{DSTARF}). 
-If the score is greater than 150,000 then use the last few digits of the score
+The consequences for failing this checksum test are tagged on to the end of the display starfield routine (\icode{DSTARF}). 
+If the score is greater than 150,000 then we use the last few digits of the score
 to randomly increment a byte in memory at position 200 or above. Like the damage
 wrought in \icode{QT3} this will be done every time the starfield display is updated
-during a level change so will inevitably, and promptly, bring the game to a crashing
+during a level change so will inevitably, and usually promptly, bring the game to a crashing
 halt.
 
 \begin{lstlisting}
-ZQPONS: LDA QT5
-        IFNE
-        LDX LSCORH
-        CPX I,15
-        IFCS
-        LDX LSCORL
-        INC X,200
-        ENDIF
-        ENDIF
-        RTS
+ZQPONS: 
+  LDA QT5     ; LOAD QT5 IN THE ACCUMULATOR.
+  IFNE        ; IF IT'S NON-ZERO THEN..
+  LDX LSCORH  ; GET THE FIRST 2 DIGITS OF THE SCORE..
+  CPX I,15    ; COMPARE WITH 15..
+  IFCS        ; IF SCORE GREATER THAN 150,000 THEN..
+  LDX LSCORL  ; GET THE LAST 2 DIGITS OF THE SCORE..
+  INC X,200   ; AND USE THAT TO INCREMENT ONE OF THE BYTES AT ADDRESS $200. 
+  ENDIF       ; IN THE HOPE OF CAUSING SOME HAVOC.
+  ENDIF       ; HAVOC SECURED.
+  RTS
 \end{lstlisting}
 
 \section*{\icode{QT6}: copyright atari, one last time}
@@ -389,17 +418,18 @@ This is the same check as \icode{QT3} but is run in attract mode. The display li
 is inspected and a checksum calculated on the line where the Atari copyright message
 is expected to be.
 \begin{lstlisting}
-ZATVG1: LDA QSTATUS      ; ARE WE IN ATTRACT MODE?
-        IFPL             ; IF YES THEN.. ATARI BETTER BE ON SCREEN
-        LDA I,0F2        ; INITIALIZE THE CHECKSUM VALUE TO F2.
-        CLC              ; CLEAR THE CARRY BIT.
-        LDY I,39.        ; ITERATE OVER ALL 39 BYTES ON THE LINE
-        BEGIN            ; LOOP THROUGH ALL 39 BYTES..
-        ADC NY,SECUVG    ; ADDING THE VALUE AT EACH BYTE TO OUR CHECKSUM
-        DEY              ; KEEP LOOPING FOR ALL 39.
-        MIEND            ; END LOOP
-        STA QT6          ; SAVE THE RESULT (WHICH SHOULD BE 0)
-        ENDIF
+ZATVG1:
+  LDA QSTATUS      ; ARE WE IN ATTRACT MODE?
+  IFPL             ; IF YES THEN.. ATARI BETTER BE ON SCREEN
+  LDA I,0F2        ; INITIALIZE THE CHECKSUM VALUE TO F2.
+  CLC              ; CLEAR THE CARRY BIT.
+  LDY I,39.        ; ITERATE OVER ALL 39 BYTES ON THE LINE
+  BEGIN            ; LOOP THROUGH ALL 39 BYTES..
+  ADC NY,SECUVG    ; ADDING THE VALUE AT EACH BYTE TO OUR CHECKSUM
+  DEY              ; KEEP LOOPING FOR ALL 39.
+  MIEND            ; END LOOP
+  STA QT6          ; SAVE THE RESULT (WHICH SHOULD BE 0)
+  ENDIF
 \end{lstlisting}
 
 Like \icode{QT3}, an invalid checksum in \icode{QT3}, will cause rapid corruption
