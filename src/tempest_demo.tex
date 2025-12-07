@@ -38,16 +38,11 @@ him move.
 \section*{movement admin}
 This one is surprisingly easy. At any given moment we just have to decide whether
 the cursor (representing the player) is going to move left or right. The only thing
-that should ever affect this decision is whether the movement moves us nearer the same
-line as the furthest advanced enemy that we can shoot at. 
-
-\begin{lstlisting}
-        .SBTTL PLAY - MOVE CURSOR (MAINLINE)
-        LDX I,0
-        LDA QSTATUS
-        IFPL                    ;ATTRACT?
-        JSR AUTOCU              ;YES, AUTO MOVEMENT
-\end{lstlisting}
+that should ever affect this decision is whether the movement gets us nearer the same
+line as the enemy that is nearest the top of the web. The diagram below shows this
+decision-making in action. We are much nearer the line of the invader that is second
+farthest away from us, but rather than move right towards that enemy we move left,
+towards the enemy that is closest to reaching the top of the web.
 
 \begin{minipage}[c]{0.48\linewidth}
 \begin{figure}[H]
@@ -73,6 +68,9 @@ line as the furthest advanced enemy that we can shoot at.
     \end{adjustbox}
 \end{figure}
 \end{minipage}
+
+This approach, while it may be suboptimal in some ways, has the merit of being very
+simple and we can implement it in a compact routine on the page opposite.
 
 
 Routine for moving the cursor automatically.
@@ -198,4 +196,12 @@ DLADR:  LDA QSTATUS
         LDA I,CDHITB
         STA QDSTATE
         RTS
+\end{lstlisting}
+
+\begin{lstlisting}
+        .SBTTL PLAY - MOVE CURSOR (MAINLINE)
+        LDX I,0
+        LDA QSTATUS
+        IFPL                    ;ATTRACT?
+        JSR AUTOCU              ;YES, AUTO MOVEMENT
 \end{lstlisting}
