@@ -353,19 +353,30 @@ mypal:
 Can you guess the piece of \icode{beasty7.cry} we're copying here? It's this:
 
 
+\begin{minipage}[c]{0.45\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=12cm,center}
+    \begin{adjustbox}{width=6cm,center}
       \frame{\includegraphics[width=3cm]{src/cry/beasty7.png}}%
-      \hspace{0.5cm}
-      \begin{tikzpicture}[baseline={(current bounding box.south)}]
-        \draw[->,line width=4pt] (0,0) to (1,0);
-      \end{tikzpicture}
-      \hspace{0.5cm}
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.45\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
       \frame{\includegraphics[width=5cm]{src/blitting/2000.png}}%
     \end{adjustbox}
-  \caption{Extracting the '2000' chunk from \icode{beasty7.cry}.}
 \end{figure}
+\end{minipage}
 
 There is a little extra twiddling in our code to figure out whether the display we're on is PAL or NTSC. These were slightly conflicting standards for
 analogue television display through the 1960s to the 1990s. NTSC was the standard in the US and PAL the standard in Europe. Most video games of the time 
