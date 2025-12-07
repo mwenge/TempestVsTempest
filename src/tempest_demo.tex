@@ -41,7 +41,7 @@ the cursor (representing the player) is going to move left or right. The only th
 that should ever affect this decision is whether the movement gets us nearer the same
 line as the enemy that is nearest the top of the web. The diagram below shows this
 decision-making in action. We are much nearer the line of the invader that is second
-farthest away from us, but rather than move right towards that enemy we move left,
+farthest away from us, but rather than move right towards that enemy, we move left:
 towards the enemy that is closest to reaching the top of the web.
 
 \begin{minipage}[c]{0.48\linewidth}
@@ -72,8 +72,17 @@ towards the enemy that is closest to reaching the top of the web.
 This approach, while it may be suboptimal in some ways, has the merit of being very
 simple and we can implement it in a compact routine on the page opposite.
 
+This routine consists of two steps. The first identifies the invader that has
+advanced furthest along the web. The second then decides in which direction we must
+move to get nearer to that invader. 
 
-Routine for moving the cursor automatically.
+The first step is a simple matter of finding the invader with the highest 'Z Position' (which
+is measured on the Y axis by \textit{Tempest} and stored in the \icode{INVAY} array for each
+invader).
+The second step depends on finding the shortest distance between the line the player's cursor is in and that
+of the selected invader. A subroutine called \icode{POLDEL} is used to calculate this, and
+the direction is indicated by whether the value is positive (to the left) or negative (to the right).
+\clearpage
 \begin{lstlisting}
   .SBTTL  PLAY-AUTO MOVE OF CURSOR
 AUTOCU: 
@@ -115,68 +124,107 @@ AUTOCU:
   RTS
 \end{lstlisting}
 
+This isn't a perfect strategy, as we've already indicated. It means we potentially
+move away from invaders that are nearer to our line of fire. But it does at least
+ensure that we are always attempting to kill any enemy that is in danger of reaching
+the top of the web and overrunning us.
+\clearpage
 \section*{shooting admin}
-Routine for firing a charge automatically.
+As long as we're trying to get nearer to the enemy that poses the most imminent danger,
+we should also have a strategy for what we do when we get there. The obvious one is: shoot.
+And that is indeed what we do, but with some latitude on top that improves our chances of 
+killing any invader that happens to be in our field of fire. Our strategy for shooting,
+therefore, will be to look at every enemy, and every shot fired by the enemy, and fire 
+a shot in their direction if the line they are on is within two moves from our present position.
+
+This means we will fire a shot along lines even when there isn't an enemy currently there (in the
+hope that they might move there soon). It also means we no pay attention to how many shots we have
+already fired or any consideration to whether it might be better to wait for a better opportunity.
+
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=9cm,center}
+      \includegraphics[width=3cm]{src/attractmode/shooting_between.png}%
+    \end{adjustbox}
+    \caption*{Shooting when no one is there: an example of firing player charges when enemies are adjacent.}
+\end{figure}
+
+We implement this simple control logic in the same routine responsible for shooting charges
+when the player presses the fire button: \icode{FIREPC}. 
 \begin{lstlisting}
-        .SBTTL PLAY - FIRE PLAYER CHARGE
+  .SBTTL PLAY - FIRE PLAYER CHARGE
 FIREPC:
-        LDA CURSL2
-        IFPL                    ;PLAYER ALIVE
-        LDA QSTATUS
-        IFPL                    ;ATTRACT?
-        LDA CURMOD              ;YES. AUTO FIRE
-        STA TEMP0
-        LDX I,NICHARG+NINVAD-1
-        BEGIN                   ;LOOP FOR EACH INVADER & SHOT UNTIL EXHAUSTED OR CLOSE 1 IS FOUND
-        LDA X,CHARY+NPCHAR
-        IFNE                    ;ACTIVE?
-        LDA X,CHARL1+NPCHAR     ;YES CALUCLATE ABSOLUTE VALUE OF LINE DELTA
-        SEC                     ;
-        SBC CURSL1
-        IFMI
-        EOR I,0FF
-        CLC
-        ADC I,1
+  LDA CURSL2                ; GET THE PLAYER'S LINE POSITION.
+  IFPL                      ; NON-NEGATIVE MEANS THEY'RE ALIVE SO.. 
+  LDA QSTATUS               ; CHECK WHETHER IN ATTRACT MODE..
+  IFPL                      ; IF WE ARE THEN..
+    LDA CURMOD              ; UNLESS WE'RE DROPPING, CURMOD WILL BE 0. 
+    STA TEMP0               ; STORE AS OUR PROVISIONAL FIRE DECISION.
+
+    ; LOOP THROUGH ALL INVADERS AND ALL SHOTS FIRED BY INVADERS TO LOOK
+    ; FOR ANY ON A LINE NEAR TO THE PLAYER.
+    LDX I,NICHARG+NINVAD-1  ; THE NUMBER OF INVADERS PLUS INVADER SHOTS.
+    BEGIN                   ; LOOP THROUGH ALL INVADERS + INVADER SHOTS.
+      LDA X,CHARY+NPCHAR    ; GET DEPTH OF CURRENT INVADER.
+      IFNE                  ; IF NON-ZERO, IT IS IN PLAY SO..
+        LDA X,CHARL1+NPCHAR ; GET THE LINE IT'S ON.
+        SEC                 ; SET THE CARRY BIT BEFORE SUBTRACTING.
+        SBC CURSL1          ; SUBTRACT PLAYER LINE FROM INVADER LINE.
+        IFMI                ; IF NEGATIVE MAKE IT AN ABSOLUTE NUMBER..
+        EOR I,0FF           ; BY X-OR'ING THE RESULT.
+        CLC                 ; AND CLEAR THE CARRY BIT BEFORE..
+        ADC I,1             ; ADDING 1 TO THE DIFFERENCE.
         ENDIF
-        CMP I,2
-        IFCC                    ;TOO CLOSE?
-        INC TEMP0               ;YES. FIRE
+        CMP I,2             ; COMPARE THE RESULT WITH 2..
+        IFCC                ; IF THEY ARE LESS THAN 2 LINES APART THEN..
+        INC TEMP0           ; SET TEMP0 SO THAT WE WILL FIRE A SHOT.
         ENDIF
-        ENDIF
-        DEX
-        MIEND
-        LDA TEMP0
-        ELSE
-        LDA SWSTAT
-        AND I,MFIRE
-        ENDIF
-        IFNE                    ;FIRE CHARGE?
-        LDX I,NPCHARG-1         ;YES
-        BEGIN                   ;LOOP UNTIL VACANCY IS FOUND
-        LDA X,CHARY
-        IFEQ                    ;VACANCY?
-                                ;YES FIRE CHARGE
-        INC CHACOU
-        LDA CURSY               ;START AT CURSOR
-        STA X,CHARY
-        LDA CURSL1
-        STA X,CHARL1            ;STARTS AT SAME LINE AS CURSOR
-        LDA CURSL2
-        STA X,CHARL2
-        LDA I,0                 ;0 COLLISION COUNTER
-        STA X,CHARCO
-        JSR SLAUNC              ;LAUNCH SOUND
-        LDA CURSY
-        JSR COLCHK              ;CHECK FOR COLLISION
-        LDX I,0                 ;EXIT LOOP
-        ENDIF
-        DEX
-        MIEND
-        ENDIF
-        ENDIF
-        RTS
+      ENDIF
+      DEX                   ; MOVE TO THE NEXT INVADER.
+    MIEND                   ; LOOP UNTIL ALL INVADERS & SHOTS ARE DONE.
+    LDA TEMP0               ; STORE OUR FIRE DECISION IN THE ACCUMULATOR.
+  ELSE                      ; IF WE"RE NOT IN ATTRACT MODE THEN..
+    LDA SWSTAT              ; READ INPUT FROM THE FIRE BUTTONS..
+    AND I,MFIRE             ; IF THE FIRE BITS ARE SET, STORE THE DECISION.
+  ENDIF
+\end{lstlisting}
+Hopefully the indentation above helps apprehend the structure of the above. In the first
+branch of the if statement we are calculating the fire decision for attract mode by looping
+through all the invaders and invaders shots. The second branch of the \icode{IF} statement
+is much shorter by comparison: it reads the input from a human player and determines if the
+fire button has been pressed or not. The end result in both cases is stored in the accumulator
+register (\icode{A}). If the value is non-zero it means we should go ahead and fire. Here's
+the remainder of the \icode{FIREPC} routine. It looks for a vacant slot in the 8 active shots
+available to the player, if one is free then we can go ahead and fire. Otherwise the player
+(or in our case the attract mode) will have to try again the next time around.
+
+\clearpage
+\begin{lstlisting}
+  IFNE                    ; IF THE FIRE DECISION IS NON-ZERO THEN..
+    LDX I,NPCHARG-1       ; GET THE NUMBER OF SLOTS FOR BULLETS (8)..
+    BEGIN                 ; LOOP THROUGH EACH SLOT LOOKING FOR A SPARE.. 
+      LDA X,CHARY         ; DOES THIS BULLET HAVE A DEPTH POSITION?
+      IFEQ                ; IF NOT, THEN IT'S FREE AND WE CAN USE IT.
+        INC CHACOU        ; INCREMENT THE BULLETS-USED COUNT.
+        LDA CURSY         ; GET THE PLAYER'S DEPTH POSITION.
+        STA X,CHARY       ; STORE IT AS THE NEW BULLET'S DEPTH POSITION.
+        LDA CURSL1        ; GET THE PLAYER'S CURRENT LINE.
+        STA X,CHARL1      ; STORE IT AS THE BULLET'S LINE.
+        LDA CURSL2        ; GET THE PLAYER'S CURRENT LINE.
+        STA X,CHARL2      ; STORE IT AS THE BULLET'S LINE.
+        LDA I,0           ; INITIALIZE TO ZERO..
+        STA X,CHARCO      ; THE BULLET'S COLLISION COUNTER.
+        JSR SLAUNC        ; PLAY THE BULLET-FIRED SOUND.
+        LDA CURSY         ; GET THE PLAYER'S DEPTH.
+        JSR COLCHK        ; CHECK FOR COLLISION WITH ENEMY.
+        LDX I,0           ; EXIT LOOP BY SETTING X TO 0.
+      ENDIF
+      DEX                 ; DECREMENT X TO MOVE TO NEXT BULLET.
+    MIEND                 ; KEEP LOOPING UNTIL X GETS TO -1.
+  ENDIF
 \end{lstlisting}
 
+\section*{admin on and off}
 Put the game into attract mode when displaying the high score table.
 \begin{lstlisting}
 DLADR:  LDA QSTATUS
