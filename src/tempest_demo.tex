@@ -224,32 +224,7 @@ available to the player, if one is free then we can go ahead and fire. Otherwise
   ENDIF
 \end{lstlisting}
 
-\section*{admin on and off}
-Put the game into attract mode when displaying the high score table.
-\begin{lstlisting}
-DLADR:  LDA QSTATUS
-        AND I,^C<MATRACT!MGTMOD>
-                        ;PUT INTO ATTRACT
-        STA QSTATUS             ;REQUEST DISPLAY OF LADDER
-        LDA I,0                 ;
-        STA NUMPLA              ;RETURN TO PLAYER
-        LDA I,CLOGO
-        STA QNXTSTA             ;REQUEST NEW GAME AFTER
-        LDA I,CPAUSE            ;A LONG DELAY
-        STA QSTATE
-        LDA I,0A0
-        STA QTMPAUS
-        LDA I,1                 ;DOUBLE TIME
-        STA PSCALE
-        LDA I,CDHITB
-        STA QDSTATE
-        RTS
-\end{lstlisting}
-
-\begin{lstlisting}
-        .SBTTL PLAY - MOVE CURSOR (MAINLINE)
-        LDX I,0
-        LDA QSTATUS
-        IFPL                    ;ATTRACT?
-        JSR AUTOCU              ;YES, AUTO MOVEMENT
-\end{lstlisting}
+We have specified just two mechanics: moving and shooting; and we've kept
+their operation very simple. Yet just a few seconds watching \textit{Tempest}
+play by itself in \textit{attract mode} testifies to their unreasonable
+effectiveness at emulating an accomplished player.  
