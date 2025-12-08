@@ -38,26 +38,51 @@ Before we see how the magic was achieved, let's briefly consider what is actuall
 to achieve a jump-like effect. We visualize this in the simplified sequence of diagrams 
 below: the claw moves gradually off the top of the web along its Z axis. That's it.
 
-\begin{minipage}[c]{0.31\linewidth}
+\begin{minipage}[c]{0.48\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=5.5cm,center}
+    \begin{adjustbox}{width=6cm,center}
       \includegraphics[width=12cm]{src/jump/web_29.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
-\begin{minipage}[c]{0.31\linewidth}
+\begin{minipage}[c]{0.06\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=5.5cm,center}
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6cm,center}
       \includegraphics[width=12cm]{src/jump/web_15.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
-\begin{minipage}[c]{0.31\linewidth}
+
+\begin{minipage}[c]{0.48\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=5.5cm,center}
+    \begin{adjustbox}{width=6cm,center}
+      \includegraphics[width=12cm]{src/jump/web_15.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6cm,center}
       \includegraphics[width=12cm]{src/jump/web_1.png}%
     \end{adjustbox}
 \end{figure}
@@ -67,30 +92,56 @@ So to achieve a jump, we just have to adjust the Z position of the claw every ti
 are updating its position in \icode{claw\_con1}. There is one added complication of course,
 the claw has to come back down to earth again.
 
-\begin{minipage}[c]{0.31\linewidth}
+\begin{minipage}[c]{0.48\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=5.5cm,center}
+    \begin{adjustbox}{width=6cm,center}
       \includegraphics[width=12cm]{src/jump/web_1.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
-\begin{minipage}[c]{0.31\linewidth}
+\begin{minipage}[c]{0.06\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=5.5cm,center}
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6cm,center}
       \includegraphics[width=12cm]{src/jump/web_15.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
-\begin{minipage}[c]{0.31\linewidth}
+
+\begin{minipage}[c]{0.48\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=5.5cm,center}
+    \begin{adjustbox}{width=6cm,center}
+      \includegraphics[width=12cm]{src/jump/web_15.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6cm,center}
       \includegraphics[width=12cm]{src/jump/web_29.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
+
 
 This is where the slightly magic value of \icode{-\$20000} starts to come in handy. It has the
 property of being negative. In assembler arithmetic, negative values have a very useful property
