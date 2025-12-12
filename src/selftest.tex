@@ -3,3 +3,341 @@
 \lhead[tempest]{}
 \lstset{style=6502Style}
 
+\begin{lstlisting}
+	.SBTTL	SELF TEST SUBROUTINE ON CASE GOSUB
+SFTJSR:
+	.WORD BADEAR-1		;BAD EAROM
+	.WORD ROMREP-1		;REPORT ON ROM, MATH BOX
+	.WORD SHATCH-1		;CROSS LATCH, ALPHABET
+	.WORD SHYSTER-1		;HYSTERESIS
+	.WORD SINTEN-1
+	.WORD SCHEKR-1		;CHECKERS
+	.WORD SIGANA-1		;SIGNATURE ANALYSIS
+SFTJSE:
+\end{lstlisting}
+
+\begin{lstlisting}
+SSTATE: LDX QSTATE
+        CPX I,SFTJSE-SFTJSR
+        IFCS
+        LDX I,2
+        STX QSTATE
+        ENDIF
+        LDA X,SFTJSR+1
+        PHA
+        LDA X,SFTJSR
+        PHA
+NOOPR:  RTS
+\end{lstlisting}
+
+\section*{input test}
+\begin{lstlisting}
+        LDX I,0AC                       ;DRAW VECTOR TO CLOCK POSITION 
+        LDA I,30                        ; INDICATED BY TBHD
+        JSR VGVTR1
+        LDY TBHD
+        LDA Y,POTXTA
+        LDX Y,POTYTA
+        LDY I,0C0
+        JMP VGVTR 
+\end{lstlisting}
+
+\begin{lstlisting}
+POTYTA:
+00 0C 16 1E
+
+POTXTA:
+20 1E 16 0C 
+\end{lstlisting}
+
+
+
+\section*{cross hatch}
+A cross-hatched screen with the alphabet displayed along the bottom.
+
+\begin{lstlisting}
+SHATCH: JSR NOSOUND
+        LAH HATCH+1
+        LXL HATCH
+        JMP VGJSRL              ;CROSS HATCH & ALPHABET
+\end{lstlisting}
+
+\begin{lstlisting}
+MAX	=500.
+MAY	=540.
+CM	=1
+CD	=1
+HATCH:
+	JSRL BONDRY		;EDGE OF SCREEN (END UP IN LOWER LEFT CORNER)
+	ICVEC
+	CNTR
+	SCVEC -MAX,-MAY,0
+	SCVEC MAX,MAY/2,4
+	SCVEC MAX/3,MAY,4
+	SCVEC -MAX,0,4
+	SCVEC MAX/3,-MAY,4
+	SCVEC MAX,-MAY/2,4
+	SCVEC -MAX,MAY,4
+	SCVEC MAX,MAY,0
+	SCVEC -MAX,-MAY/2,4
+	SCVEC -MAX/3,-MAY,4
+	SCVEC MAX,0,4
+	SCVEC -MAX/3,MAY,4
+	SCVEC -MAX,MAY/2,4
+	SCVEC MAX,-MAY,4
+	CNTR
+	VCTR -520.,-358.,0
+	JMPL VGMSGA		;GO DO ALPHABET
+\end{lstlisting}
+
+\begin{lstlisting}
+	.GLOBL	VGMSGA
+VGMSGA:	JSRL	CHAR.		;ADDRESS OF LETTER ROUTINES
+	JSRL	CHAR.0
+	JSRL	CHAR.1
+	JSRL	CHAR.2
+	JSRL	CHAR.3
+	JSRL	CHAR.4
+	JSRL	CHAR.5
+	JSRL	CHAR.6
+	JSRL	CHAR.7
+	JSRL	CHAR.8
+	JSRL	CHAR.9
+	JSRL	CHAR.A
+	JSRL	CHAR.B
+	JSRL	CHAR.C
+	JSRL	CHAR.D
+	JSRL	CHAR.E
+	JSRL	CHAR.F
+	JSRL	CHAR.G
+	JSRL	CHAR.H
+	JSRL	CHAR.I
+	JSRL	CHAR.J
+	JSRL	CHAR.K
+	JSRL	CHAR.L
+	JSRL	CHAR.M
+	JSRL	CHAR.N
+	JSRL	CHAR.O
+	JSRL	CHAR.P
+	JSRL	CHAR.Q
+	JSRL	CHAR.R
+	JSRL	CHAR.S
+	JSRL	CHAR.T
+	JSRL	CHAR.U
+	JSRL	CHAR.V
+	JSRL	CHAR.W
+	JSRL	CHAR.X
+	JSRL	CHAR.Y
+	JSRL	CHAR.Z
+\end{lstlisting}
+
+\section*{hysteresis}
+The sound test with a box that cycles from large to small.
+\begin{lstlisting}
+	.BYTE 16		;PART OF SNDTBL (UNDERFLOW)
+SNDTBL:	.BYTE 0,10,2,12,4,14,6,16,0
+        .SBTTL  SOUND TEST
+SHYSTER:
+        LDA QFRAME
+        AND I,3F
+        IFEQ
+        INC INDEX3              ;UPDATE TIMER
+        ENDIF
+        LDA INDEX3
+        AND I,7
+        TAX
+        LDY X,SNDTBL-1
+        LDA I,0
+        STA Y,AUDC1             ;TURN OFF OLD CHANNEL
+        LDY X,SNDTBL
+        LDA X,SNDFRQ
+        STA Y,AUDF1             ;TURN ON NEW CHANNEL
+        LDA I,0A8
+        STA Y,AUDC1
+        LAH HYSTER+1
+        LXL HYSTER
+        JSR VGJSRL              ;HYSTERESIS
+        LDA QFRAME              ;TEST LINEAR SCALE
+        AND I,7F
+        TAY                     ;RAMP LINEAR SCALE
+        LDA I,1                 ;BINARY SCALE
+        JSR VGSCAL
+        LAH VORBOX+1
+        LXL VORBOX
+        JMP VGJSRL              ;VARY BOX SIZE
+\end{lstlisting}
+
+\begin{lstlisting}
+        .SBTTL  SELFTEST-HYSTERESIS PIC
+MAX=512.*3/2
+MAY=384.*3/2
+.HATCH=4
+
+HYSTER: ICVEC
+        JSRL CNWHSC
+        CVEC MAX,0,.HATCH
+        CVEC 0,MAY,0
+        CVEC 0,-MAY,.HATCH
+        CVEC -MAX,0,0
+        CVEC 0,0,.HATCH
+        RTSL
+\end{lstlisting}
+\begin{lstlisting}
+BONDRY: CSTAT WHITE             ;SCREEN BOUNDARY
+        SCAL 1,0
+VORBOX: CNTR
+        VCTR -MX,-MY,0
+        VCTR 2*MX,0,6
+        VCTR 0,2*MY,6
+        VCTR -2*MX,0,6
+        VCTR 0,-2*MY,6
+        RTSL
+\end{lstlisting}
+
+\section*{intensity}
+Intensity test. Bands of difference colours displayed on screen.
+\begin{lstlisting}
+SINTEN:
+	LXL INTEST
+	LAH INTEST+1
+	BNE JSRVGJ		;INTENSITY TEST
+\end{lstlisting}
+
+\begin{lstlisting}
+INTEST: JSRL BONDRY
+        CNTR
+        RVCTR -<INLEN/2*3>,SEPY*4,0
+        CSTAT RED
+        JSRL SEVEN
+        CNTR
+        RVCTR -<INLEN/2>,SEPY*4,0
+        CSTAT BLUE
+        JSRL SEVEN
+        CNTR
+        RVCTR <INLEN/2>,SEPY*4,0
+        CSTAT GREEN
+        JSRL SEVEN
+        CNTR
+        RVCTR -<INLEN/2*3>,-SEPY*10.,0
+        CSTAT YELLOW
+        JSRL SEVEN
+        CNTR
+        RVCTR -<INLEN/2>,-SEPY*10.,0
+        CSTAT TURQOI
+        JSRL SEVEN
+        CNTR
+        RVCTR <INLEN/2>,-SEPY*10.,0
+        CSTAT PURPLE
+        JSRL SEVEN
+        CNTR
+        RVCTR -<INLEN/2>,-SEPY*3,0
+        CSTAT WHITE
+        RVCTR INLEN,0,2
+        RVCTR -INLEN-40,SEPY,0
+        RVCTR INLEN+40,0,3
+        JMPL SEVEN2
+\end{lstlisting}
+
+\begin{lstlisting}
+SEVEN:                          ;DRAW SIX LEVELS OF INTENSITY
+        RVCTR INLEN,0,2
+        RVCTR -INLEN,SEPY,0
+        RVCTR INLEN,0,3
+SEVEN2: RVCTR -INLEN,SEPY,0
+        RVCTR INLEN,0,4
+        RVCTR -INLEN,SEPY,0
+        RVCTR INLEN,0,5
+        RVCTR -INLEN,SEPY,0
+        RVCTR INLEN,0,6
+        RVCTR -INLEN,SEPY,0
+        RVCTR INLEN,0,7
+        RTSL
+\end{lstlisting}
+
+\section*{checkerboard}
+A checkerboard.
+
+\begin{lstlisting}
+        .SBTTL  CROSS HATCH, INTENSITY TEST PATTERNS
+SCHEKR:
+        LDA TBHD
+        LSR
+        TAY
+        LDA I,68
+        JSR VGSTAT              ;SET COLOR
+        LXL CHEKER
+        LAH CHEKER+1
+        BNE JSRVGJ              ;JSRL TO CHECKER BOARD
+SINTEN:
+        LXL INTEST
+        LAH INTEST+1
+        BNE JSRVGJ              ;INTENSITY TEST
+\end{lstlisting}
+
+\begin{lstlisting}
+CHEKER:
+        SCAL 1,0
+
+        NLINES=15.
+        ..X=-MAY+1              ;HORIZONTAL LINES
+        .REPT NLINES
+        CNTR
+        VCTR MAX,..X,0
+        VCTR -2*MAX,0,.HATCH
+        ..X=..X+<2*MAY/<NLINES-1>>
+        .ENDR
+        ..X=-MAX+1              ;VERTICAL LINES
+        NLINES=11.
+        .REPT NLINES
+        CNTR
+        VCTR ..X,MAY,0
+        VCTR 0,-2*MAY,.HATCH
+        ..X=..X+<2*MAX/<NLINES-1>>
+        .ENDR
+        RTSL
+\end{lstlisting}
+
+\section*{signature analysis}
+
+\begin{lstlisting}
+        .SBTTL  SIGNATURE ANALYSIS
+SIGANA:
+        LDA I,0                 ;CLOSE SIGNATURE WINDOW
+        STA OUTANK              ;SAEN23 (ENABLE FOR SA)
+        STA MBSTAR              ;CLOCK IT
+        STA POKEY
+        STA POKEY2
+        STA EADAL
+        STA EACTL
+        LDA MSTAT
+        LDA MYLOW
+        LDA MYHIGH
+        LDA EAIN
+        LDA I,8                 ;****
+        STA OUTANK              ;OPEN SIGNATURE WINDOW
+        LDA I,1
+        LDX I,1F
+        CLC
+        BEGIN
+        STA X,MBSTAR            ;SCAN MB MAPPING PROM
+        ROL
+        DEX
+        MIEND
+        LAH BONDRY+1
+        LXL BONDRY
+        JMP VGJSRL              ;DRAW BIG BOX ON SCREEN
+\end{lstlisting}
+
+\begin{lstlisting}
+MX      =500.
+MY      =540.
+BONDRY: CSTAT WHITE             ;SCREEN BOUNDARY
+        SCAL 1,0
+VORBOX: CNTR
+        VCTR -MX,-MY,0
+        VCTR 2*MX,0,6
+        VCTR 0,2*MY,6
+        VCTR -2*MX,0,6
+        VCTR 0,-2*MY,6
+        RTSL
+\end{lstlisting}
