@@ -1,157 +1,270 @@
-\chapter{game over}
+\chapter{auto}
 \lhead[tempest 2000]{}
 \label{sec:bullet}
 \lstset{style=68KStyle}
-The player explosion in \textit{Tempest 2000} is vector-based: that is, it is
-not a solid polygon like the claw or its enemies, but a line-based object using
-the same machinery as the objects in \textit{Tempest Classic} mode. The data
-structure that defines the \icode{zap} used to render the explosion is a series
-of x,y,z co-ordinate triplets followed by an index to the co-ordinate it should be connected to.
 
 \begin{minipage}[c]{0.48\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=7cm,center}
-      \includegraphics[width=12cm]{src/zap/zap.png}%
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/t2kdemo/demo.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
-\hspace{0.5cm}
 \begin{minipage}[c]{0.48\linewidth}
 \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+tst auto      ; Check if in demo-mode.
+beq namsg     ; If we're not, skip.
+; Draw the demo text.
+lea bfont,a1  ; Load the large font
+lea autom1,a0 ; "Demo" string
+move #50,d0   ; Set y position
+jsr centext   ; Display text in center
 \end{lstlisting}
 \vspace*{\fill}
 \end{minipage}
-\clearpage
 
-The explosion effect will consist of four of these star-shaped \icode{zap}s spinning
-clockwise in unison and racing towards the player. We can visualize the general
-character of the explosion as follows:
+As in the original \textit{Tempest}, managing the attract mode behaviour
+of the claw comes down to deciding where to move and when to shoot. What
+we find in \textit{Tempest 2000} is that shooting is simplified down to 
+'always shoot'. Unlike \textit{Tempest}, no attention is paid to whether
+there may be an enemy present or not: the rule is that we will stop and
+shoot if there is an enemy on the same lane, and we'll also fire off a
+bullet whenever we move left or right. This keeps things simple, but does
+mean that we will sit on a lane firing bullets at an enemy until it is
+destroyed rather than moving on immediately.
 
-\begin{minipage}[c]{0.48\linewidth}
-\vspace{-0.6cm}
-\begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=6.5cm,center}
-      \includegraphics{src/zap/web_zap1.png}%
-    \end{adjustbox}
-\end{figure}
-\end{minipage}
-\hspace{0.2cm}
-\begin{minipage}[c]{0.48\linewidth}
-\vspace{-0.6cm}
-\begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=6.5cm,center}
-      \includegraphics{src/zap/web_zap2.png}%
-    \end{adjustbox}
-\end{figure}
-\end{minipage}
-\begin{minipage}[c]{0.48\linewidth}
-\vspace{-1.1cm}
-\begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=6.5cm,center}
-      \includegraphics{src/zap/web_zap3.png}%
-    \end{adjustbox}
-\end{figure}
-\end{minipage}
-\hspace{0.2cm}
-\begin{minipage}[c]{0.48\linewidth}
-\vspace{-1.1cm}
-\begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=6.5cm,center}
-      \includegraphics{src/zap/web_zap4.png}%
-    \end{adjustbox}
-\end{figure}
-\end{minipage}
-
-\clearpage
+We find this approach compactly implemented at the head of the \icode{claw\_con1}
+routine. It outsources the decision on whether left or right movement is the
+best choice to a routine called \icode{lor} but looks afer everything else itself.
 
 \begin{lstlisting}
-; *******************************************************************
-; gofeed
-; A 'demo_routine' routine
-; Implements the game over display effect.
-; *******************************************************************
-gofeed:
-        move.l #(PITCH1|PIXEL16|WID384),d0   ; Set the GPU flags in d0.
-        move.l d0,source_flags     ; Pass them to the GPU's source flags.
-        move.l d0,dest_flags
-        lea in_buf,a0              ; Point our GPU RAM input buffer at a0.
-        add.l #$2000,pongz
-        move pongz,d0
-        and.l #$0f,d0              ; Keep it between 0 and 15
-        sub.l #$07,d0
-        move.l cscreen,(a0)        ; source screen is already-displayed screen
-        move.l #384,4(a0)          ; Full screen width.
-        move.l #240,d1             ; Full screen height.
-        add palfix1,d1             ; Adjust for PAL
-        move.l d1,8(a0)            ; Store height in GPU input buffer.
-        move.l #$1f4,12(a0)        ; Store X scale in GPU input buffer.
-        move.l #$1f4,16(a0)        ; Store Y scale in GPU input buffer.
-        move.l d0,20(a0)           ; Store initial angle in brads in GPU buffer.
-        move.l #$c00000,24(a0)     ; source x centre in 16:16
-        move.l #$780000,d0
-        add.l palfix3,d0           ; Adjust for PAL screens if required.
-        move.l d0,28(a0)           ; y centre the same
-        move.l #$0,32(a0)          ; offset of dest rectangle
-        move.l delta_i,36(a0)      ; change of i per increment
-        ; Op 2 of this module is Scale and Rotate ('scar').
-        move.l #2,gpu_mode         ; Select 'scar' in antelope.gas.
-        move.l #demons,a0          ; Load the GPU module in antelope.gas.
-        jsr gpurun                 ; Run the selected GPU module.
-        jsr gpuwait                ; Wait for the GPU to finish.
+claw_con1:
+        move #1,whichclaw    ; Flag that this is player 1. 
+        tst auto             ; Are we in demo mode?
+        beq sclawr           ; If we're not, use player input. 
+
+        ; Otherwise we're in demo mode, so decide what to do. 
+        move.l pad_now,-(a7) ; Stash any player input on the stack.
+        move droid_data,d0   ; droid_data has the lane of enemy nearest top.
+        bsr lor              ; Decide whether to move left or right.
+
+        bpl moveme           ; If movement selected, perform the movement.
+        clr.l 20(a6)         ; Otherwise, stop the claw here.
+        move.l fire_1,pad_now ; Press fire.
+gscl:   bsr sclawr           ; Shoot a bullet at the enemy.
+        move.l (a7)+,pad_now ; Restore stashed player input from the stack.
+        rts                  ; We're done - so return.
     
-        ; Calculate the new X and Y scale for the 'Game Over' graphic.
-        move.l #4,gpu_mode         ; Select 'rex' in camel.gas. Multiple images stretching towards you in Z
-        lea p_sines,a0             ; Load the positive sine table to a0.
-        move pongx,d0
-        move pongy,d3
-        add #15,pongx
-        add #17,pongy
-        and #$ff,d0                ; Keep it between 0 and 255
-        and #$ff,d3                ; Keep d3 between 0 and 255.
-        move.b 0(a0,d0.w),d1
-        move.b 0(a0,d3.w),d2
-        and.l #$ff,d1              ; Keep it between 0 and 255
-        and.l #$ff,d2              ; Keep it between 0 and 255
-        lsl.l #6,d2                ; Multiply it by 64.
-        lsl.l #6,d1                ; Multiply it by 64.
-        add.l #$8000,d1
-        add.l #$8000,d2
-    
-        ; Draw the Game Over graphic.
-        lea in_buf,a0              ; Point our GPU RAM input buffer at a0.
-        move.l #pic2,(a0)+         ; crex->_bass: srce screen for Game Over graphics is pic2
-        move.l #$150094,(a0)+      ; crex-> spixel: srce start pixel address for 'Game Over'
-        move.l #$440091,(a0)+      ; crex-> ssize: srce size for 'Game Over'
-        move.l d1,(a0)+            ; crex-> scalex: x-scale calculated above
-        move.l d2,(a0)+            ; crex-> scaley: y-scale calculated above
-        move.l #0,(a0)+            ; crex-> shearx: shearx
-        move.l #0,(a0)+            ; crex-> sheary: sheary
-        move.l #1,(a0)+            ; crex-> mode: Mode 1 = Centered
-        move.l #0,d0               ; Store 0 in d0 for X and Y destination position..
-        move.l d0,(a0)+            ; crex-> dstx: Destination X position.
-        move.l d0,(a0)+            ; crex-> dsty: Destination Y position.
-        move.l #$600000,d0         ; Store Z in d0.
-        move.l d0,(a0)+            ; crex-> dstz:
-        lea parrot,a0              ; Load the GPU module in camel.gas.
-        jsr gpurun                 ; do clear screen
-        jsr gpuwait                ; Wait for the GPU to finish.
-    
-        tst timer
-        bmi babb
-        sub #1,timer
-        bpl rrrts
-    
-babb:   move.l pad_now,d0
-        and.l #allbutts,d0
-        beq rrrts
-        move #50,timer
-        move.l #clearfeed,demo_routine
-        move.l #$1f4,pongx
-        rts
+        ; Look after the movement. 
+moveme: bne clawright        ; If '0' from 'lor' then move right.
+        ; Otherwise We need to move left.
+        move.l fire_1,d0     ; Might as well fire a bullet too.
+        or.l #$00400000,d0   ; Move left.
+        move.l d0,pad_now    ; Add bullet and movement to input.
+        bra gscl             ; Move, fire bullet, and return.
+
+clawright:                   ; We need to move right.
+        move.l fire_1,d0     ; Might as well fire a bullet too. 
+        or.l #$00800000,d0   ; Move right.
+        move.l d0,pad_now    ; Add bullet and movement to input.
+        bra gscl             ; Move, fire bullet, and return.
 \end{lstlisting}
+
+The \icode{lor} subroutine is responsible for figuring out whether the best movement is left or right. On
+a plane that is open, i.e. isn't closed like a circle, it's a simple question
+of whether the claw is to the right or left of the target and should move
+in the opposite direction to get nearer to it. 
+
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics[width=3cm]{src/t2kdemo/demo_plane_left1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics[width=3cm]{src/t2kdemo/demo_plane_left2.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+
+But in the case of a closed plane, this might be suboptimal. 
+So what we do instead is split the closed plane
+into two halves. If the target is in a lower-numbered lane than the claw, then
+the claw will move left if is in the 'lower' half of the web:
+
+\clearpage
+\begin{lstlisting}
+; *******************************************************************
+; lor: select whether to move left or right
+; enter with d0=web column # of target. 
+; For any web, returns d1=0 for go left, 1 for go right,
+; based on a6 object's position.
+; *******************************************************************
+lor:    move 16(a6),d1 ; Get the claw's current position.
+        cmp d0,d1      ; Compare it to the topmost enemy's.
+        bne nntrv      ; If positions not the same, go to nntrv.
+        tst auto       ; Are we in demo mode?
+        beq nntrv      ; If not, skip to nntrv.
+        move #-1,d1    ; Tell demo mode to stop the claw here.
+        rts            ; Return.
+
+        ; Where position of claw and target are not the same, figure
+        ; out whether to go left or right.
+nntrv:  tst connect    ; Is it a closed/wrapper web?
+        bne _lor1      ; If so, skip to _lor1 to handle it..
+        ; (1) Othwerise the web is a plane that doesn't wrap so subtracting
+        ; positions will tell us which way to move.
+        sub d0,d1      ; Subtract the position of target from the claw. 
+        bgt lor0       ; If greater than 0, move left..
+        ble lor1       ; If less than 0, move right..
+
+        ; (2) Otherwise the web is a 'closed plane' that wraps, so need to
+        ; figure the shortest path to the enemy.
+_lor1:  move web_max,d2; Get number of lanes in web and put it in d2.
+        asr #1,d2      ; Divide by 2 to get half total lanes in web.
+        sub d0,d1      ; Subtract the position of target from the claw. 
+        bgt _lll       ; If target in a lower lane than claw, go to _lll.  
+        ble _rrr       ; If target in a higher lane than claw, go to _rrr.  
+        ; With target in a lower lane than the claw, if the claw is in 
+        ; the 'lower' half of the web then it should move left, otherwise
+        ; it should move right.
+_lll:   sub d2,d1      ; Subtract halfway-point in web from claw position.
+        blt lor0       ; If it's less than zero, move left..
+        bra lor1       ; Otherwise move right.
+
+        ; With target in a higher lane than the claw, if the claw is in 
+        ; the 'lower' half of the web then it should move right, otherwise
+        ; it should move left.
+_rrr:   neg d1       
+        sub d2,d1      ; Subtract halfway-point in web from claw position.
+        blt lor1       ; If it's less than zero, move right..
+                       ; .. otherwise move left.
+lor0:   clr d1         ; Decided to move left, so set d1 to 0.
+        rts            ; Return
+lor1:   move #1,d1     ; Decided to move right, so set d1 to 1.
+        rts            ; Return
+\end{lstlisting}
+\clearpage
+
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics[width=3cm]{src/t2kdemo/demo_left1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics[width=3cm]{src/t2kdemo/demo_left2.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+Otherwise it will move right:
+
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics[width=3cm]{src/t2kdemo/demo_left1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics[width=3cm]{src/t2kdemo/demo_left3.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+Likewise if the target is in a higher-numbered lane than the claw,
+then the claw will move right if it is in the 'lower' half of the web:
+
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics[width=3cm]{src/t2kdemo/demo_left1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics[width=3cm]{src/t2kdemo/demo_left3.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+Otherwise it will move left:
+
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics[width=3cm]{src/t2kdemo/demo_left1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics[width=3cm]{src/t2kdemo/demo_left3.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
 
