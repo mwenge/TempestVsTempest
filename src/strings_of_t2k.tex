@@ -1,0 +1,45 @@
+\chapter{strings of tempest 2000}
+\lhead[tempest 2000]{}
+\label{sec:bullet}
+\lstset{style=68KStyle}
+
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/t2kdemo/demo.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+tst auto      ; Check if in demo-mode.
+beq namsg     ; If we're not, skip.
+; Draw the demo text.
+lea bfont,a1  ; Load the large font
+lea autom1,a0 ; "Demo" string
+move #50,d0   ; Set y position
+jsr centext   ; Display text in center
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+\begin{minipage}[c]{0.48\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=7cm,center}
+      \includegraphics[width=12cm]{src/t2kdemo/pressfiretoplay.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+; Draw 'press FIRE to play'
+lea cfont,a1   ; Load the small font
+lea autom2,a0  ; "press FIRE to play"
+move #180,d0   ; Set y position
+jsr centext    ; Draw the text in the centre.
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
