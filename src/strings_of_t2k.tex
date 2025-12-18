@@ -2,44 +2,289 @@
 \lhead[tempest 2000]{}
 \label{sec:bullet}
 \lstset{style=68KStyle}
+Three different fonts are used in \textit{Tempest 2000}. Each one is
+set out in a sprite sheet, and comes with an accompanying array that
+maps ASCII characters a set of co-ordinates in the sheet. 
 
-\begin{minipage}[c]{0.48\linewidth}
+\subsection*{afont - the 'Atari' font}
+For example in the \icode{afont}, also known as the \textit{Atari} font, the
+letter \icode{A} is found at X position 1 and Y position 164 (\icode{\$A4}),
+while \icode{B} is at X position 20 (\icode{\$14}) and Y position 164 (\icode{\$A4}), 
+in the sprite sheet \icode{beasty4.cry}.
+
+\begin{minipage}[c]{0.58\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=5cm,center}
-      \includegraphics[width=12cm]{src/t2kdemo/demo.png}%
+    \begin{adjustbox}{width=8.6cm,center}
+      \includegraphics[width=12cm]{src/cry/beasty4.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
-\begin{minipage}[c]{0.48\linewidth}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.38\linewidth}
 \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
-tst auto      ; Check if in demo-mode.
-beq namsg     ; If we're not, skip.
-; Draw the demo text.
-lea bfont,a1  ; Load the large font
-lea autom1,a0 ; "Demo" string
-move #50,d0   ; Set y position
-jsr centext   ; Display text in center
+afont:  
+  dc.l pic2      ; beasty4.cry
+  dc.l $0012000f ; 
+  dc.l $b6011e   ; Space
+  dc.l $a40001   ; A
+  dc.l $a40014   ; B
+  dc.l $a40027   ; C
+  dc.l $a4003a   ; D
+  dc.l $a4004d   ; E
+  dc.l $a40060   ; F
+  dc.l $a40073   ; G
+  dc.l $a40086   ; H
+  dc.l $a40099   ; I
+  dc.l $a400ac   ; J
+  dc.l $a400bf   ; K
+  dc.l $a400d2   ; L
+  dc.l $a400e5   ; M
+  dc.l $a400f8   ; N
 \end{lstlisting}
 \vspace*{\fill}
 \end{minipage}
 
-\begin{minipage}[c]{0.48\linewidth}
+What this looks like in practice is demonstrated below. The copyright message
+from the title screen is displayed by loading the \icode{afont}, the text string,
+and then using the \icode{centext} routine to render the string to the display.
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=7cm,center}
-      \includegraphics[width=12cm]{src/t2kdemo/pressfiretoplay.png}%
+    \begin{adjustbox}{width=13cm,center}
+      \includegraphics[width=12cm]{src/t2k_strings/copyright_1981,.png}%
+    \end{adjustbox}
+    \begin{adjustbox}{width=13cm,center}
+      \includegraphics[width=12cm]{src/t2k_strings/1994_Atari_Corp..png}%
+    \end{adjustbox}
+\end{figure}
+\vspace{-0.6cm}
+\begin{lstlisting}
+; Write "Copyright 1981" to screen.
+lea afont,a1     ; Select afont image map for our font.
+lea ataricop1,a0 ; Load "Copyright 1981" string to a0
+move #190-8,d0   ; Set the Y Pos.
+add palfix2,d0   ; Adjust for PAL.
+jsr centext      ; Write the text in a0 to the screen.
+
+; Write "1994 Atari Corp" to screen.
+lea afont,a1     ; Select afont image map for our font.
+lea ataricop2,a0 ; Load "1994 Atari Corp" string to a0.
+move #207-5,d0   ; Set the Y pos of the text.
+add palfix2,d0   ; Adjust for PAL.
+jsr centext      ; Write the text in a0 to the screen.
+\end{lstlisting}
+
+The routine \icode{centext} is useful for display static, horizontally
+centred messages. But what about cases where we want to display a message
+for a brief period of time? For this we have a pair of routines called
+\icode{setmsg} and \icode{drawmsg} that are used to display contextual
+messages to the player in the 'Atari' font. For example, when they are
+doing especially well and get a 'power up':
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=13cm,center}
+      \includegraphics[width=12cm]{src/t2k_strings/yes!_yes!_yes!.png}%
+    \end{adjustbox}
+\end{figure}
+\vspace{-0.6cm}
+\begin{lstlisting}
+lea drtxt,a0               ; Point a0 to  "yes! yes! yes!" string.
+clr.l d0                   ; Set X position.
+move.l #$8000,d1           ; Set Y position.
+bsr setmsg                 ; Display the message.
+\end{lstlisting}
+
+Once we've defined the message and its horizontal and vertical position above, we
+call \icode{setmsg} to put it on a display timer. We also set its initial X and
+Y position as well as the final position of the message as it 'decays'.
+
+Every time we draw objects on the screen we will call the \icode{drawmsg} routine
+to render any active messages in \icode{afont}. We don't give that routine in full
+here as it is quite long!
+\clearpage
+\begin{lstlisting}
+; *******************************************************************
+; Update the message displayed to the player with whatever is in a0.
+; The display of the message is handled by 'drawmsg'.
+; *******************************************************************
+setmsg:
+        move #100,msgtim1          ; set default Messager parameters
+        move #50,msgtim2
+        move.l d0,msgxv            ; X position for second phase of message.
+        move.l d1,msgyv            ; Y position for second phase of message.
+        move.l #$10000,msgxs       ; Initial X position.
+        move.l #$10000,msgys       ; Initial Y position.
+        move.l a0,msg              ; Set the message object.
+        rts
+\end{lstlisting}
+
+
+\subsection*{bfont - the 'Paused' font}
+This metallic space-opera of a font is used primarily for the 'Demo' and 'Paused'
+messages but is also used when entering a high score.
+
+\begin{minipage}[c]{0.58\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8.6cm,center}
+      \includegraphics[width=12cm]{src/cry/beasty8.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
-\begin{minipage}[c]{0.48\linewidth}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.38\linewidth}
 \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+bfont:
+  dc.l pic6     ; beasty8.cry
+  dc.l $001f001b
+  dc.l $470119  ;Space
+  dc.l $010001  ;A
+  dc.l $010024  ;B
+  dc.l $010047  ;C
+  dc.l $01006a  ;D
+  dc.l $01008d  ;E
+  dc.l $0100b0  ;F
+  dc.l $0100d3  ;G
+  dc.l $0100f6  ;H
+  dc.l $010119  ;I
+  dc.l $240001  ;J
+  dc.l $240024  ;K
+  dc.l $240047  ;L
+  dc.l $24006a  ;M
+  dc.l $24008d  ;N
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+Here's how it looks during the 'Pause' screen.
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=7cm,center}
+      \includegraphics[width=12cm]{src/t2k_strings/paused.png}%
+    \end{adjustbox}
+\end{figure}
+\vspace{-0.6cm}
+\begin{lstlisting}
+jsr text2_setup
+; Display the 'paused' text.
+lea in_buf,a0           ; Point our GPU RAM input buffer at a0.
+move.l #$490074,32(a0)  ; was 35
+move.l #pautext,(a0)    ; Point a0 at "paused" string.
+lea texter,a0           ; Load the GPU module in stoat.gas.
+jsr gpurun              ; Run the selected GPU module.
+jsr gpuwait             ; Wait for the GPU to finish.
+\end{lstlisting}
+
+The 'Pause' screen has a commented-out feature that was likely in use when the
+game was going through testing and review. This is a date-stamped version string,
+referencing the date of the current build. What we find in the source code is the
+date of the last build that this feature was used: 12th November 1993, or 11th
+December 1993. My guess is the latter - since the intended audience for the test
+builds were American.
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=13cm,center}
+      \includegraphics[width=14cm]{src/t2k_strings/t2k_version_121193.png}%
+    \end{adjustbox}
+\end{figure}
+\vspace{-0.6cm}
+\begin{lstlisting}
+jsr text2_setup ; Select 'bfont'.
+move.l #$400040,32(a0) ; Set position.
+move.l #vertext,(a0) ; Select version string.
+lea texter,a0   ; Load GPU module in stoat.gas.
+jsr gpurun      ; Run selected GPU module.
+jsr gpuwait     ; Wait for GPU to finish.
+\end{lstlisting}
+
+\subsection*{cfont - the 'Arcade' font}
+This one has the unusual distinction of containing two fonts in one: or rather
+the same font in different colours. Upper case strings are mapped to a green/orange
+version of the font, while lower case strings are mapped to a blue/white version.
+\begin{minipage}[c]{0.58\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8.6cm,center}
+      \includegraphics[width=12cm]{src/cry/beasty3.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.38\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+cfont:
+  dc.l pic      ; beasty3.cry
+  dc.l $00080008
+  dc.l $b50137  ;Space
+  dc.l $b5001b  ;A
+  dc.l $b50026  ;B
+  dc.l $b50031  ;C
+  dc.l $b5003c  ;D
+  dc.l $b50047  ;E
+  dc.l $b50052  ;F
+  dc.l $b5005d  ;G
+  dc.l $bf001b  ;a
+  dc.l $bf0026  ;b
+  dc.l $bf0031  ;c
+  dc.l $bf003c  ;d
+  dc.l $bf0047  ;e
+  dc.l $bf0052  ;f
+  dc.l $bf005d  ;g
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+We can see an example of this in the string \textit{"press FIRE to play"}. \textit{"FIRE"}
+is rendered in the green/orange font, while the rest of the text is rendered in the blue/white
+font used for lower case text.
+
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=13cm,center}
+      \includegraphics[width=12cm]{src/t2kdemo/pressfiretoplay.png}%
+    \end{adjustbox}
+\end{figure}
+\vspace{-0.6cm}
+\begin{lstlisting}
 ; Draw 'press FIRE to play'
 lea cfont,a1   ; Load the small font
 lea autom2,a0  ; "press FIRE to play"
 move #180,d0   ; Set y position
 jsr centext    ; Draw the text in the centre.
 \end{lstlisting}
-\vspace*{\fill}
-\end{minipage}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=13cm,center}
+      \includegraphics[width=12cm]{src/t2k_strings/enter_something_EGOTISTICAL!.png}%
+    \end{adjustbox}
+\end{figure}
+\vspace{-0.6cm}
+\begin{lstlisting}
+lea cfont,a1         ; Load the small regular font to a1.
+move.l enl3,a0       ; "enter something EGOTISTICAL!"
+move #80,d0          ; Set Y position of text.
+jsr centext          ; Display horizontally centred text.
+\end{lstlisting}
+
+\begin{lstlisting}
+; *******************************************************************
+; text_setup
+; Set up text in the 'Atari' font.
+; *******************************************************************
+text_setup:
+        lea in_buf,a0              ; Point our GPU RAM input buffer at a0.
+        move.l #afont,4(a0)        ; 'Atari' font data structure
+tsu:
+        move.l #0,8(a0)            ; Start of font data structure.
+        move.l #0,12(a0)           ; Drop-shadow in X direction.
+        move.l #$10000,d0          ; Store 10000 in d0.
+        move.l d0,16(a0)           ; Drop-shadow in Y direction.
+        move.l d0,20(a0)           ; Scale factor in X direction.
+        move.l #0,24(a0)           ; Scale factor in Y direction.
+        move.l #0,28(a0)           ; Text shear in X direction.
+        move.l #0,36(a0)           ; Mode 0: Straight Draw.
+        rts
+\end{lstlisting}
 
