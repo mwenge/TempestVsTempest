@@ -2,38 +2,36 @@
 \lhead[tempest 2000]{}
 \label{sec:bullet}
 \lstset{style=68KStyle}
-The player explosion in \textit{Tempest 2000} is vector-based: that is, it is
-not a solid polygon like the claw or its enemies, but a line-based object using
-the same machinery as the objects in \textit{Tempest Classic} mode. The data
-structure that defines the \icode{zap} used to render the explosion is a series
-of x,y,z co-ordinate triplets followed by an index to the co-ordinate it should be connected to.
 
 \begin{minipage}[c]{0.48\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=7cm,center}
-      \includegraphics[width=12cm]{src/zap/zap.png}%
+    \begin{adjustbox}{width=6.6cm,center}
+      \includegraphics[width=12cm]{src/cry/beasty4.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
 \hspace{0.5cm}
 \begin{minipage}[c]{0.48\linewidth}
 \begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+; Point GPU RAM at a0.
+lea in_buf,a0 
+; Srce screen is pic2 aka beasty4.cry.
+move.l #pic2,(a0)+ 
+; Start pixel address for 'Game Over'
+move.l #$150094,(a0)+ 
+; Size for 'Game Over'
+move.l #$440091,(a0)+ 
 \end{lstlisting}
 \vspace*{\fill}
 \end{minipage}
-\clearpage
-
-The explosion effect will consist of four of these star-shaped \icode{zap}s spinning
-clockwise in unison and racing towards the player. We can visualize the general
-character of the explosion as follows:
 
 \begin{minipage}[c]{0.48\linewidth}
 \vspace{-0.6cm}
 \begin{figure}[H]
     \centering
     \begin{adjustbox}{width=6.5cm,center}
-      \includegraphics{src/zap/web_zap1.png}%
+      \includegraphics{src/gameover/layer4.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
@@ -43,7 +41,7 @@ character of the explosion as follows:
 \begin{figure}[H]
     \centering
     \begin{adjustbox}{width=6.5cm,center}
-      \includegraphics{src/zap/web_zap2.png}%
+      \includegraphics{src/gameover/layer5.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
@@ -52,7 +50,7 @@ character of the explosion as follows:
 \begin{figure}[H]
     \centering
     \begin{adjustbox}{width=6.5cm,center}
-      \includegraphics{src/zap/web_zap3.png}%
+      \includegraphics{src/gameover/layer6.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
@@ -62,12 +60,10 @@ character of the explosion as follows:
 \begin{figure}[H]
     \centering
     \begin{adjustbox}{width=6.5cm,center}
-      \includegraphics{src/zap/web_zap4.png}%
+      \includegraphics{src/gameover/layer7.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
-
-\clearpage
 
 \begin{lstlisting}
 ; *******************************************************************
@@ -76,28 +72,32 @@ character of the explosion as follows:
 ; Implements the game over display effect.
 ; *******************************************************************
 gofeed:
+        ; Draw the rotating galaxy effect on the game over screen. This
+        ; draws the spiralling arms of the main game over graphic. It does
+        ; this by taking the currently displayed screen and stretching and
+        ; rotating it.
         move.l #(PITCH1|PIXEL16|WID384),d0   ; Set the GPU flags in d0.
         move.l d0,source_flags     ; Pass them to the GPU's source flags.
-        move.l d0,dest_flags
+        move.l d0,dest_flags       ; And the GPU's destination flags.
         lea in_buf,a0              ; Point our GPU RAM input buffer at a0.
-        add.l #$2000,pongz
-        move pongz,d0
-        and.l #$0f,d0              ; Keep it between 0 and 15
-        sub.l #$07,d0
-        move.l cscreen,(a0)        ; source screen is already-displayed screen
+        add.l #$2000,pongz         ; Add 2000 to pongz.
+        move pongz,d0              ; Store pongz in d0.
+        and.l #$0f,d0              ; Keep d0 between 0 and 15
+        sub.l #$07,d0              ; Make sure d0 is between 0 and 8.
+        move.l cscreen,(a0)        ; The image we will rotate is the current screen.
         move.l #384,4(a0)          ; Full screen width.
         move.l #240,d1             ; Full screen height.
         add palfix1,d1             ; Adjust for PAL
         move.l d1,8(a0)            ; Store height in GPU input buffer.
         move.l #$1f4,12(a0)        ; Store X scale in GPU input buffer.
         move.l #$1f4,16(a0)        ; Store Y scale in GPU input buffer.
-        move.l d0,20(a0)           ; Store initial angle in brads in GPU buffer.
+        move.l d0,20(a0)           ; Store initial angle in brads (d0) in GPU buffer.
         move.l #$c00000,24(a0)     ; source x centre in 16:16
-        move.l #$780000,d0
+        move.l #$780000,d0         ; Source Y centre
         add.l palfix3,d0           ; Adjust for PAL screens if required.
-        move.l d0,28(a0)           ; y centre the same
+        move.l d0,28(a0)           ; Set as Y centre.
         move.l #$0,32(a0)          ; offset of dest rectangle
-        move.l delta_i,36(a0)      ; change of i per increment
+        move.l delta_i,36(a0)      ; Set the color intensity delta.
         ; Op 2 of this module is Scale and Rotate ('scar').
         move.l #2,gpu_mode         ; Select 'scar' in antelope.gas.
         move.l #demons,a0          ; Load the GPU module in antelope.gas.
@@ -105,24 +105,28 @@ gofeed:
         jsr gpuwait                ; Wait for the GPU to finish.
     
         ; Calculate the new X and Y scale for the 'Game Over' graphic.
-        move.l #4,gpu_mode         ; Select 'rex' in camel.gas. Multiple images stretching towards you in Z
+        ; We use a table of positive sine values to pick an X and Y
+        ; scale based on previous X and Y positions .
+        move.l #4,gpu_mode         ; Select 'rex' in camel.gas.
+        ; Multiple images stretching towards you in Z
         lea p_sines,a0             ; Load the positive sine table to a0.
-        move pongx,d0
-        move pongy,d3
-        add #15,pongx
-        add #17,pongy
-        and #$ff,d0                ; Keep it between 0 and 255
+        move pongx,d0              ; Store pongx in d0.
+        move pongy,d3              ; Store pongy in d3.
+        add #15,pongx              ; Increment pongx for next time.
+        add #17,pongy              ; Increment pongy for next time.
+        and #$ff,d0                ; Keep d0 between 0 and 255
         and #$ff,d3                ; Keep d3 between 0 and 255.
-        move.b 0(a0,d0.w),d1
-        move.b 0(a0,d3.w),d2
-        and.l #$ff,d1              ; Keep it between 0 and 255
-        and.l #$ff,d2              ; Keep it between 0 and 255
-        lsl.l #6,d2                ; Multiply it by 64.
-        lsl.l #6,d1                ; Multiply it by 64.
-        add.l #$8000,d1
-        add.l #$8000,d2
+        move.b 0(a0,d0.w),d1       ; Use d0 to get val in sine table, result in d1.
+        move.b 0(a0,d3.w),d2       ; Use d3 to get val in sine table, result in d2.
+        and.l #$ff,d1              ; Keep d1 between 0 and 255
+        and.l #$ff,d2              ; Keep d2 between 0 and 255
+        lsl.l #6,d2                ; Multiply d2 by 64.
+        lsl.l #6,d1                ; Multiply d1 by 64.
+        add.l #$8000,d1            ; Make d1 negative?
+        add.l #$8000,d2            ; Make d2 negative?
     
-        ; Draw the Game Over graphic.
+        ; Draw the Game Over graphic. This is the 'game over' message that expands and
+        ; contracts in the centre of the screen.
         lea in_buf,a0              ; Point our GPU RAM input buffer at a0.
         move.l #pic2,(a0)+         ; crex->_bass: srce screen for Game Over graphics is pic2
         move.l #$150094,(a0)+      ; crex-> spixel: srce start pixel address for 'Game Over'
@@ -140,12 +144,12 @@ gofeed:
         lea parrot,a0              ; Load the GPU module in camel.gas.
         jsr gpurun                 ; do clear screen
         jsr gpuwait                ; Wait for the GPU to finish.
-    
+
         tst timer
         bmi babb
         sub #1,timer
         bpl rrrts
-    
+
 babb:   move.l pad_now,d0
         and.l #allbutts,d0
         beq rrrts
