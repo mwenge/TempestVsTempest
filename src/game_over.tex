@@ -3,6 +3,38 @@
 \label{sec:bullet}
 \lstset{style=68KStyle}
 
+The 'game over' display in \textit{Tempest 2000} is a pulsating, coruscating
+display achieved in a relatively simple fashion. It relies on two separate
+shader operations. The first takes the entire screen and scales and rotates it. This
+creates the effect of the 'Game Over' swirling and atomizing into the background.
+The second manipulates the height and width of the 'Game Over' message to create a pulsating
+effect. This also has the effect of creating an irregular profile to the background as it is
+scaled and rotated.
+
+\begin{minipage}[c]{0.48\linewidth}
+\vspace{-0.3cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5.5cm,center}
+      \includegraphics{src/gameover/1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.2cm}
+\begin{minipage}[c]{0.48\linewidth}
+\vspace{-0.3cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5.5cm,center}
+      \includegraphics{src/gameover/4.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+The 'Game Over' graphic itself is sourced from the \icode{beasty4.cry} spritesheet.
+We find it located in the top right of the sheet, extracting it is a straightforward
+matter of providing the offset into the sheet and the number of pixels to extract:
+
 \begin{minipage}[c]{0.48\linewidth}
 \begin{figure}[H]
     \centering
@@ -26,44 +58,12 @@ move.l #$440091,(a0)+
 \vspace*{\fill}
 \end{minipage}
 
-\begin{minipage}[c]{0.48\linewidth}
-\vspace{-0.6cm}
-\begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=6.5cm,center}
-      \includegraphics{src/gameover/layer4.png}%
-    \end{adjustbox}
-\end{figure}
-\end{minipage}
-\hspace{0.2cm}
-\begin{minipage}[c]{0.48\linewidth}
-\vspace{-0.6cm}
-\begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=6.5cm,center}
-      \includegraphics{src/gameover/layer5.png}%
-    \end{adjustbox}
-\end{figure}
-\end{minipage}
-\begin{minipage}[c]{0.48\linewidth}
-\vspace{-1.1cm}
-\begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=6.5cm,center}
-      \includegraphics{src/gameover/layer6.png}%
-    \end{adjustbox}
-\end{figure}
-\end{minipage}
-\hspace{0.2cm}
-\begin{minipage}[c]{0.48\linewidth}
-\vspace{-1.1cm}
-\begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=6.5cm,center}
-      \includegraphics{src/gameover/layer7.png}%
-    \end{adjustbox}
-\end{figure}
-\end{minipage}
+In the \icode{gofeed} routine we find the two elements of the 'Game Over' effect
+implemented. First up is the scale and rotation of the currently displayed screen (\icode{cscreen}).
+This is a call to the \icode{scar} module in \icode{antelope.gas}. The main task prior
+to calling \icode{scar} is to calculate the angle that we will rotate the image by. This result
+is stored in register \icode{d0} and passed to the GPU input buffer. The scaling factor on
+the other hand is a constant value \icode{\$1f4}.
 
 \begin{lstlisting}
 ; *******************************************************************
@@ -84,31 +84,72 @@ gofeed:
         move pongz,d0              ; Store pongz in d0.
         and.l #$0f,d0              ; Keep d0 between 0 and 15
         sub.l #$07,d0              ; Make sure d0 is between 0 and 8.
-        move.l cscreen,(a0)        ; The image we will rotate is the current screen.
+        move.l cscreen,(a0)        ; Image to rotate is the current screen.
         move.l #384,4(a0)          ; Full screen width.
         move.l #240,d1             ; Full screen height.
         add palfix1,d1             ; Adjust for PAL
         move.l d1,8(a0)            ; Store height in GPU input buffer.
         move.l #$1f4,12(a0)        ; Store X scale in GPU input buffer.
         move.l #$1f4,16(a0)        ; Store Y scale in GPU input buffer.
-        move.l d0,20(a0)           ; Store initial angle in brads (d0) in GPU buffer.
+        move.l d0,20(a0)           ; Store initial angle in brads (d0).
         move.l #$c00000,24(a0)     ; source x centre in 16:16
         move.l #$780000,d0         ; Source Y centre
         add.l palfix3,d0           ; Adjust for PAL screens if required.
         move.l d0,28(a0)           ; Set as Y centre.
-        move.l #$0,32(a0)          ; offset of dest rectangle
+        move.l #$0,32(a0)          ; Offset of dest rectangle
         move.l delta_i,36(a0)      ; Set the color intensity delta.
         ; Op 2 of this module is Scale and Rotate ('scar').
         move.l #2,gpu_mode         ; Select 'scar' in antelope.gas.
         move.l #demons,a0          ; Load the GPU module in antelope.gas.
         jsr gpurun                 ; Run the selected GPU module.
         jsr gpuwait                ; Wait for the GPU to finish.
-    
+\end{lstlisting}
+
+If we think of this as a layer being drawn to the screen we can visualize it like so.
+We take the current screen and rotate and expand it clockwise. Our diagram shows the result
+of several iterations of scaling and rotating so that the effect is obvious. In reality,
+each visit to the \icode{gofeed} routine will scale and rotate only a little, but when you're 
+visiting the routine 20 or 30 times a second, those operations quickly add up.
+
+\begin{minipage}[c]{0.48\linewidth}
+\vspace{-0.6cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics{src/gameover/layer_back_4.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\vspace{-0.6cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics{src/gameover/layer_back_9.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+The second and final part of the effect is to draw a new 'layer' of the
+'Game Over' graphic onto the screen. We distort its width and height to
+create a pulsating effect. The new width and height are calculated in
+the section below and stored in the \icode{d1} and \icode{d2} registers
+respectively. Notice that we use a \textit{sine} table as a source of 
+values for the degree to which we will expand or contract the graphic.
+
+\begin{lstlisting}
         ; Calculate the new X and Y scale for the 'Game Over' graphic.
         ; We use a table of positive sine values to pick an X and Y
         ; scale based on previous X and Y positions .
         move.l #4,gpu_mode         ; Select 'rex' in camel.gas.
-        ; Multiple images stretching towards you in Z
         lea p_sines,a0             ; Load the positive sine table to a0.
         move pongx,d0              ; Store pongx in d0.
         move pongy,d3              ; Store pongy in d3.
@@ -116,27 +157,33 @@ gofeed:
         add #17,pongy              ; Increment pongy for next time.
         and #$ff,d0                ; Keep d0 between 0 and 255
         and #$ff,d3                ; Keep d3 between 0 and 255.
-        move.b 0(a0,d0.w),d1       ; Use d0 to get val in sine table, result in d1.
-        move.b 0(a0,d3.w),d2       ; Use d3 to get val in sine table, result in d2.
+        ; Use d0 to get val in sine table and..
+        move.b 0(a0,d0.w),d1       ; .. store result in d1.
+        ; Use d3 to get val in sine table and..
+        move.b 0(a0,d3.w),d2       ; .. store result in d2.
         and.l #$ff,d1              ; Keep d1 between 0 and 255
         and.l #$ff,d2              ; Keep d2 between 0 and 255
         lsl.l #6,d2                ; Multiply d2 by 64.
         lsl.l #6,d1                ; Multiply d1 by 64.
         add.l #$8000,d1            ; Make d1 negative?
         add.l #$8000,d2            ; Make d2 negative?
-    
-        ; Draw the Game Over graphic. This is the 'game over' message that expands and
-        ; contracts in the centre of the screen.
+\end{lstlisting}
+
+With the new scale along the X and Y axes calculated, we are ready to draw
+the graphic itself.
+\begin{lstlisting}
+        ; Draw the Game Over graphic. This is the 'game over' message that
+        ; expands and  contracts in the centre of the screen.
         lea in_buf,a0              ; Point our GPU RAM input buffer at a0.
-        move.l #pic2,(a0)+         ; crex->_bass: srce screen for Game Over graphics is pic2
-        move.l #$150094,(a0)+      ; crex-> spixel: srce start pixel address for 'Game Over'
+        move.l #pic2,(a0)+         ; crex->_bass: srce screen is pic2.
+        move.l #$150094,(a0)+      ; crex-> spixel: srce start pixel address.
         move.l #$440091,(a0)+      ; crex-> ssize: srce size for 'Game Over'
         move.l d1,(a0)+            ; crex-> scalex: x-scale calculated above
         move.l d2,(a0)+            ; crex-> scaley: y-scale calculated above
         move.l #0,(a0)+            ; crex-> shearx: shearx
         move.l #0,(a0)+            ; crex-> sheary: sheary
         move.l #1,(a0)+            ; crex-> mode: Mode 1 = Centered
-        move.l #0,d0               ; Store 0 in d0 for X and Y destination position..
+        move.l #0,d0               ; Store 0 in d0 for X and Y dest pos..
         move.l d0,(a0)+            ; crex-> dstx: Destination X position.
         move.l d0,(a0)+            ; crex-> dsty: Destination Y position.
         move.l #$600000,d0         ; Store Z in d0.
@@ -144,18 +191,36 @@ gofeed:
         lea parrot,a0              ; Load the GPU module in camel.gas.
         jsr gpurun                 ; do clear screen
         jsr gpuwait                ; Wait for the GPU to finish.
-
-        tst timer
-        bmi babb
-        sub #1,timer
-        bpl rrrts
-
-babb:   move.l pad_now,d0
-        and.l #allbutts,d0
-        beq rrrts
-        move #50,timer
-        move.l #clearfeed,demo_routine
-        move.l #$1f4,pongx
-        rts
 \end{lstlisting}
+
+We can think of the final result as follows - two layers consisting of the
+rotated background we draw in the first part, followed by the second layer
+of the scaled graphic drawn on top of it.
+
+\begin{minipage}[c]{0.48\linewidth}
+\vspace{-0.6cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics{src/gameover/layer_back_9.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\vspace{-0.6cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics{src/gameover/layer9.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
 
