@@ -15,7 +15,7 @@ scaled and rotated.
 \vspace{-0.3cm}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=5.5cm,center}
+    \begin{adjustbox}{width=6.5cm,center}
       \includegraphics{src/gameover/1.png}%
     \end{adjustbox}
 \end{figure}
@@ -25,11 +25,12 @@ scaled and rotated.
 \vspace{-0.3cm}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=5.5cm,center}
+    \begin{adjustbox}{width=6.5cm,center}
       \includegraphics{src/gameover/4.png}%
     \end{adjustbox}
 \end{figure}
 \end{minipage}
+\clearpage
 
 The 'Game Over' graphic itself is sourced from the \icode{beasty4.cry} spritesheet.
 We find it located in the top right of the sheet, extracting it is a straightforward
@@ -170,7 +171,11 @@ values for the degree to which we will expand or contract the graphic.
 \end{lstlisting}
 
 With the new scale along the X and Y axes calculated, we are ready to draw
-the graphic itself.
+the graphic itself. For this we use the \icode{rex} shader in \icode{camel.gas}.
+This shader is capable of shearing as well as scaling the image. For our purposes
+here all we need to do is pass the scaling parameters we calculated above to the
+\icode{shearx} and \icode{sheary} fields in the GPU RAM input buffer \icode{in\_buf}.
+
 \begin{lstlisting}
         ; Draw the Game Over graphic. This is the 'game over' message that
         ; expands and  contracts in the centre of the screen.
