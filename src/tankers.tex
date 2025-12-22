@@ -1,0 +1,162 @@
+\chapter{tanker detail}
+\label{sec:attract_mode}
+\lhead[tempest]{}
+\lstset{style=6502Style}
+
+A standard tanker in \textit{Tempest} releases flippers when it is struck.
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tankers/vec_image_plot_tankr.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+TANKR:
+        ICVEC
+        SCVEC 20,0,0
+GENTNK: CSTAT PURPLE
+        SCVEC 0,20,CB
+        SCVEC 0,0C,CB
+        SCVEC 20,0,CB
+        SCVEC 0C,0,CB
+        SCVEC 0,0C,CB
+        SCVEC -0C,0,CB
+        SCVEC 0,20,CB
+        SCVEC -20,0,CB
+        SCVEC -0C,0,CB
+        SCVEC 0,-0C,CB
+        SCVEC -20,0,CB
+        SCVEC 0,-20,CB
+        SCVEC 0,-0C,CB
+        SCVEC 0C,0,CB
+        SCVEC 0,-20,CB
+        SCVEC 20,0,CB
+        SCVEC 0C,0,CB
+        RTSL
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+A detail that is almost hidden, or at least very easy to miss, is that the tankers containing
+pulsars and fuses contain a rubric indicating their contents.  
+
+The tanker containing fuses contains a very basic representation of the fuse enemy.
+\begin{minipage}[c]{0.67\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=9.6cm,center}
+      \includegraphics[width=12cm]{src/tankers/vec_image_plot_tankf.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.25\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+TANKF: ICVEC
+      CSTAT BLUE
+      SCVEC -0C,0,CB
+      SCVEC 0,0C,0
+      CSTAT RED
+      SCVEC 0,0,CB
+      CSTAT GREEN
+      SCVEC 0,-0C,CB
+      SCVEC 0,0,0
+      CSTAT YELLOW
+      SCVEC 0C,0,CB
+      SCVEC 20,0,0
+GENTNK:
+      CSTAT PURPLE
+      SCVEC 0,20,CB
+      SCVEC 0,0C,CB
+      SCVEC 20,0,CB
+      SCVEC 0C,0,CB
+      SCVEC 0,0C,CB
+      SCVEC -0C,0,CB
+      SCVEC 0,20,CB
+      SCVEC -20,0,CB
+      SCVEC -0C,0,CB
+      SCVEC 0,-0C,CB
+      SCVEC -20,0,CB
+      SCVEC 0,-20,CB
+      SCVEC 0,-0C,CB
+      SCVEC 0C,0,CB
+      SCVEC 0,-20,CB
+      SCVEC 20,0,CB
+      SCVEC 0C,0,CB
+      RTSL
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+The tanker for \textit{pulses}, given opposite, contains a more successful effort. It
+is much more immediately legible during play, compared to the cross on a \textit{fuse}
+tanker which gets slightly lost in the detail.
+
+Note the relative economy of coding used to draw each tanker. The rubrics are drawn
+by the first few lines, i.e. \icode{TANKF} and \icode{TANKP}. In each case the remaining
+section (\icode{GENTNK}) is common to all tanker types. I've given \icode{GENTNK} in 
+full in each of the diagrams for the purposes of clarity - but in practice the duplication
+of code was avoided by replacing each with a \icode{JMP} call to the \icode{GENTNK} routine, which
+only had to be written once. For example, in the case of the pulsar tank:
+\begin{lstlisting}
+TANKP:ICVEC
+      CSTAT TURQOI
+      SCVEC -5,-2,0
+      SCVEC -3,6,CB
+      SCVEC 0,-6,CB
+      SCVEC 3,6,CB
+      SCVEC 5,-2,CB
+      SCVEC 20,0,0
+      JMP GENTNK
+\end{lstlisting}
+
+
+\begin{minipage}[c]{0.67\linewidth}
+\vspace{-0.5cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=8.5cm,center}
+      \includegraphics[width=12cm]{src/tankers/vec_image_plot_tankp.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.25\linewidth}
+\vspace{-0.5cm}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+TANKP:ICVEC
+      CSTAT TURQOI
+      SCVEC -5,-2,0
+      SCVEC -3,6,CB
+      SCVEC 0,-6,CB
+      SCVEC 3,6,CB
+      SCVEC 5,-2,CB
+      SCVEC 20,0,0
+GENTNK:
+      CSTAT PURPLE
+      SCVEC 0,20,CB
+      SCVEC 0,0C,CB
+      SCVEC 20,0,CB
+      SCVEC 0C,0,CB
+      SCVEC 0,0C,CB
+      SCVEC -0C,0,CB
+      SCVEC 0,20,CB
+      SCVEC -20,0,CB
+      SCVEC -0C,0,CB
+      SCVEC 0,-0C,CB
+      SCVEC -20,0,CB
+      SCVEC 0,-20,CB
+      SCVEC 0,-0C,CB
+      SCVEC 0C,0,CB
+      SCVEC 0,-20,CB
+      SCVEC 20,0,CB
+      SCVEC 0C,0,CB
+      RTSL
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
