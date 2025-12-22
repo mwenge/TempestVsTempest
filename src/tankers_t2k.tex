@@ -1,0 +1,110 @@
+\chapter{even more tanker detail}
+\lhead[tempest 2000]{}
+\label{sec:bullet}
+\lstset{style=68KStyle}
+
+\textit{Tempest 2000} manages a little extra with the tankers in both \textit{classic}
+and \textit{2000} mode. The flipper tanker gets a badge of its own, in contrast to its
+anonymous appearance in the original.
+
+\begin{minipage}[c]{0.58\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=7.5cm,center}
+      \includegraphics[width=12cm]{src/tankers_2k/vec_image_plot_0.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.38\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+fliptank:
+  dc.b 2,9,1,2,7,4,0
+  dc.b 9,16,1,8,3,0
+  dc.b 16,9,1,4,5,0
+  dc.b 9,2,1,6,0
+  dc.b 9,6,1,6,8,0
+  dc.b 6,9,1,7,0
+  dc.b 9,12,1,8,-1,240,0
+  dc.b 12,9,1,0
+  dc.b 7,8,1,10,14,-1,0,0
+  dc.b 11,10,1,11,0
+  dc.b 10,9,1,12,0
+  dc.b 11,8,1,13,0
+  dc.b 7,10,1,14,0
+  dc.b 8,9,1,0,0
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+The fuse tanker meanwhile has a more spirited rendering of the fuse enemy as its
+rubric.
+
+\begin{minipage}[c]{0.58\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=7.5cm,center}
+      \includegraphics[width=12cm]{src/tankers_2k/vec_image_plot_1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.38\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+fusetank:
+  dc.b 2,9,1,2,7,4,0
+  dc.b 9,16,1,8,3,0
+  dc.b 16,9,1,4,5,0
+  dc.b 9,2,1,6,0
+  dc.b 9,4,1,6,8,0
+  dc.b 4,9,1,7,0
+  dc.b 9,14,1,8,-1,240,0
+  dc.b 14,9,1,0
+  dc.b 9,9,1,10,0
+  dc.b 8,10,1,11,0
+  dc.b 8,12,1,0
+  dc.b 10,11,1,-1,143,9,13,0
+  dc.b 11,12,1,0
+  dc.b 11,8,1,-1,240,9,15,0
+  dc.b 12,8,1,0
+  dc.b 8,7,1,-1,15,9,17,0
+  dc.b 9,5,1,0
+  dc.b 7,8,1,-1,255,9,19,0
+  dc.b 5,9,1,0,0
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+The pulse tanker on the other hand is a relatively straightforward copy of that found
+in the original.
+
+\begin{minipage}[c]{0.58\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=7.5cm,center}
+      \includegraphics[width=12cm]{src/tankers_2k/vec_image_plot_2.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.38\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+pulstank:
+  dc.b 2,9,1,2,7,4,0
+  dc.b 9,16,1,8,3,0
+  dc.b 16,9,1,4,5,0
+  dc.b 9,2,1,6,0
+  dc.b 9,4,1,6,8,0
+  dc.b 4,9,1,7,0
+  dc.b 9,14,1,8,-1,255,0
+  dc.b 14,9,1,0
+  dc.b 6,10,1,10,0
+  dc.b 7,7,1,11,0
+  dc.b 8,12,1,12,0
+  dc.b 9,6,1,13,0
+  dc.b 10,11,1,14,0
+  dc.b 11,7,1,15,0
+  dc.b 12,9,1,0,0
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
