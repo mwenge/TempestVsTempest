@@ -1,0 +1,233 @@
+\chapter{strings of tempest}
+\label{sec:strings_tempest}
+\lhead[tempest]{}
+\lstset{style=6502Style}
+
+We covered the mechanics of generating strings in \textit{Tempest} in the earlier chapter
+\hyperref[sec:language]{\textcolor{blue}{'macro language fun'}}. So here we'll take a small
+selection of the message strings used in \textit{Tempest} and recreate how they appear
+on screen.
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/MCMLXXX_ATARI.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	ATARI,BLULET,1,92
+SATARI:	ASCVH <^ MCMLXXX ATARI>
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/RATE_YOURSELF.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	RATE,GREEN,1,10.
+ERATE:	ASCVH <RATE YOURSELF>
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/HIGH_SCORE.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	HIGHS,RED,0,38
+EHIGHS:	ASCVH 0BC,<HIGH SCORES>
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/BONUS_EVERY.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	BOLIF,TURQOI,1,89
+EBOLIF:	ASCVH 0C8,<BONUS EVERY >
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/SUPERZAPPER_RECHARGE.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	SUPZA,BLULET,1,0A0	;NEW SUPER
+ESUPZA:	ASCVH <SUPERZAPPER RECHARGE>
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/AVOID_SPIKES.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	SPIKE,WHITE,0,0		;AVOID SPIKES
+ESPIKE:	ASCVH -72.,<AVOID SPIKES>
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/CREDIT_MINIMUM.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	2GAME,GREEN,1,89	;2 GAME MINIMUM
+E2GAME:	ASCVH <2 CREDIT MINIMUM>
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/PRESS_FIRE_TO_SELECT.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	PRFIR,YELLOW,1,-10.	;PRESS FIRE
+EPRFIR:	ASCVH <PRESS FIRE TO SELECT>
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/FREE_PLAY.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	CMODE,GREEN,1,80	;FREE PLAY
+ECMODE:	ASCVH 0,<FREE PLAY>
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/HOLE.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	HOLE,GREEN,1,-55.	;HOLE
+EHOLE: ASCVH 8B,<HOLE>
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/NOVICE.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	NOVIC,RED,1,-30.	;NOVICE
+ENOVIC:	ASCVH 0AA,<NOVICE>
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/EXPERT.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	EXPER,RED,1,-30.	;EXPERT
+EEXPER:	ASCVH 4A,<EXPERT>
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
+
+\begin{minipage}[c]{0.52\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.75cm,center}
+      \includegraphics[width=12cm]{src/tempest_strings/GAME_OVER.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[c]{0.40\linewidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+MESS	GAMOV,GREEN,1,56		;GAME OVER
+EGAMOV:	ASCVH <GAME OVER>
+\end{lstlisting}
+\vspace*{\fill}
+\end{minipage}
