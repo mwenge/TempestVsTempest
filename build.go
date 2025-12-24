@@ -269,6 +269,12 @@ func main() {
     fmt.Println("%s %s", string(out), err)
   }
 
+  // Rename the PDF.
+  var src = outputDirName + "/book.pdf"
+  var high_quality =  outputDirName + "/" + currentDir() + "_" + getMode() + "_high_quality.pdf"
+  os.Rename(src, high_quality)
+
+  var low_quality =  outputDirName + "/" + currentDir() + "_" + getMode() + "_low_quality.pdf"
   // Trim the final PDF.
   bin = "gs"
   trim_args := []string{
@@ -278,8 +284,8 @@ func main() {
     "-dNOPAUSE",
     "-dQUIET",
     "-dBATCH",
-    "-sOutputFile=" + outputDirName + "/book_trimmed.pdf",
-    outputDirName + "/book.pdf",
+    "-sOutputFile=" + low_quality,
+    high_quality,
   }
   fmt.Println(bin, trim_args)
 
@@ -289,9 +295,8 @@ func main() {
     fmt.Println("%s %s", string(out), err)
   }
 
-  // Rename the PDF.
-  var src = outputDirName + "/book_trimmed.pdf"
-  var dst =  outputDirName + "/" + currentDir() + "_" + getMode() + ".pdf"
-  os.Rename(src, dst)
+  // Rename the light PDF.
+  var release_quality =  outputDirName + "/" + currentDir() + "_" + getMode() + ".pdf"
+  os.Rename(low_quality, release_quality)
 
 }
