@@ -5,104 +5,60 @@
 
 A standard tanker in \textit{Tempest} releases flippers when it is struck.
 
-\begin{lstlisting}
-        .SBTTL  PLAY - INVADERS -TRAILER
-                                ;
-                                ;SPECIAL TRAILER PROCESSING
-                                ;
-JSTRAI:
-        LDA I,1
-        STA CAMSTA
-        LDY X,INVAL1
-        LDA Y,LINEY
-        IFEQ                    ;LINE VACANT?
-        LDA I,ILINDDY+1         ;YES. START LOW. 2
-        STA Y,LINEY
-        ENDIF
-        LDA X,INVAY
-        CMP Y,LINEY
-        IFCC                    ;NEW ENEMY LINE?
-        STA Y,LINEY             ;YES.
-        LDA I,80
-        STA Y,LINSTA            ;REQUEST RECALC.
-                                ;NO DESTRUCTION PICS
-        ENDIF
-        LDA X,INVAY
-        CMP I,20
-        IFCC                    ;MAX HEIGHT?
-        LDA X,INVAC2            ;YES.
-        ORA I,ZDIRDO            ;SEND IT DOWN
-        STA X,INVAC2
-        LDA I,20                ;MAX HEIGHT
-        STA X,INVAY
-        ELSE
-        CMP I,0F2               ;NO.
-        IFCS                    ;MIN HEIGHT?
-        JSR ASTRAL              ;YES. REASSIGN, REVERSE
-        LDA I,0F0               ;DON'T LET IT GET TO LOW
-        STA X,INVAY
-        LDA NYMCOU              ;ANY NYMPHS, OR NON SPIKER TYPE CLIMBERS?
-        IFEQ
-        LDA X,INVAC2
-        AND I,^C<INVCAR>        ;CONVERT IT TO TANKER
-        ORA I,ZCARFL            ;CARRYING FLIPPERS
-        STA X,INVAC2
-        LDA X,INVAC1            ;LOOKS LIKE TANKER TOO
-        AND I,^C<INVABI>
-        ORA I,ZABTAN
-        STA X,INVAC1
-        LDA I,0                 ;SET ZERO STATUS (CONVERTED TOO CARRIER)
-        STA CAMSTA
-        ENDIF
-        ENDIF
-        ENDIF
-        RTS
-\end{lstlisting}
+\begin{minipage}[c]{0.48\linewidth}
+\vspace{-0.6cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics{src/spikes/spike_evolution_blank.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\vspace{-0.6cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics{src/spikes/spike_evolution_spike_only.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
 
-\begin{lstlisting}
-ASTRAL:
-        LDA I,0
-        STA TEMP4
-        LDA I,NLINES-1          ;LOOP LINE COUNTER
-        STA OPSPIN
+\begin{minipage}[c]{0.48\linewidth}
+\vspace{-0.6cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics{src/spikes/spike_evolution_spike_only.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\vspace{-0.6cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics{src/spikes/spike_evolution_1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
 
-        LDA RANDO2              ;START AT A RANDOM LINE
-        AND I,0F
-        TAY
-        BEGIN                   ;LOOP FOR EACH LINE
-        CPY I,0F
-        IFEQ
-        LDA WELTYP
-        BNE SKIPIT              ;SKIP LINE IF PLANAR FAR RIGHT EDGE
-        ENDIF
-        LDA Y,LINEY
-        IFEQ                    ;DEAD LINE?
-        LDA I,0FF               ;YES. WORST CASE
-        ENDIF
-        CMP TEMP4
-        IFCS                    ;NEEDIEST LINE SO FAR?
-        STA TEMP4               ;YES. CONDITION
-        STY TEMP0               ;LINE #
-        ENDIF
-SKIPIT: DEY
-        IFMI
-        LDY I,NLINES-1
-        ENDIF
-        DEC OPSPIN
-        MIEND
-        LDA TEMP0               ;REASSIGN TO NEW LINE
-        STA X,INVAL1
-        CLC
-        ADC I,1
-        AND I,0F
-        STA X,INVAL2
-        LDA X,INVAC2            ;SEND BACK UP
-        AND I,^C<INVDIR>
-        STA X,INVAC2
-        RTS
-\end{lstlisting}
-
-\section*{display}
 \begin{minipage}[c]{0.48\linewidth}
 \vspace{-0.6cm}
 \begin{figure}[H]
@@ -130,6 +86,135 @@ SKIPIT: DEY
 \end{figure}
 \end{minipage}
 
+\begin{minipage}[c]{0.48\linewidth}
+\vspace{-0.6cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics{src/spikes/spike_shooting_1.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.06\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[baseline={(current bounding box.south)}]
+      \draw[->,line width=3pt] (0,0) to (1,0);
+    \end{tikzpicture}
+\end{figure}
+\end{minipage}
+\begin{minipage}[c]{0.48\linewidth}
+\vspace{-0.6cm}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=6.5cm,center}
+      \includegraphics{src/spikes/spike_shooting_2.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{lstlisting}
+        .SBTTL  DISPLAY - ENEMY LINES
+
+DSPENL:
+        LDA LEVELY+1            ;BOTTOM OF WELL
+        IFNE                    ;WELL ON?
+        RTS                     ;NO. NO ENEMY LINES THEN
+        ENDIF
+        LDA EYH
+        IFEQ                    ;EYE ON WELL?
+        LDA EYL                 ;YES.
+        CMP I,0F0
+        IFCS                    ;PAST END?
+        RTS                     ;YES. ABORT
+        ENDIF
+        ENDIF
+        LDA I,1
+        JSR VGSCA1
+        LDA VGLIST              ;SAVE FOR NEXT TIME
+        PHA
+        LDA VGLIST+1
+        PHA
+        LDA I,0                 ;LINE LOOP INDEX
+        STA INDEX2
+        STA VGY
+        LDX I,NLINES-1
+        LDA WELTYP
+        IFNE                    ;PLANAR?
+        DEX                     ;YES. 1 LESS LINE
+        ENDIF
+        STX INDEX1
+        BEGIN                   ;LOOP FOR EACH LINE FROM 0 TO TOP
+        LDX I,3
+        LDY VGY                 
+        BEGIN                   ;SET FIXED CODES
+        LDA X,ENLFIX            ;(CSTATGREEN,CNTR)
+        STA NY,VGLIST
+        INY
+        DEX
+        MIEND
+        STY VGY
+        LDA ROTDIS
+        IFEQ                    ;REDO WELL?
+        LDX INDEX2              ;NO
+        LDA X,LINSTA
+        IFPL                    ;ACTION AT NEAR PT?
+        LDX I,0B
+        LDY VGY
+        BEGIN                   ;NO. COPY VARIABLE STUFF
+        LDA NY,OLDLLO           ;COPY VECTOR TO FAR POINT AND
+        STA NY,VGLIST           ;VECTOR TO NEAR POINT
+        INY
+        DEX
+        MIEND
+        STY VGY
+        ELSE
+        LDY VGY                 ;NO. SINCE FAR PT. NEED NOT BE
+        LDA NY,OLDLLO           ;RECALCULATED, COPY IT TO NEW BUFFER.
+        STA NY,VGLIST           ;
+        STA CURNTY                      ;Z VECTOR (LSB)
+        INY
+        LDA NY,OLDLLO
+        STA NY,VGLIST
+        CMP I,10
+        IFCS
+        ORA I,0E0               ;SIGN EXTEND
+        ENDIF
+        STA CURNTY+1                    ;Z VECTOR (MSB)
+        INY
+        LDA NY,OLDLLO
+        STA NY,VGLIST           ;X VECTOR (LSB)
+        STA CURNTX
+        INY
+        LDA NY,OLDLLO
+        STA NY,VGLIST           ;
+        CMP I,10
+        IFCS
+        ORA I,0E0               ;SIGN EXTEND
+        ENDIF
+        STA CURNTX+1                    ;X VECTOR (MSB)
+        INY
+        STY VGY
+        JSR TIPACT              ;YES. GENERATE TIP STUFF
+        ENDIF
+        ELSE
+                                ;YES (REDO WELL)
+        JSR FIXSTU              ;GENERATE FIXED STUFF
+        JSR TIPACT              ;GENERATE TIP STUFF
+        ENDIF
+        LDX INDEX2
+        ASL X,LINSTA            ;CLEAR LINE STATUS
+        INC INDEX2
+        DEC INDEX1
+        MIEND
+        PLA                     ;SAVE LOC OF NEW BUFFER
+        STA OLDLHI
+        PLA
+        STA OLDLLO
+        LDY VGY
+        DEY
+        JMP VGADD               ;UPDATE VGLIST
+\end{lstlisting}
 \begin{lstlisting}
         .SBTTL  DISPLAY - ENEMY LINES (INITIAL FIXED VG CODES)
                                 ;
@@ -262,5 +347,102 @@ WHITIP: LDY VGY                 ;JUST A DOT AT TIP
         STY VGY
         ENDIF
         ENDIF
+        RTS
+\end{lstlisting}
+
+\begin{lstlisting}
+        .SBTTL  PLAY - INVADERS -TRAILER
+                                ;
+                                ;SPECIAL TRAILER PROCESSING
+                                ;
+JSTRAI:
+        LDA I,1
+        STA CAMSTA
+        LDY X,INVAL1
+        LDA Y,LINEY
+        IFEQ                    ;LINE VACANT?
+        LDA I,ILINDDY+1         ;YES. START LOW. 2
+        STA Y,LINEY
+        ENDIF
+        LDA X,INVAY
+        CMP Y,LINEY
+        IFCC                    ;NEW ENEMY LINE?
+        STA Y,LINEY             ;YES.
+        LDA I,80
+        STA Y,LINSTA            ;REQUEST RECALC.
+                                ;NO DESTRUCTION PICS
+        ENDIF
+        LDA X,INVAY
+        CMP I,20
+        IFCC                    ;MAX HEIGHT?
+        LDA X,INVAC2            ;YES.
+        ORA I,ZDIRDO            ;SEND IT DOWN
+        STA X,INVAC2
+        LDA I,20                ;MAX HEIGHT
+        STA X,INVAY
+        ELSE
+        CMP I,0F2               ;NO.
+        IFCS                    ;MIN HEIGHT?
+        JSR ASTRAL              ;YES. REASSIGN, REVERSE
+        LDA I,0F0               ;DON'T LET IT GET TO LOW
+        STA X,INVAY
+        LDA NYMCOU              ;ANY NYMPHS, OR NON SPIKER TYPE CLIMBERS?
+        IFEQ
+        LDA X,INVAC2
+        AND I,^C<INVCAR>        ;CONVERT IT TO TANKER
+        ORA I,ZCARFL            ;CARRYING FLIPPERS
+        STA X,INVAC2
+        LDA X,INVAC1            ;LOOKS LIKE TANKER TOO
+        AND I,^C<INVABI>
+        ORA I,ZABTAN
+        STA X,INVAC1
+        LDA I,0                 ;SET ZERO STATUS (CONVERTED TOO CARRIER)
+        STA CAMSTA
+        ENDIF
+        ENDIF
+        ENDIF
+        RTS
+\end{lstlisting}
+
+\begin{lstlisting}
+ASTRAL:
+        LDA I,0
+        STA TEMP4
+        LDA I,NLINES-1          ;LOOP LINE COUNTER
+        STA OPSPIN
+
+        LDA RANDO2              ;START AT A RANDOM LINE
+        AND I,0F
+        TAY
+        BEGIN                   ;LOOP FOR EACH LINE
+        CPY I,0F
+        IFEQ
+        LDA WELTYP
+        BNE SKIPIT              ;SKIP LINE IF PLANAR FAR RIGHT EDGE
+        ENDIF
+        LDA Y,LINEY
+        IFEQ                    ;DEAD LINE?
+        LDA I,0FF               ;YES. WORST CASE
+        ENDIF
+        CMP TEMP4
+        IFCS                    ;NEEDIEST LINE SO FAR?
+        STA TEMP4               ;YES. CONDITION
+        STY TEMP0               ;LINE #
+        ENDIF
+SKIPIT: DEY
+        IFMI
+        LDY I,NLINES-1
+        ENDIF
+        DEC OPSPIN
+        MIEND
+        LDA TEMP0               ;REASSIGN TO NEW LINE
+        STA X,INVAL1
+        CLC
+        ADC I,1
+        AND I,0F
+        STA X,INVAL2
+        LDA X,INVAC2            ;SEND BACK UP
+        AND I,^C<INVDIR>
+        STA X,INVAC2
         RTS
 \end{lstlisting}
