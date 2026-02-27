@@ -10,8 +10,14 @@
 % \clearpage
 % \blankpage
 
+\ifx\forprint\undefined
 \clearpage
 \blankpage
+\else
+\blankpage
+\blankpage
+\clearpage
+\fi
 
 \vspace*{\fill}
 \begin{figure}[H]
