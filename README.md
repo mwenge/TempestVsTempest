@@ -1,6 +1,6 @@
 # Tempest vs Tempest
 ## The Making and Remaking of Atari's Iconic Video Game
-[<img align="right" width=40% src="https://github.com/mwenge/t2k-25easypieces/raw/master/src/cover/pdf/cover_front.png">](https://raw.githubusercontent.com/mwenge/TempestVsTempest/refs/heads/master/out/TempestVsTempest_release.pdf) 
+[<img align="right" width=40% src="https://github.com/mwenge/TempestVsTempest/raw/master/src/cover/pdf/cover_front.png">](https://raw.githubusercontent.com/mwenge/TempestVsTempest/refs/heads/master/out/TempestVsTempest_release.pdf) 
 In this book I attempt to explore and understand the code and craft of Dave Theurer's 'Tempest' (1981) and Jeff Minter's 'Tempest 2000' (1994).
 
 The idea is to explain how lots of different little things in each of the games actually work, down to the level of
