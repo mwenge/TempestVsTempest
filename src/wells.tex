@@ -40,10 +40,10 @@ make up the web's shape in two dimensions.
 \begin{lstlisting}
 ; Data structure for the 'HEART' well. 
 ; X Co-Ordinates
-    .BYTE 0DA,0A4, 87, 80, 79, 5C, 26, 10    ;HEART
+    .BYTE 0DA,0A4, 87, 80, 79, 5C, 26, 10    ; HEART
     .BYTE  10, 20, 48, 80,0B8,0E0,0F0,0F0
 ; Y Co-Ordinates
-    .BYTE 0E4,0E8,0B7, 80,0B7,0E8,0E4,0B2     ;HEART
+    .BYTE 0E4,0E8,0B7, 80,0B7,0E8,0E4,0B2    ; HEART
     .BYTE  7A, 47, 20, 10, 20, 47, 7A,0B2
 \end{lstlisting}
 
@@ -59,62 +59,517 @@ it in decimal instead:
     .BYTE 122, 71, 32, 16, 32, 71,122,178
 \end{lstlisting}
 
+To understand how we turn this list of numbers into a well, we're goint to look
+at the routine that is used to draw a miniature version on the level selection screen.
+The procedure consists of reading each X and Y co-ordinate pair in the order that they're
+given, starting with \icode{218} for X and \icode{228} for Y, and drawing a line to the 
+position given by the next pair. As we saw in our 
+\hyperref[sec:cursors]{\textcolor{blue}{'cursors'}}
+chapter, we do this by constructing 'vector' commands and adding them to the vector list.
+Each command will consist of the X and Y direction in which to move the beam. In order to
+construct this list of vector commands we must loop through our co-ordinates above. In the
+routine given below, these co-ordinates are stored in \icode{NEWLIX} (for the X co-ordinates)
+and \icode{NEWLIZ} (for the Y co-ordinates).
+
 \begin{lstlisting}
         .SBTTL  UTILITY-DRAW WELL SHAPE
 DSPHOL:
-        JSR LVLWEL              ;SET UP WELL INDEX & ID
-        STA SAVEY               ;WELL INDEX
-        STX SAVEX               ;CYCLE
-        LDA I,0
-        STA VGBRIT
-        LDA I,5                 ;MAKE WELL REALLY SMALL
-        JSR VGSCA1
-        LDA SAVEX               ;GET CYCLE (TIMES THRU ALL WELLS
-        AND I,7
-        TAX
-        LDY X,SPWECO            ;GET SPECIAL WELL COLOR FOR CYCLE
-        STY COLOR
-        LDA I,MZCOLO
-        JSR VGSTAT              ;SET WELL COLOR
-        LDX WELLID
-        LDA SAVEY
-        LDY X,HOLRAP
-        IFEQ                    ;PLANAR?
-        SEC                     ;NO. START BEAM AT FIRST POINT
-        SBC I,0F                ;IN TABLE (FOR CLOSED WELLS)
-        ENDIF
-        TAY
-        LDA Y,NEWLIZ
-        STA PYL
-        EOR I,80                ;ADJUST Z SIGN
-        TAX
-        LDA Y,NEWLIX            ;SAVE COORDS OF 1ST PT
-        STA PXL
-        EOR I,80                ;ADJUST X SIGN
-        JSR VGVTR1              ;POSITION BEAM AT 1ST PT ON WELL
-        LDA I,0C0               ;TURN BEAM ON
-        STA VGBRIT
-        LDX I,NLINES-1
-        STX INDEX2
-        BEGIN                   ;LOOP FOR EACH PT ON EDGE
-        LDY SAVEY
-        LDA Y,NEWLIX            ;
-        TAX
-        SEC
-        SBC PXL                 ;DELTA X
-        PHA                     ;
-        STX PXL                 ;CURRENT X OLD X
-        LDA Y,NEWLIZ
-        TAY
-        SEC
-        SBC PYL                 ;DELTA Z
-        TAX
-        STY PYL                 ;CURRENT Z>OLD Z
-        PLA
-        JSR VGVTR1              ;DRAW VECTOR TO NEXT PT.
-        DEC SAVEY
-        DEC INDEX2
-        MIEND
-        LDA I,1                 ;NORMAL SIZE AGAIN
-        JMP VGSCA1
+        ..
+        BEGIN            ; LOOP FOR EACH PT ON EDGE
+        LDY SAVEY        ; GET THE CURRENT INDEX
+        LDA Y,NEWLIX     ; STORE CURRENT X CO-ORD IN A
+        TAX              ; MOVE IT TO X
+        SEC              ; SET THE CARRY BIT.
+        SBC PXL          ; SUBTRACT THE LAST X POSITION.
+        PHA              ; STORE THE X MOVEMENT ON THE STACK.
+        STX PXL          ; STORE THE CURRENT VALUE AS THE LAST X POSITION.
+        LDA Y,NEWLIZ     ; STORE CURRENT Y CO-ORD IN A.
+        TAY              ; MOVE IT TO Y
+        SEC              ; SET THE CARRY BIT.
+        SBC PYL          ; SUBTRACT THE LAST Y POSITION.
+        TAX              ; STORE THE Y MOVEMENT IN X.
+        STY PYL          ; STORE THE CURRENT VALUE AS THE LAST Y POSITION.
+        PLA              ; PUT OUR X MOVEMENT IN A.
+        ; WE NOW HAVE THE X MOVEMENT IN A AND THE Y MOVEMENT IN X.
+        ; WE CAN DRAW OUR VECTOR LINE.
+        JSR VGVTR1       ; DRAW OUR VECTOR.
+        DEC SAVEY        ; DECREMENT THE INDEX TO MOVE TO NEXT CO-ORDINATE.
+        MIEND            ; LOOP UNTIL WE'RE DONE.
 \end{lstlisting}
+
+The procedure consists of calculating an X and Y movement for each vector line by 
+subtracting the last X and Y position in the co-ordinate list from the current one.
+This difference or 'delta' tells the vector ROM the number of units in the X and Y
+direction it should move the line. The end result is one single face of our web
+in two dimensions.
+
+We can visualise this by following the construction of the well face, vector by vector,
+as follows. In each case we list the actual vector instruction used, encoded into two bytes
+ by the \icode{VGVTR1} macro. 
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+         Draw vector to (164,232)  & \icode{0x48C4}   & \icode{01001000 11000100} \\
+                                  &         & \icode{   4   8    C   4} \\
+
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_2_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (-83,-45)  & \icode{0x53CD}   & \icode{01010011 11001101} \\
+                         &         & \icode{   5   3    C   D} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_3_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (-36,-104)  & \icode{0x58DC}   & \icode{01011000 11011100} \\
+                         &         & \icode{   5   8    D   C} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_4_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (-14,0)  & \icode{0x40D2}   & \icode{01000000 11010010} \\
+                         &         & \icode{   4   0    D   2} \\
+
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_5_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (-36,104)  & \icode{0x48DC}   & \icode{01001000 11011100} \\
+                         &         & \icode{   4   8    D   C} \\
+
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_6_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (-83,45)  & \icode{0x4DCD}   & \icode{01001101 11001101} \\
+                         &         & \icode{   4   D    C   D} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_7_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (-76,-54)  & \icode{0x4AD4}   & \icode{01001010 11010100} \\
+                         &         & \icode{   4   A    D   4} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_8_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (-22,-106)  & \icode{0x56CA}   & \icode{01010110 11001010} \\
+                         &         & \icode{   5   6    C   A} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_9_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (16,-107)  & \icode{0x55D0}   & \icode{01010101 11010000} \\
+                         &         & \icode{   5   5    D   0} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_10_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (56,-90)  & \icode{0x46D8}   & \icode{01000110 11011000} \\
+                         &         & \icode{   4   6    D   8} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_11_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (96,-55)  & \icode{0x49C0}   & \icode{01001001 11000000} \\
+                         &         & \icode{   4   9    C   0} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_12_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (112,0)  & \icode{0x40D0}   & \icode{01000000 11010000} \\
+                         &         & \icode{   4   0    D   0} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_13_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (96,55)  & \icode{0x57C0}   & \icode{01010111 11000000} \\
+                         &         & \icode{   5   7    C   0} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_14_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (56,90)  & \icode{0x5AD8}   & \icode{01011010 11011000} \\
+                         &         & \icode{   5   A    D   8} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_15_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (16,107)  & \icode{0x4BD0}   & \icode{01001011 11010000} \\
+                         &         & \icode{   4   B    D   0} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_16_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
+
+\begin{minipage}[c]{0.68\linewidth}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=8.5cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Description & Op Code & Bitmap \\
+        \midrule
+                                   & \icode{0x5\_\_\_}        & \icode{010YYYYY IIIXXXXX} \\
+Draw vector to (-22,106)  & \icode{0x4ACA}   & \icode{01001010 11001010} \\
+                         &         & \icode{   4   A    C   A} \\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\end{minipage}
+\vspace{0.1cm}
+\begin{minipage}[c]{0.30\linewidth}
+\begin{figure}[H]
+    \centering
+    \begin{adjustbox}{width=5cm,center}
+      \includegraphics[width=12cm]{src/heart_graphs/HEART_17_2d.png}%
+    \end{adjustbox}
+\end{figure}
+\end{minipage}
