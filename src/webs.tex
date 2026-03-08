@@ -73,88 +73,366 @@ the object to the right, while positive values rotate it to the left.
   \caption{The rotation table applied to the claw in each lane of the web.}
 \end{figure}
 
-This is the routine that converts the web data structure into a list of vertices and lines between vertices
+This is the important part of the routine that converts the web data structure into a list of vertices and lines between vertices
 that will make up the web itself:
 
 \begin{lstlisting}
-extrude:
-;
-; extrude a web from a list of 16 pairs of XY coordinates addressed by (a1)
-;
-; a0 = vector ram space; a2.l = z depth to extrude to; d0-d7 as above
-
-  move.l vadd,a0
-  movem.l d0-d7/a0/a2,-(a7)    ;save so routine can return address
-  clr connect
-  move.l a2,-(a7)    ;save z depth
-  bsr initvo    ;make header, do standard vector object init
-  move.l a3,a4    ;save first vertex
-  move.l (a7)+,d7    ;retrieve z-depth
-  move d7,d0
-  asr #1,d0
-  move d0,web_z    ;Current Web z centering
-  clr.l d0
-  clr.l d1
-  clr d5      ;to catch highest X point
-  move (a1)+,d6            ; No of lines in the web.
-  move d6,web_max          ; Keep it in web_max
-  move (a1)+,web_firstseg  ; first position on web
-  move.l a1,web_ptab       ;position table
-  move.l a3,(a5)+          ;first vertex to lanes list
-\end{lstlisting}
-
-\begin{lstlisting}
-  ; Read in the x/y pairs
+  ; Read in the x/y pairs from our data structure. We create an interleaved
+  ; list of near and far points in a2 and a 'connlist' in a3 that describes
+  ; how each point is connected to the others.
 xweb:
   ; Get the current x and y pair
-  move (a1)+,d0
-  move (a1)+,d1    ;get X and Y
-  ext.l d0
-  ext.l d1
+  move (a1)+,d0    ; Store the Y value in d0.
+  move (a1)+,d1    ; Store the X value in d1.
+  ext.l d0         ; Make d0 4 bytes long.
+  ext.l d1         ; Make d1 4 bytes long.
 
-  ; Check if this is the large X value so far
-  cmp d5,d1       ; Compare x with the largest so far, stored in d5. 
+  ; Check if this is the largest X value so far
+  cmp d5,d1       ; Compare X with the largest so far, stored in d5. 
   blt xweb2       ; If it's less, skip to xweb2 below.
   move d1,d5      ; It's bigger, so save it in d5.
 
 xweb2:
   ; Store the x,y,z value for the near point in the web
-  move.l d0,(a2)+ ; x value
-  move.l d1,(a2)+ ; y value
-  clr.l (a2)+     ; z value for near point (always 0)
+  move.l d0,(a2)+ ; Y value
+  move.l d1,(a2)+ ; X value
+  clr.l (a2)+     ; Z value for near point (always 0)
 
   ; Store the x,y,z value for the far point in the web
-  move.l d0,(a2)+ ; x value
-  move.l d1,(a2)+ ; y value
+  move.l d0,(a2)+ ; Y value
+  move.l d1,(a2)+ ; X value
   move.l d7,(a2)+ ; z value for far point (calculated by initvo).
 
-  move d3,(a3)+    ;vertex ID to conn list
-  tst d6
-  beq lastpoint    ;special case for last point!
+  ; a3 is the 'connlist', the list describing how each point is connected
+  ; to the others. 
 
-  ; Connect the vertices
-  move d3,d4       ;copy vertex #
-  addq #1,d4
-  move d4,(a3)+    ;connect to n+1
-  addq #1,d4
-  move d4,(a3)+    ;connect to n+2
-  move #0,(a3)+    ;end vertex 
-  subq #1,d4       ;point to n+1
-  move d4,(a3)+
-  addq #2,d4       ;n+3
-  move d4,(a3)+    ;connect
-  move #0,(a3)+    ;delimit
-  move.l a3,(a5)+  ;to v.conn list
-  add #2,d3        ;move 2 vertices
+  ; Create entries in the connlist for this point. First we create an entry
+  ; for the 'near' point.  This will be connected to the far point and the
+  ; next point in the web data structure. Each entry starts with an index
+  ; to the point in question, followed by indices to the points its connected to.
+  move d3,(a3)+   ; Make this a connlist entry for the 'near' point. 
+  move d3,d4      ; Store the 'near' point index in d4. 
+  addq #1,d4      ; Add 1 to it, so it's now an index to the 'far' point.
+  move d4,(a3)+   ; Store this as first connected point in the entry.
+  addq #1,d4      ; Add 1 to d4 again so it's an index to the next point.
+  move d4,(a3)+   ; Store this as the second connected point in the entry.
+  move #0,(a3)+   ; Mark the end of the entry with a zero.
 
-  ; Get the next pair
-  dbra d6,xweb
+  ; Create an entry in the connlist for the 'far' point.
+  subq #1,d4      ; Subtract 1 from d4 so it's an index to the far point.
+  move d4,(a3)+   ; Make this an entry for the 'far' point.
+  addq #2,d4      ; Add 2 to d4 so it's an index for the next 'far' point.
+  move d4,(a3)+   ; Store this as the connected point in the entry.
+  move #0,(a3)+   ; Mark the end of the entry with a zero.
+  move.l a3,(a5)+ ; Add our entries to the overall connlist list of lists.
+  add #2,d3       ; Point d3 to the next X/Y pair.
+
+  ; Keep looping until we finish reading the X/Y pairs in the data structure.
+  dbra d6,xweb    ; Get the next pair
 \end{lstlisting}
 
+Its job is to read in X and Y pairs in our \icode{web13} data structure. To make sense of them
+as describing a web it uses the pairs to create a connection list or \icode{connlist} that describes
+how each of the points in the web are connected to each other. Let's take a look at how the loop in
+\icode{xweb} builds up this \icode{connlist} as it iterates over the X and Y pairs in \icode{web13}.
+
+
 \begin{figure}[H]
-    \centering
-    \begin{adjustbox}{width=9cm,center}
-      \includegraphics[width=12cm]{src/webs/sine_wave_no_title.png}%
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{center}
+      \begin{tabular}[t]{cc}
+        \toprule
+        X/Y Pairs and Connections & Current Draw State\\
+        \midrule
+        \makecell[cl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{l}
+            \tcode{web13:~~~~~~~(-2,14),~~~(-2,12)} \\
+            \tcode{} \\
+            \tcode{connlist:~~~~(0,1,2,0),~(1,3,0)} \\
+          \end{tabular}
+          \endgroup
+        }
+        &
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_2.png} \\
+        }
+        \\
+        \bottomrule
+      \end{tabular}
     \end{adjustbox}
-  \caption{Adding in our second triangle}
+  }
+\end{figure}
+
+In this first iteration through \icode{xweb} we've managed to construct the first three
+lines of our web. On the near and far side we've connected the first two points in the web,
+and we've connected the near and far side of the first point. 
+
+In our \icode{connlist} the entry
+\icode{(1,3,0)} connects the far point (\icode{1}) with the next far point (\icode{3}). The \icode{0}
+at the end is a terminator sentinel telling us it's the end of that particular entry.
+
+The first entry in the \icode{connlist} tells us that the first near point (\icode{0}) is connected to
+its far point counterpoint (\icode{1}) and the the next near point (\icode{2}). Again the zero at the
+end is a terminator for the entry.
+
+Moving to the next X/Y pair in our next diagram we repeat this process, layering on the same shape and
+the same set of connections between the near and far points for the next point and its successor.
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{center}
+      \begin{tabular}[t]{cc}
+        \toprule
+        X/Y Pairs and Connections & Current Draw State\\
+        \midrule
+        \makecell[cl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{l}
+            \tcode{web13:~~~~~~~(-2,14),~~~(-2,12)} \\
+            \tcode{~~~~~~~~~~~~~(-1,10)} \\
+            \tcode{} \\
+            \tcode{connlist:~~~~(0,1,2,0), (1,3,0)} \\
+            \tcode{~~~~~~~~~~~~~(1,2,3,0), (2,4,0)} \\
+          \end{tabular}
+          \endgroup
+        }
+        &
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_3.png} \\
+        }
+        \\
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+
+This process now continues for each pair, building up the \icode{connlist} for each pair
+of 'near' and 'far' point counterparts.
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{center}
+      \begin{tabular}[t]{cc}
+        \toprule
+        X/Y Pairs and Connections & Current Draw State\\
+        \midrule
+        \makecell[cl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{l}
+            \tcode{web13:~~~~~~~(-2,14),~~~(-2,12)} \\
+            \tcode{~~~~~~~~~~~~~(-1,10),~~~(1,8)} \\
+            \tcode{} \\
+            \tcode{connlist:~~~~(0,1,2,0), (1,3,0)} \\
+            \tcode{~~~~~~~~~~~~~(1,2,3,0), (2,4,0)} \\
+            \tcode{~~~~~~~~~~~~~(2,3,4,0), (3,5,0)} \\
+          \end{tabular}
+          \endgroup
+        }
+        &
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_4.png} \\
+        }
+        \\
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{center}
+      \begin{tabular}[t]{cc}
+        \toprule
+        X/Y Pairs and Connections & Current Draw State\\
+        \midrule
+        \makecell[cl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{l}
+            \tcode{web13:~~~~~~~(-2,14),~~~(-2,12)} \\
+            \tcode{~~~~~~~~~~~~~(-1,10),~~~(1,8)} \\
+            \tcode{~~~~~~~~~~~~~(3,7)} \\
+            \tcode{} \\
+            \tcode{connlist:~~~~(0,1,2,0), (1,3,0)} \\
+            \tcode{~~~~~~~~~~~~~(1,2,3,0), (2,4,0)} \\
+            \tcode{~~~~~~~~~~~~~(2,3,4,0), (3,5,0)} \\
+            \tcode{~~~~~~~~~~~~~(3,4,5,0), (4,6,0)} \\
+          \end{tabular}
+          \endgroup
+        }
+        &
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_5.png} \\
+        }
+        \\
+        \bottomrule
+        \makecell[cl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{l}
+            \tcode{web13:~~~~~~~(-2,14),~~~(-2,12)} \\
+            \tcode{~~~~~~~~~~~~~(-1,10),~~~(1,8)} \\
+            \tcode{~~~~~~~~~~~~~(3,7),~~~~(5,7)} \\
+            \tcode{} \\
+            \tcode{connlist:~~~~(0,1,2,0), (1,3,0)} \\
+            \tcode{~~~~~~~~~~~~~(1,2,3,0), (2,4,0)} \\
+            \tcode{~~~~~~~~~~~~~(2,3,4,0), (3,5,0)} \\
+            \tcode{~~~~~~~~~~~~~(3,4,5,0), (4,6,0)} \\
+            \tcode{~~~~~~~~~~~~~(4,5,6,0), (5,7,0)} \\
+          \end{tabular}
+          \endgroup
+        }
+        &
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_6.png} \\
+        }
+        \\
+        \bottomrule
+        \makecell[cl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{l}
+            \tcode{web13:~~~~~~~(-2,14),~~~(-2,12)} \\
+            \tcode{~~~~~~~~~~~~~(-1,10),~~~(1,8)} \\
+            \tcode{~~~~~~~~~~~~~(3,7),~~~~(5,7)} \\
+            \tcode{~~~~~~~~~~~~~(7,8)          } \\
+            \tcode{} \\
+            \tcode{connlist:~~~~(0,1,2,0), (1,3,0)} \\
+            \tcode{~~~~~~~~~~~~~(1,2,3,0), (2,4,0)} \\
+            \tcode{~~~~~~~~~~~~~(2,3,4,0), (3,5,0)} \\
+            \tcode{~~~~~~~~~~~~~(3,4,5,0), (4,6,0)} \\
+            \tcode{~~~~~~~~~~~~~(4,5,6,0), (5,7,0)} \\
+            \tcode{~~~~~~~~~~~~~(5,6,7,0), (6,8,0)} \\
+          \end{tabular}
+          \endgroup
+        }
+        &
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_7.png} \\
+        }
+        \\
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{center}
+      \begin{tabular}[t]{cc}
+        \toprule
+        X/Y Pairs and Connections & Current Draw State\\
+        \midrule
+        \makecell[cl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{l}
+            \tcode{web13:~~~~~~~(-2,14),~~~(-2,12)} \\
+            \tcode{~~~~~~~~~~~~~(-1,10),~~~(1,8)} \\
+            \tcode{~~~~~~~~~~~~~(3,7),~~~~(5,7)} \\
+            \tcode{~~~~~~~~~~~~~(7,8),~~~~(9,10)} \\
+            \tcode{} \\
+            \tcode{connlist:~~~~(0,1,2,0), (1,3,0)} \\
+            \tcode{~~~~~~~~~~~~~(1,2,3,0), (2,4,0)} \\
+            \tcode{~~~~~~~~~~~~~(2,3,4,0), (3,5,0)} \\
+            \tcode{~~~~~~~~~~~~~(3,4,5,0), (4,6,0)} \\
+            \tcode{~~~~~~~~~~~~~(4,5,6,0), (5,7,0)} \\
+            \tcode{~~~~~~~~~~~~~(5,6,7,0), (6,8,0)} \\
+            \tcode{~~~~~~~~~~~~~(6,7,8,0), (7,9,0)} \\
+          \end{tabular}
+          \endgroup
+        }
+        &
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_8.png} \\
+        }
+        \\
+        \bottomrule
+        \makecell[cl]{
+          \begingroup
+          \renewcommand{\arraystretch}{.8} % Default value: 1
+          \begin{tabular}[t]{l}
+            \tcode{web13:~~~~~~~(-2,14),~~~(-2,12)} \\
+            \tcode{~~~~~~~~~~~~~(-1,10),~~~(1,8)} \\
+            \tcode{~~~~~~~~~~~~~(3,7),~~~~(5,7)} \\
+            \tcode{~~~~~~~~~~~~~(7,8),~~~~(9,10)} \\
+            \tcode{~~~~~~~~~~~~~(11,12)} \\
+            \tcode{} \\
+            \tcode{connlist:~~~~(0,1,2,0), (1,3,0)} \\
+            \tcode{~~~~~~~~~~~~~(1,2,3,0), (2,4,0)} \\
+            \tcode{~~~~~~~~~~~~~(2,3,4,0), (3,5,0)} \\
+            \tcode{~~~~~~~~~~~~~(3,4,5,0), (4,6,0)} \\
+            \tcode{~~~~~~~~~~~~~(4,5,6,0), (5,7,0)} \\
+            \tcode{~~~~~~~~~~~~~(5,6,7,0), (6,8,0)} \\
+            \tcode{~~~~~~~~~~~~~(6,7,8,0), (7,9,0)} \\
+            \tcode{~~~~~~~~~~~~~(7,8,9,0), (8,10,0)} \\
+          \end{tabular}
+          \endgroup
+        }
+        &
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_9.png} \\
+        }
+        \\
+        \bottomrule
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+
+OK I think we're getting the idea. There's a clear pattern in the way the \icode{connlist}
+is constructed for each of the point pairs. Let's finish off the construction.
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{center}
+      \begin{tabular}[t]{cc}
+        \toprule
+        Draw State & Draw State\\
+        \midrule
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_10.png} \\
+        }
+        &
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_11.png} \\
+        }
+        \\
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_12.png} \\
+        }
+        &
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_13.png} \\
+        }
+        \\
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_14.png} \\
+        }
+        &
+        \makecell[l]{
+            \includegraphics[width=6.2cm]{gradual_web/sine_wave_15.png} \\
+        }
+        \\
+      \end{tabular}
+    \end{adjustbox}
+  }
 \end{figure}
