@@ -144,7 +144,7 @@ bytes themselves. This table shows the first ten or so triplets to give you an i
   }\caption*{The triplets in \icode{ALEXEC.LDA} for ROM address \icode{9000} written to ROM Part 136002-237.}
 \end{figure}
 \vspace{-0.5cm}
-Notice how apparently wasteful this file format is: some of the triplets contain only byte! You can also notice
+Notice how apparently wasteful this file format is: some of the triplets contain only one byte! You can also notice
 that the triplets can appear out of order. For example the bytes for address \icode{90A2} are specified after the 
 bytes for \icode{90A1}. So perhaps for some binaries this encoding scheme may be more efficient than just raw bytes,
 but not in the case of \icode{ALEXEC.LDA} which uses 25,408 bytes to encode a total of 24,576 bytes that actually
