@@ -274,29 +274,4 @@ func main() {
   var high_quality =  outputDirName + "/" + currentDir() + "_" + getMode() + "_high_quality.pdf"
   os.Rename(src, high_quality)
 
-  var low_quality =  outputDirName + "/" + currentDir() + "_" + getMode() + "_low_quality.pdf"
-  // Trim the final PDF.
-  bin = "gs"
-  trim_args := []string{
-    "-sDEVICE=pdfwrite",
-    "-dCompatibilityLevel=1.4",
-    "-dPDFSETTINGS=/ebook",
-    "-dNOPAUSE",
-    "-dQUIET",
-    "-dBATCH",
-    "-sOutputFile=" + low_quality,
-    high_quality,
-  }
-  fmt.Println(bin, trim_args)
-
-  out, err = exec.Command(bin, trim_args...).CombinedOutput()
-
-  if err != nil {
-    fmt.Println("%s %s", string(out), err)
-  }
-
-  // Rename the light PDF.
-  var release_quality =  outputDirName + "/" + currentDir() + "_" + getMode() + ".pdf"
-  os.Rename(low_quality, release_quality)
-
 }
