@@ -8,50 +8,42 @@ of assembly code. Beneath lies an iceberg of strange machinery but at its core t
 running these 15 or so lines many hundreds of times per second:
 
 \begin{lstlisting}
-;INPUT:         POWER ON RESET PREPARATION
-;OUTPUT:        NONE
-
-MAINLN: JSR INISOU              ;INITIALIZE SOUNDS
-        LDA I,CNEWGA
-        STA QSTATE
-        BEGIN                   ;MAINLOOP
-        BEGIN                   ;LOOP UNTIL CURRENT FRAME HAS BEEN UP X MS.
-        LDA FRTIMR
-        CMP I,9
-        CSEND
-        LDA I,0                 ;RESTART FRAME TIMER
-        STA FRTIMR
-        JSR EXSTAT              ;EXECUTE APPROPRIATE GAME STATE
-        JSR NONSTA              ;EXECUTE NON-STATE DEPENDENT CODE
-        JSR DISPLA              ;EXECUTE CODE TO DISPLAY NEW SCREEN
-        CLC
-        CSEND                   ;LOOP ALWAYS
+MAINLN: JSR INISOU     ; INITIALIZE SOUNDS
+        LDA I,CNEWGA   ; GET 'NEW GAME' AND SET IT TO..
+        STA QSTATE     ; .. OUR CURRENT 'STATE'.
+        BEGIN          ; THE MAIN LOOP
+          BEGIN        ; LOOP UNTIL CURRENT FRAME HAS BEEN UP 9 MS.
+            LDA FRTIMR ; GET THE FRAME TIMER
+            CMP I,9    ; IS IT 9 YET?
+          CSEND        ; IF NOT, LOOP AGAIN
+          LDA I,0      ; LOAD 0 TO THE 'A' REGISTER
+          STA FRTIMR   ; AND USE IT TO RESTART THE FRAME TIMER.
+          JSR EXSTAT   ; EXECUTE APPROPRIATE GAME STATE
+          JSR NONSTA   ; EXECUTE NON-STATE DEPENDENT CODE
+          JSR DISPLA   ; EXECUTE CODE TO DISPLAY NEW SCREEN
+          CLC
+        CSEND          ; GO BACK TO START OF MAIN LOOP
 \end{lstlisting}
 
 The game's framerate is controlled by this tight little loop. As soon as \icode{FRTIMR} reaches 9 a frame
 of the game is executed:
 \begin{lstlisting}
-        LDA FRTIMR
-        CMP I,9
-        CSEND
+        BEGIN        ; LOOP UNTIL CURRENT FRAME HAS BEEN UP 9 MS.
+          LDA FRTIMR ; GET THE FRAME TIMER
+          CMP I,9    ; IS IT 9 YET?
+        CSEND        ; IF NOT, LOOP AGAIN
 \end{lstlisting}
 
 \begin{figure}[H]
   \centering
-  \frame{\includegraphics[width=13cm]{src/build/mainline.png}}%
+  \frame{\includegraphics[width=14cm]{src/build/mainline.png}}%
   \caption{The \icode{MAINLN} routine in an assembly listing.}
 \end{figure}
-\begin{figure}[H]
-  \centering
-  \frame{\includegraphics[width=13cm]{src/build/exstat.png}}%
-  \caption{The \icode{EXSTAT} and \icode{ROUTEAD} routines in an assembly listing.}
-\end{figure}
-\clearpage
 
 Then it is reset to zero:
 \begin{lstlisting}
-        LDA I,0                 ;RESTART FRAME TIMER
-        STA FRTIMR
+        LDA I,0      ; LOAD 0 TO THE 'A' REGISTER
+        STA FRTIMR   ; AND USE IT TO RESTART THE FRAME TIMER.
 \end{lstlisting}
 Increasing the value from \icode{9} to \icode{0F} (15) will slow the game down appreciably, while increasing
 it to \icode{1F} (31) will bring it to an unplayable crawl. Lowering it to \icode{0} or \icode{1} does make the game slightly
@@ -67,78 +59,72 @@ faster, but not noticeably and it is still playable.
 \textcolor{white}{
   But what increments \icode{FRTIMR} you ask? The answer is a piece of code in what is known
   as an 'interrupt handler'. This runs separately from the main loop and is invoked by the CPU up to 60
-  times a second.
+  times a second. It is a long function so I haven't reproduced it here in full, but for our purposes
+  it suffices to say that it increments the \icode{FRTRIMR} once every millisecond or so.
 }
 \end{definition}
 
 Once we've decided to execute a frame we are down to just three lines orchestrating the entirety of the game:
 
 \begin{lstlisting}
-        JSR EXSTAT              ;EXECUTE APPROPRIATE GAME STATE
-        JSR NONSTA              ;EXECUTE NON-STATE DEPENDENT CODE
-        JSR DISPLA              ;EXECUTE CODE TO DISPLAY NEW SCREEN
+        JSR EXSTAT   ; EXECUTE APPROPRIATE GAME STATE
+        JSR NONSTA   ; EXECUTE NON-STATE DEPENDENT CODE
+        JSR DISPLA   ; EXECUTE CODE TO DISPLAY NEW SCREEN
 \end{lstlisting}
 
 The first routine we call is \icode{EXSTAT}. It always updates the starfield (\icode{PRSTAR}) but what it
 does next is dependent on the value contained in \icode{QSTATE}. Take a brief look at the routine to see if
 you can identify how it uses \icode{QSTATE}:
 \begin{lstlisting}
-;INPUT:         QSTATE: CODE FOR STATE ROUTINE TO EXECUTE
-;OUTPUT:        CONTROL PASSED TO ROUTINE
-
-EXSTAT:
-        LDA INOP0
-        AND I,83
-        CMP I,82
-        IFNE                    ;FREEZE & FREE PLAY?
-        JSR PRSTAR              ;PROCESS STAR FIELD
-        LDX QSTATE
-        LDA SWFINA              ;SET MUST PROCESS FLAG
-        ORA I,MFAKE
-        STA SWFINA
-        LDA AX,ROUTAD+1
-        PHA
-        LDA AX,ROUTAD
-        PHA
-        ENDIF
+EXSTAT: LDA INOP0        ; READ THE OPTION SWITCHES
+        AND I,83         ; GET THE BITS WE'RE INTERESTED IN
+        CMP I,82         ; CHECK THE SWITCHES FOR DEMONSTRATION/FREEZE MODE 
+        IFNE             ; IF WE'RE NOT IN DEMO/FREEZE MODE THEN..
+        JSR PRSTAR       ; PROCESS THE STAR FIELD
+        LDX QSTATE       ; LOAD THE QSTATE TO X
+        LDA SWFINA       ; SWFINA TRACKS USER INPUT, TO ENSURE WE RUN 
+        ORA I,MFAKE      ; OUR ROUTINE WE USE MFAKE TO ADD A FAKE INPUT 
+        STA SWFINA       ; AND STORE IT IN SWFINA.
+        LDA AX,ROUTAD+1  ; USE QSTATE TO GET BYTE 2 OF SELECTED ROUTINE
+        PHA              ; PUSH IT TO THE STACK
+        LDA AX,ROUTAD    ; USE QSTATE TO GET BYTE 1 OF SELECTED ROUTINE
+        PHA              ; PUSH IT TO THE STACK
+        ENDIF            ; END IF
 NOOPR:  RTS
 \end{lstlisting}
 
 The answer is in these lines:
 \begin{lstlisting}
-        LDX QSTATE
+        LDX QSTATE       ; LOAD THE QSTATE TO X
         ..
-        LDA AX,ROUTAD+1
-        PHA
-        LDA AX,ROUTAD
-        PHA
+        LDA AX,ROUTAD+1  ; USE QSTATE TO GET BYTE 2 OF SELECTED ROUTINE
+        PHA              ; PUSH IT TO THE STACK
+        LDA AX,ROUTAD    ; USE QSTATE TO GET BYTE 1 OF SELECTED ROUTINE
+        PHA              ; PUSH IT TO THE STACK
 \end{lstlisting}
 
 The value in \icode{QSTATE} is loaded to the \icode{X} register. This is then used an index to retrieve the two-byte address
 stored in the \icode{X}th - 1 index of the \icode{ROUTAD} table: 
 \begin{lstlisting}
-;
-;STATE ROUTINE ADDRESS
-;
-ROUTAD: .WORD NEWGAM-1          ;NEW GAME
-        .WORD NEWLIF-1          ;NEW LIFE (AFTER LOSING A BASE)
-        .WORD PLAY-1            ;PLAY
-        .WORD ENDLIF-1          ;LIFE LOST
-        .WORD ENDGAM-1          ;END OF GAME
-        .WORD PAUSE-1           ;PAUSE
-        .WORD 0                 ;NEW WAVE (AFTER SHOOTING ALL INVADERS)
-        .WORD ENDWAV-1          ;END OF WAVE
-        .WORD HISCHK-1          ;CHECK FOR HI SCORES
-        .WORD GETINI-1          ;GET HI SCORE INITIALS
-        .WORD DLADR-1           ;DISPLAY HI SCORE TABLE
-        .WORD PRORAT-1          ;REQUEST PLAYER RATE
-        .WORD NEWAV2-1          ;NEW WAVE PART 2
-        .WORD LOGINI-1          ;LOGO INIT
-        .WORD INIRAT-1          ;MONSTER DELAY/DISPLAY
-        .WORD NEWLF2-1          ;NEW LIFE PART 2
-        .WORD PLDROP-1          ;DROP MODE
-        .WORD SYSTEM-1          ;END WAVE CLEAN UP AFTER BONUS
-        .WORD PRBOOM-1          ;BOOM
+ROUTAD: .WORD NEWGAM-1   ; NEW GAME
+        .WORD NEWLIF-1   ; NEW LIFE (AFTER LOSING A BASE)
+        .WORD PLAY-1     ; PLAY
+        .WORD ENDLIF-1   ; LIFE LOST
+        .WORD ENDGAM-1   ; END OF GAME
+        .WORD PAUSE-1    ; PAUSE
+        .WORD 0          ; NEW WAVE (AFTER SHOOTING ALL INVADERS)
+        .WORD ENDWAV-1   ; END OF WAVE
+        .WORD HISCHK-1   ; CHECK FOR HI SCORES
+        .WORD GETINI-1   ; GET HI SCORE INITIALS
+        .WORD DLADR-1    ; DISPLAY HI SCORE TABLE
+        .WORD PRORAT-1   ; REQUEST PLAYER RATE
+        .WORD NEWAV2-1   ; NEW WAVE PART 2
+        .WORD LOGINI-1   ; LOGO INIT
+        .WORD INIRAT-1   ; MONSTER DELAY/DISPLAY
+        .WORD NEWLF2-1   ; NEW LIFE PART 2
+        .WORD PLDROP-1   ; DROP MODE
+        .WORD SYSTEM-1   ; END WAVE CLEAN UP AFTER BONUS
+        .WORD PRBOOM-1   ; BOOM
 \end{lstlisting}
 
 Pushing each of the two bytes to the stack (using \icode{PHA}) means that whatever is at the address of those two bytes will
@@ -152,30 +138,30 @@ to call next. To give a flavour of what \icode{NEWGAM} looks like we've listed i
 accounting operations such as clearing the score, assigning the number of lives and so on. 
 
 \begin{lstlisting}
-NEWGAM: JSR INICHK              ;INITIALIZE LANGUAGE PTRS, OPTIONS
-        JSR INIDSP              ;INITIALIZE DISPLAY
-        LDA QSTATUS
-        IFMI                    ;ATTRACT?
-        JSR CLRSCO              ;NO. CLEAR SCORES
-        ENDIF
-        LDA I,0
-        STA LIVES2              ;ONE PLAYER GAME (DEFAULT: PLAYER 2 DEAD)
-        LDX NUMPLA              ;GIVE EACH PLAYER "NEW GAME" EQUIP
-        STX PLAYUP
-        BEGIN                   ;LOOP FOR EACH PLAYER IN GAME (1 OR 2)
-        LDX PLAYUP
-        LDA LVSGAM              ;GET # LIVES
-        STA AX,LIVES1           ;INITIAL # OF LIVES (GUNS)
-        LDA I,-1
-        STA AX,WAVEN1           ;FORCE REQUEST RATE STATE
-        DEC PLAYUP
-        MIEND                   ;ENDLOOP AFTER ALL PLAYERS PROCESSED
-        LDA I,0
-        STA NEWPLA              ;START GAME WITH 1ST PLAYER UP.
-        STA PLAGRO              ;DEACTIVATE STAR FIELD
-        LDA NUMPLA              ;INDUCE "PLAY PLAYER 1" MESSAGE
-        STA PLAYUP              ;IF 2 PLAYER GAME.
-        JMP INIRA0              ;INITIALIZE FOR PLAYER RATE REQUEST
+NEWGAM: JSR INICHK       ; INITIALIZE LANGUAGE PTRS, OPTIONS
+        JSR INIDSP       ; INITIALIZE DISPLAY
+        LDA QSTATUS      ; CHECK THE MODE WE'RE IN..
+        IFMI             ; IS IT ATTRACT MODE?
+        JSR CLRSCO       ; IF NOT, CLEAR SCORES
+        ENDIF            ; OTHERWISE LEAVE AS IS.
+        LDA I,0          ; LOAD 0 TO THE A REGISTER.
+        STA LIVES2       ; ONE PLAYER GAME (DEFAULT: PLAYER 2 DEAD)
+        LDX NUMPLA       ; GIVE EACH PLAYER "NEW GAME" EQUIP
+        STX PLAYUP       ; STORE NUM PLAYERS IN PLAYUP
+        BEGIN            ; LOOP FOR EACH PLAYER IN GAME (1 OR 2)
+          LDX PLAYUP     ; GET CURRENT PLAYER #
+          LDA LVSGAM     ; GET # LIVES
+          STA AX,LIVES1  ; INITIAL # OF LIVES (GUNS)
+          LDA I,-1       ; STORE -1 IN A REGISTER
+          STA AX,WAVEN1  ; FORCE REQUEST RATE STATE
+          DEC PLAYUP     ; GO TO NEXT PLAYER
+        MIEND            ; ENDLOOP AFTER ALL PLAYERS PROCESSED
+        LDA I,0          ; LOAD 0 TO THE A REGISTER.
+        STA NEWPLA       ; START GAME WITH 1ST PLAYER UP.
+        STA PLAGRO       ; DEACTIVATE STAR FIELD
+        LDA NUMPLA       ; INDUCE "PLAY PLAYER 1" MESSAGE
+        STA PLAYUP       ; IF 2 PLAYER GAME.
+        JMP INIRA0       ; INITIALIZE FOR PLAYER RATE REQUEST
 \end{lstlisting}
 
 You will notice at the end that we jump to a routine called \icode{INIRA0}. This continues the accounting set-up for a new
@@ -183,8 +169,8 @@ game but it also does something important, which is update \icode{QSTATE} to dir
 \icode{MAINLN} to a different function. In this case, it loads \icode{16} to \icode{QSTATE}, which will direct us to the routine
 \icode{PRORAT} at the next iteration:
 \begin{lstlisting}
-        LDA I,CREQRAT           ;GO TO REQUEST
-        STA QSTATE              ;RATE STATE
+        LDA I,CREQRAT    ; LOAD CREQRAT TO A AND STORE IT IN..
+        STA QSTATE       ; QSTATE SO WE CALL PRORAT NEXT TIME AROUND.
 \end{lstlisting}
 
 Another way of describing what we have here is a 'state machine'. As the state of the system changes, \icode{EXSTAT} will execute
@@ -192,22 +178,22 @@ a different routine, appropriate to the current state of the game. The one execu
 \icode{ROUTEAD} table. This is called \icode{PLAY} and its contents, as well as its name, are almost self-explanatory.
 
 \begin{figure}[H]
-      \centering
-      \includegraphics[width=14cm]{src/mainline/mainline-comic.png}%
+  \hspace{-0.50cm}
+  \includegraphics[width=14.2cm]{src/mainline/mainline-comic.png}%
 \end{figure}
 
 \begin{lstlisting}
 PLAY:
-        JSR MOVCUR              ;MOVE CURSOR AROUND
-        JSR FIREPC              ;FIRE PLAYER CHARGE
-        JSR PROSUZ              ;PROCESS SUPER ZAP
-        JSR MOVNYM              ;MOVE NYMPHS
-        JSR MOVINV              ;MOVE INVADERS
-        JSR MOVCHA              ;MOVE CHARGES
-        JSR FIREIC              ;FIRE INVADER CHARGE
-        JSR COLLIS              ;COLLISION DETECT
-        JSR PROEXP              ;EXPLOSIONS
-        JMP ANALYZ              ;ANALYZE PLAYER STATUS
+        JSR MOVCUR       ; MOVE CURSOR AROUND
+        JSR FIREPC       ; FIRE PLAYER CHARGE
+        JSR PROSUZ       ; PROCESS SUPER ZAP
+        JSR MOVNYM       ; MOVE NYMPHS
+        JSR MOVINV       ; MOVE INVADERS
+        JSR MOVCHA       ; MOVE CHARGES
+        JSR FIREIC       ; FIRE INVADER CHARGE
+        JSR COLLIS       ; COLLISION DETECT
+        JSR PROEXP       ; EXPLOSIONS
+        JMP ANALYZ       ; ANALYZE PLAYER STATUS
 \end{lstlisting}
 
 Here every element of the game is updated and manipulated in some way. It is not surprising that somewhere in the heart of a
@@ -223,74 +209,219 @@ of this order is to ensure that information about the player and its enemies are
 A lot has happened underneath the single line..
 
 \begin{lstlisting}
-        JSR EXSTAT              ;EXECUTE APPROPRIATE GAME STATE
+        JSR EXSTAT       ; EXECUTE APPROPRIATE GAME STATE
 \end{lstlisting}
 
 .. however now that we have all the properties of the game in its current frame we can move on to updating how they are displayed:
+\footnote{We have skipped over \icode{JSR NONSTAT}, which takes care of game play logic that does not depend on the state of the 
+game. \icode{NONSTAT} is a lengthy routine with a lot of bookkeeping activity relating to the player's available credits, updates
+to in-game options etc. so I have passed over it to allow us to focus on the core concerns of the main game loop: updating the game
+elements in \icode{EXSTAT} and displaying them in \icode{DISPLAY}.} 
 \begin{lstlisting}
-        JSR DISPLA              ;EXECUTE CODE TO DISPLAY NEW SCREEN
+        JSR DISPLAY      ; EXECUTE CODE TO DISPLAY NEW SCREEN
 \end{lstlisting}
 
-Again this will in most cases boil down to updating all of the elements one by one. Unlike when we were concerned with updating
-state, the order in which we do things is not particularly important here. The \icode{DISPLA} routine wants to build a list of lines
-to paint on the screen so it will compute the lines for each type of object currently displayed in a more or less abitrary sequence
-determined by the programmer. Notice that in the sequence below the display of each type of object follows a fixed pattern:
+Again this will in most cases boil down to updating all of the elements one by one. Here too we find a state machine, again using
+a routine address table, this time called \icode{DROUTEAD}. Depending on the value in \icode{QDSTATE} (as opposed to \icode{QSTATE} used
+previously), we will execute one of the display routines below. 
+\clearpage
+\begin{lstlisting}
+DROUTAD:
+        .WORD DENORM-1   ; GAME PLAY - TOP OF WELL, DOWN THE TUBE
+        .WORD DSPSYS-1   ; SYSTEM CONFIGURATION
+        .WORD DSBOOM-1   ; GAME PLAY - BOOM
+        .WORD GETDSP-1   ; DATA ENTRY - HI SCORE INITIALS
+        .WORD RQRDSP-1   ; DATA ENTRY - RANKING
+        .WORD LDRDSP-1   ; INFO ONLY - HI SCORE TABLE
+        .WORD DGOVER-1   ; GAME OVER PLAYER X
+        .WORD DPLPLA-1   ; PLAY PLAYER X
+        .WORD DPRSTA-1   ; "PRESS START"
+        .WORD BOXPRO-1   ; LOGO BOX
+        .WORD LOGPRO-1   ; LOGO
+        .WORD D2GAME-1   ; 2 GAME MINIMUM
+\end{lstlisting}
+
+A quick glance shows that the majority of the routines in the table are concerned with  tasks we might think of as extraneous
+to the main business of the game,  thinkgs such as entering your initials
+after a high score, displaying the logo sequence, or configuring the system in owner/operator mode. 
+Pairing each entry in the table with the activity it is responsible for displaying in the gallery below underlines how comprehensively
+it covers every aspect of the game's lifecyle outside the main gameplay.
+It is the very first routine in the table, \icode{DENORM},
+that is called most often in practice as it is the one which manages the display during gameplay. A close second, at least in my case,
+is probably \icode{DSBOOM} which handles display when the player is killed.
+
+\begin{figure}[H]
+  {
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=14cm,center}
+      \begin{subfigure}{0.2\textwidth}
+          \centering
+          \begin{adjustbox}{width=2cm,center}
+            \includegraphics[width=12cm]{src/mainline/play.png}%
+          \end{adjustbox}
+          \caption*{\icode{DENORM}}
+      \end{subfigure}
+      \begin{subfigure}{0.2\textwidth}
+          \centering
+          \begin{adjustbox}{width=2cm,center}
+            \includegraphics[width=12cm]{src/mainline/config.png}%
+          \end{adjustbox}
+          \caption*{\icode{DSPSYS}}
+      \end{subfigure}
+      \begin{subfigure}{0.2\textwidth}
+          \centering
+          \begin{adjustbox}{width=2cm,center}
+            \includegraphics[width=12cm]{src/mainline/boom.png}%
+          \end{adjustbox}
+          \caption*{\icode{DSBOOM}}
+      \end{subfigure}
+      \begin{subfigure}{0.2\textwidth}
+          \centering
+          \begin{adjustbox}{width=2cm,center}
+            \includegraphics[width=12cm]{src/mainline/scores.png}%
+          \end{adjustbox}
+          \caption*{\icode{GETDSP}}
+      \end{subfigure}
+    \end{adjustbox}
+    \begin{adjustbox}{width=14cm,center}
+      \begin{subfigure}{0.2\textwidth}
+          \centering
+          \begin{adjustbox}{width=2cm,center}
+            \includegraphics[width=12cm]{src/mainline/ranking.png}%
+          \end{adjustbox}
+          \caption*{\icode{RQRDSP}}
+      \end{subfigure}
+      \begin{subfigure}{0.2\textwidth}
+          \centering
+          \begin{adjustbox}{width=2cm,center}
+            \includegraphics[width=12cm]{src/mainline/scores.png}%
+          \end{adjustbox}
+          \caption*{\icode{LQRDSP}}
+      \end{subfigure}
+      \begin{subfigure}{0.2\textwidth}
+          \centering
+          \begin{adjustbox}{width=2cm,center}
+            \includegraphics[width=12cm]{src/mainline/ranking.png}%
+          \end{adjustbox}
+          \caption*{\icode{DGOVER}}
+      \end{subfigure}
+      \begin{subfigure}{0.2\textwidth}
+          \centering
+          \begin{adjustbox}{width=2cm,center}
+            \includegraphics[width=12cm]{src/mainline/play_player.png}%
+          \end{adjustbox}
+          \caption*{\icode{DLPLA}}
+      \end{subfigure}
+    \end{adjustbox}
+    }
+\end{figure}
+
+\begin{figure}[H]
+  {
+    \begin{adjustbox}{width=14cm,center}
+      \begin{subfigure}{0.2\textwidth}
+          \centering
+          \begin{adjustbox}{width=2cm,center}
+            \includegraphics[width=12cm]{src/mainline/attract.png}%
+          \end{adjustbox}
+          \caption*{\icode{DPRSTA}}
+      \end{subfigure}
+      \begin{subfigure}{0.2\textwidth}
+          \centering
+          \begin{adjustbox}{width=2cm,center}
+            \includegraphics[width=12cm]{src/mainline/box.png}%
+          \end{adjustbox}
+          \caption*{\icode{BOXPRO}}
+      \end{subfigure}
+      \begin{subfigure}{0.2\textwidth}
+          \centering
+          \begin{adjustbox}{width=2cm,center}
+            \includegraphics[width=12cm]{src/mainline/logo.png}%
+          \end{adjustbox}
+          \caption*{\icode{LOGPRO}}
+      \end{subfigure}
+      \begin{subfigure}{0.2\textwidth}
+          \centering
+          \begin{adjustbox}{width=2cm,center}
+            \includegraphics[width=12cm]{src/mainline/play_player.png}%
+          \end{adjustbox}
+          \caption*{\icode{D2GAME}}
+      \end{subfigure}
+    \end{adjustbox}
+    }
+\end{figure}
+\vspace{-0.5cm}
+
+We will encounter most of the elements in the above gallery in much greater detail in later chapters. Since we are concerned with the mainline
+of play in this chapter we will briefly look at the content of the of the majority-report routine in the table, \icode{DENORM}.
+
+Here during gameplay, unlike when we were concerned with updating
+state, the order in which we do things is not particularly important. The objective of the \icode{DENORM} routine is to build a list of vector
+lines to paint on the screen. To that end, it will compute the lines for each type of object currently displayed in a more or less abitrary sequence
+determined by the programmer. In the procedure below it might seem like there is a logical order in which the elements are being displayed
+on the screen but the order is not actually important: the 'Z index' of an object, its depth in the field, is determined in a different way. 
 
 \begin{lstlisting}
-                                ;DISPLAY CURSOR (PLAYER)
-        LDA I,BCCURS
-        JSR SBCLOG
-        JSR DSPCUR
-        LDA I,BCCURS
-        JSR SBCSWI
-                                ;DISPLAY CHARGES
-        LDA I,BCSHOT
-        JSR SBCLOG
-        JSR DSPCHG
-        LDA I,BCSHOT
-        JSR SBCSWI
-                                ;DISPLAY INVADERS
-        LDA I,BCINVA
-        JSR SBCLOG
-        JSR DSPINV
-        LDA I,BCINVA
-        JSR SBCSWI
-                                ;DISPLAY EXPLOSIONS
-        LDA I,BCEXPL
-        JSR SBCLOG
-        JSR DSPEXP
-        LDA I,BCEXPL
-        JSR SBCSWI
-                                ;DISPLAY NYMPHS
-        LDA I,BCNYMP
-        JSR SBCLOG
-        JSR DSPNYM
-        LDA I,BCNYMP
-        JSR SBCSWI
-                                ;DISPLAY INFORMATION (SCORES, MSGS, ETC.)
-        LDA I,BCINFO
-        JSR SBCLOG
-        JSR INFO
-        LDA I,BCINFO
-        JSR SBCSWI
+DENORM:
+        ; DISPLAY CURSOR (PLAYER)
+        LDA I,BCCURS     ; LOAD VALUE FOR CURSOR
+        JSR SBCLOG       ; WRITE DISPLAY LIST HEADER
+        JSR DSPCUR       ; WRITE DISPLAY LIST FOR CURSOR
+        LDA I,BCCURS     ; LOAD VALUE FOR CURSOR
+        JSR SBCSWI       ; WRITE DISPLAY LIST TRAILER
+        ; DISPLAY CHARGES
+        LDA I,BCSHOT     ; LOAD VALUE FOR CHARGE
+        JSR SBCLOG       ; WRITE DISPLAY LIST HEADER
+        JSR DSPCHG       ; WRITE DISPLAY LIST FOR CHARGE
+        LDA I,BCSHOT     ; LOAD VALUE FOR CHARGE
+        JSR SBCSWI       ; WRITE DISPLAY LIST TRAILER
+        ;DISPLAY INVADERS
+        LDA I,BCINVA     ; LOAD VALUE FOR INVADER
+        JSR SBCLOG       ; WRITE DISPLAY LIST HEADER
+        JSR DSPINV       ; WRITE DISPLAY LIST FOR INVADER
+        LDA I,BCINVA     ; LOAD VALUE FOR INVADER
+        JSR SBCSWI       ; WRITE DISPLAY LIST TRAILER
+        ;DISPLAY EXPLOSIONS
+        LDA I,BCEXPL     ; LOAD VALUE FOR EXPLOSION
+        JSR SBCLOG       ; WRITE DISPLAY LIST HEADER
+        JSR DSPEXP       ; WRITE DISPLAY LIST FOR EXPLOSION
+        LDA I,BCEXPL     ; LOAD VALUE FOR EXPLOSION
+        JSR SBCSWI       ; WRITE DISPLAY LIST TRAILER
+\end{lstlisting}
+\begin{lstlisting}
+        ;DISPLAY NYMPHS
+        LDA I,BCNYMP     ; LOAD VALUE FOR NYMPH
+        JSR SBCLOG       ; WRITE DISPLAY LIST HEADER
+        JSR DSPNYM       ; WRITE DISPLAY LIST FOR NYMPH
+        LDA I,BCNYMP     ; LOAD VALUE FOR NYMPH
+        JSR SBCSWI       ; WRITE DISPLAY LIST TRAILER
+        ;DISPLAY INFORMATION (SCORES, MSGS, ETC.)
+        LDA I,BCINFO     ; LOAD VALUE FOR INFO
+        JSR SBCLOG       ; WRITE DISPLAY LIST HEADER
+        JSR INFO         ; WRITE DISPLAY LIST FOR INFO
+        LDA I,BCINFO     ; LOAD VALUE FOR INFO
+        JSR SBCSWI       ; WRITE DISPLAY LIST TRAILER
         ..
-        JSR DSPWEL              ;DISPLAY WELL
-
-        LDA I,BCENEL            ;DISPLAY ENEMY LINES
-        JSR SBCLOG
-        JSR DSPENL
-        LDA I,BCENEL
-        JSR SBCSWI
-
-        LDA I,BCSTAR            ;DISPLAY STAR FIELD
-        JSR SBCLOG
-        JSR DSTARF
-        LDA I,BCSTAR
-        JSR SBCSWI
+        JSR DSPWEL       ; DISPLAY WELL
+        ;DISPLAY ENEMY LINES
+        LDA I,BCENEL     ; LOAD VALUE FOR ENEMY LINES
+        JSR SBCLOG       ; WRITE DISPLAY LIST HEADER
+        JSR DSPENL       ; WRITE DISPLAY LIST FOR ENEMY LINES
+        LDA I,BCENEL     ; LOAD VALUE FOR ENEMY LINES
+        JSR SBCSWI       ; WRITE DISPLAY LIST TRAILER
+        ;DISPLAY STAR FIELD
+        LDA I,BCSTAR     ; LOAD VALUE FOR STARFIELD
+        JSR SBCLOG       ; WRITE DISPLAY LIST HEADER
+        JSR DSTARF       ; WRITE DISPLAY LIST FOR STARFIELD
+        LDA I,BCSTAR     ; LOAD VALUE FOR STARFIELD
+        JSR SBCSWI       ; WRITE DISPLAY LIST TRAILER
 \end{lstlisting}
-
-In each case we prime the accumulator (\icode{A}) with a value specific to that object, call the routine \icode{SBCLOG}, call a routine
-specific to the object (e.g. \icode{DSPCUR}), the close by calling the routine \icode{SBCWI}. These top and tail routines are concerned
-with setting up and preparing the header and footer material for the list of lines that displays each object. The object-specific routine
-in the middle is concerned with collecting the lines themselves. We will get the opportunity to explore the detailed mechanics of how
+Notice that in the sequence above the procedure for displaying each type of object, whether it is a charge or an invader or the player himself, follows a fixed pattern.
+In each case we prime the accumulator (\icode{A}) with a value specific to the object to be displayed, call the routine \icode{SBCLOG}, call a routine
+specific to the object (e.g. \icode{DSPCUR}), then close by calling the routine \icode{SBCWI}. These top and tail routines are concerned
+with setting up and preparing the header and footer material for the  'display list' of vector lines that manifests each object. The object-specific routine
+in the middle is concerned with generating the vector lines themselves. We will get the opportunity to explore the detailed mechanics of how
 some of these objects are calculated and displayed in later sections.
+
+
