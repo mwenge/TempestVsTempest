@@ -33,7 +33,7 @@ This is the piece of the image we are selecting for copying:
     \begin{adjustbox}{width=5cm,center}
       \frame{\includegraphics[width=12cm]{src/blitting/topgun.png}}%
     \end{adjustbox}
-\caption{The bit of \icode{beasty7.cry} we've selected for copying.}
+\caption*{The bit of \icode{beasty7.cry} we've selected for copying.}
 \end{figure}
 
 If we look more closely at the snippet I extracted above we can wee that We seem to be doing this 'specifying' by moving our values into things called \icode{a0}, \icode{a1}, \icode{d0}, \icode{d1}, and so on. 
@@ -88,48 +88,59 @@ CopyBlock:
 ; This simple routine will assume both screens are the same width
 ; Using this blitter is a piece of piss.
 
-  move.l #PITCH1|PIXEL16|WID320|XADDINC,d7
-  move.l d7,A1_FLAGS  ;a1 (Source) Gubbins
+  move.l #PITCH1|PIXEL16|WID320|XADDINC,d7 ; Set flags in d7.
+  move.l d7,A1_FLAGS       ; Copy them to Source flags.
 
-  move.l #PITCH1|PIXEL16|WID384|XADDPIX|YADD1,d7
-  move.l d7,A2_FLAGS  ;a2 (Dest) Gubbins
+  move.l #PITCH1|PIXEL16|WID384|XADDPIX|YADD1,d7 ; Set flags in d7.
+  move.l d7,A2_FLAGS       ; Copy them to Dest flags.
 
-  move d3,d7
-  swap d7
-  move d2,d7
-  move.l d7,B_COUNT   ;set inner and outer loop counts
+  ; Set the inner and outer loop counts. This is the width and height
+  ; for the block to be copied. The height (d3) will be store in the
+  ; first 2 bytes of B_COUNT, and the width (d2) in the last 2 bytes.
+  move d3,d7               ; Move height to last 2 bytes of d7.
+  swap d7                  ; Switch d7 so last 2 bytes move to front.
+  move d2,d7               ; Move width to last 2 bytes of d7.
+  move.l d7,B_COUNT        ; Move result to B_COUNT.
 
-  move d1,d7
-  swap d7
-  move d0,d7
-  move.l d7,A1_PIXEL  ;origin of source
+  ; Set the X/Y origin to copy from. The Y origin (d1) will be stored in the
+  ; first 2 bytes of A1_PIXEL, and the X origin (d0) in the last 2 bytes.
+  move d1,d7               ; Move Y origin to last 2 bytes of d7.
+  swap d7                  ; Switch d7 so last 2 bytes move to front.
+  move d0,d7               ; Move X origin to last 2 bytes of d7.
+  move.l d7,A1_PIXEL       ; Store X and Y origin A1_PIXEL.
 
-  move d5,d7
-  swap d7
-  move d4,d7
-  move.l d7,A2_PIXEL  ;origin of destination
+  ; Set the X/Y destination to copy to. The Y dest (d5) will be stored in the
+  ; first 2 bytes of A2_PIXEL, and the X origin (d4) in the last 2 bytes.
+  move d5,d7               ; Move Y dest to last 2 bytes of d7.     
+  swap d7                  ; Switch d7 so last 2 bytes move to front.
+  move d4,d7               ; Move X dest to last 2 bytes of d7.
+  move.l d7,A2_PIXEL       ; Store X and Y dest in A2_PIXEL.
 
-  move.l #0,A1_FPIXEL
+  move.l #0,A1_FPIXEL      ; Set A1_FPIXEL to 0.
+  move.l #$0001,A1_INC     ; Set A1_INC to 1.
+  move.l #$0,A1_FINC       ; Set a1_FINC to 0.
 
+  ; Set the line length, i.e. the number of items to copy in each loop.
+  move #1,d7               ; Move 0001 to last 2 bytes of d7.
+  swap d7                  ; Switch d7 so last 2 bytes move to front.
+  move d2,d7               ; Move width to last 2 bytes of d7.
+  neg d7                   ; Make it an absolute num. 
+  move.l d7,A1_STEP        ; Store result as A1_STEP.
+  move.l d7,A2_STEP        ; Store result as A2_STEP.
 
-  move.l #$0001,A1_INC
-  move.l #$0,A1_FINC
+\end{lstlisting}
+\clearpage
+\begin{lstlisting}
+  ; Set up source and desination screens.
+  move.l a0,d7             ; Copy our source screen to d7.
+  move.l d7,A1_BASE        ; Copy it to A1_BASE.
+  move.l a1,d7             ; Copy our dest screen to d7.
+  move.l d7,A2_BASE        ; Copy it to A2_BASE.
 
-  move #1,d7
-  swap d7
-  move d2,d7
-  neg d7
-  move.l d7,A1_STEP
-  move.l d7,A2_STEP    ;set loop steps
-
-  move.l a0,d7
-  move.l d7,A1_BASE
-  move.l a1,d7
-  move.l d7,A2_BASE    ;set screen window bases
-
-  move.l #SRCEN|UPDA1|UPDA2|DSTA2|LFU_A|LFU_AN,d7
-  move.l d7,B_CMD
-  bra WaitBlit
+  ; Configure the blitter command.
+  move.l #SRCEN|UPDA1|UPDA2|DSTA2|LFU_A|LFU_AN,d7  ; Set flags.
+  move.l d7,B_CMD          ; Set the blitter command flags.
+  bra WaitBlit             ; Go do the blitting!
 \end{lstlisting}
 
 \begin{definition}[claw says\index{claw says}]
@@ -145,6 +156,7 @@ CopyBlock:
   to the screen here, we can think of it as copying from one screen to another - with the destination screen the one being shown to the player.
 }
 \end{definition}
+\vspace{-0.4cm}
 
 The mechanics of how the \icode{CopyBlock} routine uses this information to actually copy a segment of our image
 to the screen are not obvious to the unintiated. This is because it involves a lot of precise specification of many different
@@ -153,8 +165,8 @@ and \icode{d0-d5} registers look modest in comparison. There is a quite involved
 set up the way we want it. Using this routine may be a 'piece of piss', but writing it was fairly painstaking. For example:
 
 \begin{lstlisting}[escapechar=\%]
-  move.l #PITCH1|PIXEL16|WID320|XADDINC,d7
-  move.l d7,A1_FLAGS  ;a1 (Source) Gubbins
+  move.l #PITCH1|PIXEL16|WID320|XADDINC,d7 ; Set flags in d7.
+  move.l d7,A1_FLAGS       ; Copy them to Source flags.
 \end{lstlisting}
 
 Here we are formulating some of the parameters we want the Blitter to use when it copies the pixels from our source. We're combining
@@ -188,10 +200,10 @@ But there is at least one other pattern worth pointing out in the routine, exemp
 and Y (\icode{d1}) positions in \textit{beasty7.cry} that we are telling the blitter to use as its origin for copying:
 
 \begin{lstlisting}[escapechar=\%]
-  move d1,d7
-  swap d7
-  move d0,d7
-  move.l d7,A1_PIXEL  ;origin of source
+  move d1,d7               ; Move Y origin to last 2 bytes of d7.
+  swap d7                  ; Switch d7 so last 2 bytes move to front.
+  move d0,d7               ; Move X origin to last 2 bytes of d7.
+  move.l d7,A1_PIXEL       ; Store X and Y origin A1_PIXEL.
 \end{lstlisting}
 
 Here the \icode{A1\_PIXEL} register we're writing to (like all our address and data registers) is 32-bits (or 4 bytes) long. This means it can
@@ -272,8 +284,8 @@ Now we write \icode{d0} to \icode{d7}:
 After setting up all our registers on the Blitter we finally get to tell it to set to work:
 
 \begin{lstlisting}[escapechar=\%]
-  move.l #SRCEN|UPDA1|UPDA2|DSTA2|LFU_A|LFU_AN,d7
-  move.l d7,BLIT_CMD
+  move.l #SRCEN|UPDA1|UPDA2|DSTA2|LFU_A|LFU_AN,d7  ; Set flags.
+  move.l d7,B_CMD          ; Set the blitter command flags.
 \end{lstlisting}
 
 As with everything else Blitter-related this is achieved above by writing a value to the Blitter command register. The register
@@ -302,6 +314,7 @@ affords up to 30 different commands and here we just use a few of them by popula
     \end{adjustbox}
   }\caption*{Combining our parameters into the Blitter's Command Register.}
 \end{figure}
+\vspace{-0.4cm}
 
 In a nutshell this command is instructing the blitter to read through our source data using an inner loop for the values to write
 along the X co-ordinates and an outer loop for the Y co-ordinates. The implementation details are obviously complex and we won't get
@@ -328,7 +341,7 @@ routine which is responsible for painting the title screen that greets us when w
     \begin{adjustbox}{width=8cm,center}
       \frame{\includegraphics[width=12cm]{src/blitting/title.png}}%
     \end{adjustbox}
-\caption{The title screen of Tempest 2000.}
+\caption*{The title screen of Tempest 2000.}
 \end{figure}
 
 Here we find a slightly different order of business in setting up the blitting copy:

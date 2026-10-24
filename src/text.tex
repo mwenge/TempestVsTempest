@@ -23,7 +23,7 @@ one of our \icode{beasty} cry files, in this case \icode{beasty4.cry}:
     \begin{adjustbox}{width=8cm,center}
       \frame{\includegraphics[width=12cm]{src/cry/beasty4.png}}%
     \end{adjustbox}
-\caption{\icode{beasty4.cry} with the copyright font at the bottom.}
+\caption*{\icode{beasty4.cry} with the copyright font at the bottom.}
 \end{figure}
 
 And as you may remember the data in \icode{beasty4.cry} is pointed by the variable \icode{pic2}:
@@ -129,7 +129,7 @@ With this information we can now isolate our 'A' glyph and extract it.
     \begin{adjustbox}{width=7.5cm,center}
       \includegraphics[width=12cm]{src/characters/plot.png}%
     \end{adjustbox}
-\caption{The 'A' glyph located in a red box by our dimension and co-ordinate information.}
+\caption*{The 'A' glyph located in a red box by our dimension and co-ordinate information.}
 \end{figure}
 
 The mechanics of our look-up table are now fully worked out so we are ready to create it. Since it has over a hundred entries we store it in 
@@ -137,7 +137,7 @@ a separate file called \icode{afont.s} and give it the very descriptive name \ic
 'Atari Font', since it is the font used to write the Atari copyright information. An incomplete excerpt of the file follows below with
 ellipses (...) to indicate lines that have been omitted.
 
-\begin{lstlisting}[caption=The opening block of the \icode{afont} data structure in source file \icode{afont.s}.]
+\begin{lstlisting}
 *
 *
 * Page 2 font, by Joby
@@ -246,7 +246,7 @@ for the rest we just plug in zero. But here's what the copyright text would look
     \begin{adjustbox}{width=9cm,center}
       \includegraphics[width=12cm]{src/characters/shear.png}%
     \end{adjustbox}
-\caption{What the characters look like when we apply a shear value of 800 on both the X and Y axes.}
+\caption*{What the characters look like when we apply a shear value of 800 on both the X and Y axes.}
 \end{figure}
 
 And here's what they looks like if we bump up the scale on the X and Y axis:
@@ -256,14 +256,14 @@ And here's what they looks like if we bump up the scale on the X and Y axis:
     \begin{adjustbox}{width=9cm,center}
       \includegraphics[width=12cm]{src/characters/scale.png}%
     \end{adjustbox}
-\caption{What the characters look like when we apply a scale value of 2000 instead of 1000. The pixellated, exploded appearance 
+\caption*{What the characters look like when we apply a scale value of 2000 instead of 1000. The pixellated, exploded appearance 
   gives some hint that 'scale' here is not simply concerned with size but a specific 'explosion
   type' effect.}
 \end{figure}
 
 We'll encounter effective use of these features elsewhere in Tempest 2000 so won't go any further into them for now.
 
-\begin{lstlisting}[caption=The \icode{centext} routine responsible for setting up the values in our GPU buffer.]
+\begin{lstlisting}
 centext:
   move.l a0,d2          ; Store 'text' in d2 so we don't overwrite it.
   lea in_buf,a0         ; Use 'in_buf' as the buffer to write to.
@@ -281,6 +281,8 @@ centext:
   ; the texta nd then storing that along with the Y pos in the 10th
   ; position in the buffer
   bsr g_textlength ; Get the length of the text in d2 and store it in d7.     
+\end{lstlisting}
+\begin{lstlisting}
   ; This uses the text length to center it along the X axis and
   ; store the result in d0;
   lsr #1,d7             
@@ -342,7 +344,7 @@ relatively trivial task of blitting our characters to the screen, in the next ch
     \begin{adjustbox}{width=9cm,center}
       \includegraphics[width=12cm]{src/characters/robotron.png}%
     \end{adjustbox}
-\caption{The explosion effect in 'Robotron 2084'.}
+\caption*{The explosion effect in 'Robotron 2084'.}
 \end{figure}
 
 

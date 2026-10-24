@@ -8,7 +8,7 @@
     \begin{adjustbox}{width=11cm,center}
       \includegraphics[width=12cm]{src/titles/title.png}%
     \end{adjustbox}
-  \caption{The Tempest Title Rainbow.}
+  \caption*{The Tempest Title Rainbow.}
 \end{figure}
 
 The \textit{TEMPEST} title sequence is a thing of simple beauty. It cascades towards
@@ -136,7 +136,7 @@ we can create a routine called \icode{VORLIT} that writes it out in full.
 \begin{minipage}[c]{0.58\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=6cm,center}
+    \begin{adjustbox}{width=7.2cm,center}
       \includegraphics[width=12cm]{src/titles/letters/TEMPEST.png}%
     \end{adjustbox}
 \end{figure}
@@ -169,8 +169,13 @@ of the logo when we draw it. If we adjust the scale and the colour as we go alon
 effect of a cascading series of differently coloured titles receding into the distance. 
 
 Fortunately there are vector commands that will allow us to do all of this. Each command is a two-byte
-Op Code. There's one for setting the color to be used when drawing, one for setting the scale to use
-when drawing (allowing us to make the title big or small), and one for calling our \icode{VORLIT}
+\textit{Op Code}. There's one for setting the color to be used when drawing. This is \icode{6000}. In order
+to use it to set a color we would change the zeros to select our color. For example, \icode{6801} will select
+ the color 'yellow'.
+
+The same principle applies for the other opcodes available. To set the scale to use
+when drawing (allowing us to make the title big or small) we can use the opcode \icode{7000}. Finally we have an 
+opcode \icode{A000} that we can use to call a specific draw routine such as our \icode{VORLIT}
 routine to actually draw the title logo in our selected colour and scale.
 
 \begin{figure}[H]
@@ -190,8 +195,9 @@ routine to actually draw the title logo in our selected colour and scale.
     \end{adjustbox}
   }
 \end{figure}
+\vspace{-0.5cm}
 
-So we can imagine issuing a series of three vector commands such as the ones given below to draw our
+So now we can begin to imagine issuing a series of three vector commands such as the ones given on the next page to draw our
 logo.
 \begin{figure}[H]
   {
@@ -251,6 +257,7 @@ logo.
     \end{adjustbox}
   }
 \end{figure}
+\vspace{-0.5cm}
 
 If we repeat these commands, changing the color and reducing the scale as we go, we 
 should expect to achieve the effect we're looking for. And this is exactly what we find
@@ -293,6 +300,8 @@ SCARNG:
     LSR                ; TWO TIMES.
     LSR                ; THREE TIMES.
     LSR                ; FOUR TIMES.
+\end{lstlisting}
+\begin{lstlisting}
     LSR                ; FIVE TIMES.
     JSR VGSCAL         ; ADD THE COMMAND SETTING BINARY AND LINEAR SCALE.
     

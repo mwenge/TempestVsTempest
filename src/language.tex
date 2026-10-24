@@ -69,6 +69,7 @@ These values are not arbitrary. Each is an offset into a table called \icode{VGM
 We've reproduced this table below. If you look up the value \icode{16} in the rightmost column
 you'll see that
 it points to an entry in the table that reads \icode{'JSRL CHAR.A'}, for example:
+
 \begin{figure}[H]
   {
     \catcode32=\active
@@ -87,6 +88,20 @@ it points to an entry in the table that reads \icode{'JSRL CHAR.A'}, for example
         \icode{        JSRL    CHAR.4    } & \icode{A8C9}  & \icode{0A}\\
         \icode{        JSRL    CHAR.5    } & \icode{A8D0}  & \icode{0C}\\
         \icode{        JSRL    CHAR.6    } & \icode{A8D7}  & \icode{0E}\\
+      \end{tabular}
+    \end{adjustbox}
+  }
+\end{figure}
+\begin{figure}[H]
+  {
+    \catcode32=\active
+    \setlength{\tabcolsep}{3.0pt}
+    \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
+    \begin{adjustbox}{width=9cm,center}
+      \begin{tabular}{lll}
+        \toprule
+        Code    &     Content In Bytes      &  Offset\\
+        \toprule
         \icode{        JSRL    CHAR.7    } & \icode{A8DE}  & \icode{10}\\
         \icode{        JSRL    CHAR.8    } & \icode{A8E3}  & \icode{12}\\
         \icode{        JSRL    CHAR.9    } & \icode{A8EB}  & \icode{14}\\
@@ -118,8 +133,9 @@ it points to an entry in the table that reads \icode{'JSRL CHAR.A'}, for example
         \icode{        JSRL    CHAR.Z    } & \icode{A8AE}  & \icode{48}\\
       \end{tabular}
     \end{adjustbox}
-  }\caption{The \icode{VGMSGA} table, along with the contents in bytes, and the offset value for each entry.}
+  }\caption*{The \icode{VGMSGA} table, along with the contents in bytes, and the offset value for each entry.}
 \end{figure}
+\vspace{-0.4cm}
 
 You will notice something funny about the last letter. Instead of \icode{26}, which would point to 
 \icode{'JRSL CHAR.I'}, as we might expect, the last byte is \icode{A6} instead. This is because the last letter

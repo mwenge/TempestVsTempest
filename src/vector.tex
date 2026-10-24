@@ -435,6 +435,8 @@ makes heavy use of it when drawing player and enemy to the screen.
         ; ^H4000 - HEX 4000 IS OUR BASE FOR SHORT VECTOR OPCODE.
         ; <ZZ*^H20> - MOVE THE INTENSITY VALUE TO THE III SLOT ABOVE.
         ; <DX/2&^H1F> - MOVE THE X VALUE TO THE END OF THE 2ND BYTE.
+\end{lstlisting}
+\begin{lstlisting}
         ; <DY*^H80&^H1F00> - MOVE THE Y VALUE TO THE END OF THE 1ST BYTE.
         .WORD   ^H4000+<ZZ*^H20>+<DX/2&^H1F>+<DY*^H80&^H1F00>
         .MEXIT                     ; EXIT MACRO.

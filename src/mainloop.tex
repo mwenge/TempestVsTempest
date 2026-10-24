@@ -225,7 +225,8 @@ ulo:    move #1,locked        ; Lock activeobjects while we delete from it.
         bra nxt_o             ; Finished deleting, go the the next object.
 ulsh1:  add #1,shots          ; Make another shot available to player 2.
         bra ulo
-    
+\end{lstlisting}
+\begin{lstlisting}
         ; For unlinking an enemy shot object.
 ashinc: add #1,ashots         ; Make another shot available to enemies.
     
@@ -283,8 +284,6 @@ Each object in the \icode{activeobjects} list has the following structure:
         34-36 & Index into draw routine in \icode{draw\_vex}.\\
         36-38 & Start address of pixel data. \& Delta Z \\
         38-40 & Y \& Colour change value\\
-        40-42 & Colour \\
-        42-44 & Scale factor \\
         \bottomrule
       \end{tabular}
     \end{adjustbox}
@@ -301,6 +300,8 @@ Each object in the \icode{activeobjects} list has the following structure:
         \toprule
         Bytes & Description\\
         \midrule
+        40-42 & Colour \\
+        42-44 & Scale factor \\
         44-46 & Mode to climb, descend or cross rail \\
         46-48 & Size of Pixel Data  \& Duration.\\
         48-50 & Fire Timer \\
@@ -314,6 +315,8 @@ Each object in the \icode{activeobjects} list has the following structure:
     \end{adjustbox}
   }\caption*{The structure of objects in \icode{activeobjects} continued.}
 \end{figure}
+\vspace{-0.5cm}
+
 
 So in the 64 bytes of each object we cover quite a bit of ground. There is colour, co-ordinate, motion, and orientation
 information. There's also detail that defines the behaviour of the object and most immediately relevant to what
@@ -322,8 +325,9 @@ we are looking at here, an index into the draw routine to use for the object at 
 This index is a value that references the routine given at the appropriate position in the \icode{draw\_vex} array:
 \begin{lstlisting}
 draw_vex: 
-   dc.l rrts,draw,draw_z,draw_vxc,draw_spike,draw_pixex,draw_mpixex,draw_oneup,draw_pel,changex
-   dc.l draw_pring,draw_prex,dxshot,drawsphere,draw_fw,dmpix,dsclaw,dsclaw2
+   dc.l rrts, draw, draw_z, draw_vxc, draw_spike, draw_pixex, draw_mpixex
+   dc.l draw_oneup, draw_pel, changex, draw_pring, draw_prex, dxshot
+   dc.l drawsphere, draw_fw, dmpix, dsclaw, dsclaw2
 \end{lstlisting}
 
 The draw routine can vary depending on the type of object. There's a distinct treatment of vector object and objects
@@ -345,6 +349,8 @@ draw:
         ; If the header contains a negative value it's an index into the
         ; 'solids' list, otherwise it's the address of the vector data
         ; object we can draw directly with the gpu.
+\end{lstlisting}
+\begin{lstlisting}
         move.l (a6),d0      ; Is the header value greater than zero?
         bpl vector          ; If yes, then a vector draw will suffice.
     
@@ -385,8 +391,8 @@ ensures that nearer objects are painted over further objects.
 
 Once we have finished this first run through the \icode{activeobjects} list our next order of business
 is to process the \icode{apriority} list we've populated. This is done in \icode{drawpolyos} which we
-call right after we've finished with our first pass of \icode{activeobjects}. 
-
+call right after we've finished with our first pass of \icode{active\-objects}. 
+\clearpage
 \begin{lstlisting}
         ; We've finished our first pass of activeobjects.
 odend:
@@ -442,6 +448,8 @@ podraw: move.l #9,d4        ; Set X centre as 9.
         move 28(a6),d0      ; Get orientation of object.
         and.l #$ff,d0       ; Use only the least significant bytes.
         ; Because we jmp to the draw routine, when it returns, execution
+\end{lstlisting}
+\begin{lstlisting}
         ; will go back to the caller of 'podraw' in dpoloop above.
         jmp (a0)            ; Call the object's draw routine.
 \end{lstlisting}
@@ -498,10 +506,6 @@ them more self-explanatory than others.
 ;  moveclaw, zoom2
 \end{lstlisting}
 
-\begin{figure}[H]
-      \centering
-      \includegraphics[width=13.7cm]{src/mainloop/mainloop-run_objects-comic.png}%
-\end{figure}
 
 Every now and then, in fact more often than not, \icode{routine} will point to a routine
 buried in the list above called \icode{moveclaw}. Despite its name, it is \icode{moveclaw} that looks after
@@ -551,6 +555,10 @@ nofire: bsr fire                   ; Fire a bullet if necessary.
         rts
 \end{lstlisting}
 
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=13.7cm]{src/mainloop/mainloop-run_objects-comic.png}%
+\end{figure}
 The key elements in here are \icode{run\_wave} near the top, and \icode{run\_objects}
 near the bottom. The first creates new enemies if required, while the second does
 the important job of updating all the active objects in the game such as the flippers,
@@ -609,8 +617,6 @@ into the \icode{run\_vex} list. This is stored at at byte 54 of the object and w
 us which of the routines in \icode{run\_vex} to use. For example a flipper object will
 have an index of \icode{2} pointing to \icode{run\_flipper}. A player bullet will have an
 index of \icode{1}, pointing to \icode{player\_shot}.
-
-\clearpage
 
 \begin{lstlisting}
 run_vex:

@@ -2,6 +2,7 @@
 \label{sec:copyprotection}
 \lhead[tempest]{}
 \lstset{style=6502Style}
+\vspace{-0.4cm}
 
 Making arcade games was an expensive business. The outlay in time and 
 money expended on \textit{Tempest} was premised on selling enough units
@@ -256,6 +257,7 @@ ZSECL0:
 When the \icode{DISPLAY} routine runs, we are processing the contents
 of the display list contained in \icode{VGLIST}. It's time for us to check
 the portion that contains our hallowed copyright message. 
+\clearpage
 \begin{lstlisting}
 ZATVG2::
   LDA SECUVY      ; ARE WE DISPLAYING ONE OF THE TITLE SCREENS?
@@ -291,11 +293,7 @@ parameters that control the game's behaviour. Commonly referred to as the 'zero 
 this is the region of 256 bytes at the very start of the program's addressable memory.
 Changing values at random in this area will lead to increasingly strange unbehaviour,
 rendering the game unplayable in a way that will vary from player to player and guaranteed
-to puzzle the owner of the pirated arcade cabinet. Unfortunately, if there is a mistake
-in the calculation of the checksum then the same result will obtain for perfectly legitimate
-owners of Atari cabinets. And this is exactly what happened to owners of the first edition
-of Tempest in the final months of 1980. A devious bug that 
-\hyperref[sec:tempest_program_bug]{\textcolor{blue}{'we cover in detail in a later chapter.'}} 
+to puzzle the owner of the pirated arcade cabinet.
 
 \begin{lstlisting}
 ZQVAVG::
@@ -311,6 +309,11 @@ ZQVAVG::
   ENDIF       ; HAVOC SECURED.
 \end{lstlisting}
 
+Unfortunately, if there is a mistake
+in the calculation of the checksum then the same result will obtain for perfectly legitimate
+owners of Atari cabinets. And this is exactly what happened to owners of the first edition
+of Tempest in the final months of 1980. A devious bug that 
+\hyperref[sec:tempest_program_bug]{\textcolor{blue}{'we cover in detail in a later chapter.'}} 
 \section*{\icode{QT4}: sound check}
 This tests the sound chips (known as 'pokeys') for expected behaviour. There are two sound chips on the 
 board and each has a hardware-based random number generator. Retrieving a random number
@@ -399,6 +402,7 @@ wrought in \icode{QT3} this will be done every time the starfield display is upd
 during a level change so will inevitably, and usually promptly, bring the game to a crashing
 halt.
 
+\clearpage
 \begin{lstlisting}
 ZQPONS: 
   LDA QT5     ; LOAD QT5 IN THE ACCUMULATOR.
