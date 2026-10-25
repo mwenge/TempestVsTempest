@@ -12,7 +12,7 @@ as the \icode{POKEY}. These commands are as follows:
   {
     \setlength{\tabcolsep}{3.0pt}
     \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
-    \begin{adjustbox}{width=12.5cm,center}
+    \begin{adjustbox}{width=11.5cm,center}
       \begin{tabular}{lllll}
         \toprule
         Register & Description & Value & Bits & Meaning\\
@@ -25,13 +25,14 @@ as the \icode{POKEY}. These commands are as follows:
     \end{adjustbox}
   }
 \end{figure}
+\vspace{-0.4cm}
 
 Then after a short interval, we follow up with the commands to stop the sound:
 \begin{figure}[H]
   {
     \setlength{\tabcolsep}{3.0pt}
     \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
-    \begin{adjustbox}{width=9.5cm,center}
+    \begin{adjustbox}{width=9.0cm,center}
       \begin{tabular}{lllll}
         \toprule
         Register & Description & Value & Bits & Meaning\\
@@ -44,6 +45,7 @@ Then after a short interval, we follow up with the commands to stop the sound:
     \end{adjustbox}
   }
 \end{figure}
+\vspace{-0.4cm}
 
 It's as simple as that. But since we will want to generate more complex sounds later, we
 have to develop some machinery that's capable of emitting more than just a single beep.
@@ -95,7 +97,7 @@ to turn on the note, wait 4 frames, and then turn it off again:
   {
     \setlength{\tabcolsep}{3.0pt}
     \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
-    \begin{adjustbox}{width=12.5cm,center}
+    \begin{adjustbox}{width=10.5cm,center}
       \begin{tabular}{lllll}
         \toprule
         Register & Description & Value & Bits & Meaning\\
@@ -108,6 +110,9 @@ to turn on the note, wait 4 frames, and then turn it off again:
     \end{adjustbox}
   }
 \end{figure}
+
+Simultaneously the \icode{LO5A} sequence instructs us to set the volume and the sound
+type by writing to the \icode{AUDC1} register and then, after 4 frames, silence it again:
 
 \begin{figure}[H]
 {
@@ -221,13 +226,11 @@ to turn on the note, wait 4 frames, and then turn it off again:
     \end{subfigure}
 }\caption*{All 28 sound samples and their spectrograms. If your reader supports it you can play the samples.}
 \end{figure}
-Simultaneously the \icode{LO5A} sequence instructs us to set the volume and the sound
-type by writing to the \icode{AUDC1} register and then, after 4 frames, silence it again:
 \begin{figure}[H]
   {
     \setlength{\tabcolsep}{3.0pt}
     \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
-    \begin{adjustbox}{width=12.5cm,center}
+    \begin{adjustbox}{width=10.5cm,center}
       \begin{tabular}{lllll}
         \toprule
         Register & Description & Value & Bits & Meaning\\
@@ -240,6 +243,7 @@ type by writing to the \icode{AUDC1} register and then, after 4 frames, silence 
     \end{adjustbox}
   }
 \end{figure}
+\vspace{-0.4cm}
 
 We can look at a slightly more involved example to get an idea of the manipulation that this scheme affords
 us. Here are the two sequences that define an 'Enemy Shot' (\icode{ESLSON}):
@@ -269,7 +273,7 @@ with these provisions we can execute the commands as follows:
   {
     \setlength{\tabcolsep}{3.0pt}
     \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
-    \begin{adjustbox}{width=11.5cm,center}
+    \begin{adjustbox}{width=9.5cm,center}
       \begin{tabular}{llllll}
         \toprule
         Register & Value & Meaning & Register & Value & Meaning\\

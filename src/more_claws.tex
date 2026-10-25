@@ -26,7 +26,7 @@ The data structure for an upright claw in Tempest 2000 mode is as follows:
 sclaw6:
   dc.l 6              ; 4 faces in this object, a shaded solid Flipper
     
-	dc.w $ff            ; Face colour - Yellow.
+  dc.w $ff            ; Face colour - Yellow.
   dc.w 0,$ff00        ; vertex index, intensity.
   dc.w 1,$ff00        ; vertex index, intensity.
   dc.w 2,$c000        ; vertex index, intensity.
@@ -44,7 +44,7 @@ sclaw6:
   dc.w 4,$ff00        ; vertex index, intensity.
   dc.w 0
     
-	dc.w $fd            ; Face colour - Yellow.
+  dc.w $fd            ; Face colour - Yellow.
   dc.w 3,$8000        ; vertex index, intensity.
   dc.w 5,$c000        ; vertex index, intensity.
   dc.w 4,$ff00        ; vertex index, intensity.
@@ -63,7 +63,7 @@ sclaw6:
   dc.w 0
     
 verts:
-	dc.w 3,8            ; Index 0
+  dc.w 3,8            ; Index 0
   dc.w 4,14           ; Index 1
   dc.w 6,13           ; Index 2
   dc.w 12,13          ; Index 3

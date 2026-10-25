@@ -85,6 +85,8 @@ DSPCHG:
         LDA CHACOU      ; GET THE NO. OF BULLETS CURRENTLY IN PLAY.
         CMP I,NPCHARG-2 ; IF BETWEEN 6 AND 8..
         IFCS            ; THEN IT'S 'LOW' SO..
+\end{lstlisting}
+\begin{lstlisting}
         LDY I,ZBLUE     ; SET COLOR TO BLUE ('LOW').
         CMP I,NPCHARG   ; IF IT'S 8...
         IFCS            ; THEN THERE ARE NO MORE LEFT..
@@ -106,30 +108,30 @@ them all yellow. Personally I'd never realized this was happening until I read t
   {
     \setlength{\tabcolsep}{3.0pt}
     \setlength\cmidrulewidth{\heavyrulewidth} % Make cmidrule = 
-    \begin{adjustbox}{width=15cm,center}
+    \begin{adjustbox}{width=13cm,center}
       \begin{subfigure}{0.3\textwidth}
           \centering
           \begin{adjustbox}{width=4cm,center}
             \includegraphics[width=12cm]{src/bullets/yellow_graph.png}%
           \end{adjustbox}
-          \caption{YELLOW: \icode{PLENTY}}
+          \caption*{YELLOW: \icode{PLENTY}}
       \end{subfigure}
       \begin{subfigure}{0.3\textwidth}
           \centering
           \begin{adjustbox}{width=4cm,center}
             \includegraphics[width=12cm]{src/bullets/blue_graph.png}%
           \end{adjustbox}
-          \caption{BLUE: \icode{LOW}}
+          \caption*{BLUE: \icode{LOW}}
       \end{subfigure}
       \begin{subfigure}{0.3\textwidth}
           \centering
           \begin{adjustbox}{width=4cm,center}
             \includegraphics[width=12cm]{src/bullets/red_graph.png}%
           \end{adjustbox}
-          \caption{RED: \icode{OUT}}
+          \caption*{RED: \icode{OUT}}
       \end{subfigure}
     \end{adjustbox}
-    }\caption[]{Different colours of the bullets depending on how many shots are left.}
+  }\caption*{Different colours of the bullets depending on how many shots are left.}
 \end{figure}
 
 The actual drawing to the screen of each bullet is worth pausing over. First of all, what

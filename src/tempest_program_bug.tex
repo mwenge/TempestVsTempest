@@ -29,20 +29,18 @@ which starts at address zero. The first nine variables in Tempest's 'zero page' 
 \icode{\$\$CRDT} is the seventh in the list, which means it has an address of \icode{\$06}.
 
 \begin{lstlisting}
-;
-;CONTROL & TIMING VARIABLES
-;
-QSTATE:  .BLKB 1    ;CONTAINS CODE FOR STATE ROUTINE (INDEX INTO ROUTAD)
-QDSTATE: .BLKB 1    ;DISPLAY STATE
-QNXTSTA: .BLKB 1    ;NEXT STATE CODE TO EXECUTE AFTER PAUSE
-QFRAME:  .BLKB 1    ;FRAME COUNTER (WRAPS AT FF)
-QTMPAUS: .BLKB 1    ;PAUSE TIMER (IN SECOND UNITS)
-QSTATUS: .BLKB 1    ;STATUS FLAGS
-;
-;OTHER OVERHEAD
-$$CRDT:  .BLKB 1    ;# OF CREDITS
-$INTCT:  .BLKB 1    ;INTERRUPT COUNT
-$COINA:  .BLKB 1    ;COIN MECHS
+                    ; CONTROL & TIMING VARIABLES
+QSTATE:  .BLKB 1    ; CONTAINS CODE FOR STATE ROUTINE (INDEX INTO ROUTAD)
+QDSTATE: .BLKB 1    ; DISPLAY STATE
+QNXTSTA: .BLKB 1    ; NEXT STATE CODE TO EXECUTE AFTER PAUSE
+QFRAME:  .BLKB 1    ; FRAME COUNTER (WRAPS AT FF)
+QTMPAUS: .BLKB 1    ; PAUSE TIMER (IN SECOND UNITS)
+QSTATUS: .BLKB 1    ; STATUS FLAGS
+
+                    ; OTHER OVERHEAD
+$$CRDT:  .BLKB 1    ; # OF CREDITS
+$INTCT:  .BLKB 1    ; INTERRUPT COUNT
+$COINA:  .BLKB 1    ; COIN MECHS
 \end{lstlisting}
 
 We've gone to some pains to point this out because when we look at all the places where we increment \icode{\$\$CRDT} in the

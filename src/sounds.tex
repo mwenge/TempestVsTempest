@@ -14,7 +14,7 @@ such as a Digital Analog Converter (DAC) you can get a sound out the other side.
     \begin{adjustbox}{width=7cm,center}
       \frame{\includegraphics[width=4cm]{src/sounds/sample.png}}%
     \end{adjustbox}
-  \caption{A sample of 80 bytes plotted as a wave graph.}
+  \caption*{A sample of 80 bytes plotted as a wave graph.}
 \end{figure}
 
 The PCM data in Tempest 2000's sound samples is nothing more than this series of bytes, each one representing a value between -128 and 128, which can
@@ -30,7 +30,7 @@ an arbitrary sample into separate streams of alternate bytes and graph them.
       \hspace{0.5cm}
       \frame{\includegraphics[width=4cm]{src/sounds/sampler.png}}%
     \end{adjustbox}
-  \caption{Plotted sound waves for the left and right channels respectively.}
+  \caption*{Plotted sound waves for the left and right channels respectively.}
 \end{figure}
 
 Since the sounds we want to play are just blobs of data, we need a way of knowing where these blobs are, and perhaps
@@ -44,7 +44,7 @@ some information on what we have to do with them. This is provided by \icode{sam
 Just byt itself, the \icode{samtab} table reveals some interesting potential for ways that we can use the
 raw PCM bytes. Here it is in its raw form. With the bytes in \icode{samtab} exactly as they are. 
 
-\begin{lstlisting}[basicstyle=\scriptsize\ttfamily,caption=The contents of \icode{samtab} at \icode{\$9AC800}.]
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
                         Prio-                                  Repeat     Repeat
  Name                   rity   Period Start      Length        Start      Length      
 ---------------------- -----  ------ ---------  -------  --   ---------  -------  ---
@@ -63,6 +63,8 @@ raw PCM bytes. Here it is in its raw form. With the bytes in \icode{samtab} exac
 'Get Power Up        ', $000d, $01ac, $009c8ce0, $001aea, $00, $009c8ce0, $000000, $00
 'Tink For Spike      ', $000e, $00fe, $009ca7ce, $00040e, $00, $009ca7ce, $000000, $00
 'NME At Top Of Web   ', $000f, $01ac, $009cabe0, $00001e, $00, $009cabe0, $000000, $00
+\end{lstlisting}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
 'Pulse For Pulsar    ', $0010, $0358, $009cac02, $0019fe, $00, $009cac02, $000000, $00
 'Normal Explosion    ', $0011, $00d6, $009cc604, $002ab6, $00, $009cc604, $000000, $00
 'Extra Explosion     ', $0012, $0358, $009cf0be, $0018ca, $00, $009cf0be, $000000, $00
@@ -426,10 +428,10 @@ fox:
   ; Since each entry in samtab is 40 bytes long, multiplying our index by
   ; 40 will bring us to the start of the 'Excellent' entry. The steps below
   ; are a fast way of doing this multiplication by 40.
-  lsl #3,d0   ; Turn $16(21) into $a8 by left-shifting. 
-  move d0,d1  ; Store in d1.
-  lsl #2,d0   ; Turn $a8 into $2a0 by left-shifting.           
-  add d1,d0   ; d0 is now $348 (840), i.e. 21 * 40. 
+  lsl #3,d0               ; Turn $16(21) into $a8 by left-shifting. 
+  move d0,d1              ; Store in d1.
+  lsl #2,d0               ; Turn $a8 into $2a0 by left-shifting.           
+  add d1,d0               ; d0 is now $348 (840), i.e. 21 * 40. 
 
   ; Now that we have an offset for our sample information in samtab, we'll
   ; add 20 to it (so that it's after the sample name) and store it in a0.
@@ -437,21 +439,23 @@ fox:
   lea 20(a0,d0.w),a0      ; Add 840 + 20 to it. 
 
   ; Now we can set up the last few items our sound synth needs.
-  move sfx_pri,d1
-  move sfx_vol,d2
-  move.l sfx_pitch,d3
+  move sfx_pri,d1         ; Store priority to d1
+  move sfx_vol,d2         ; Store volume in d2
+\end{lstlisting}
+\begin{lstlisting}
+  move.l sfx_pitch,d3     ; Store pitch in d3.
 
   ; Invoke the sound synth to play our sample.
-  jsr PLAYFX2
+  jsr PLAYFX2             ; Play the sample.
 
   ; Clean up.
-  move d0,handl
-  clr sfx_pri
-  clr sfx_vol
-  clr.l sfx_pitch
+  move d0,handl           ; Store the sample reference in handl.
+  clr sfx_pri             ; Clear the priority.
+  clr sfx_vol             ; Clear the volume.
+  clr.l sfx_pitch         ; Clear the pitch.
 
-  movem.l (a7)+,d0-d3/a0 ; Restore the old unclobbered values we saved off
-                         ; at the start.
+  movem.l (a7)+,d0-d3/a0  ; Restore the old unclobbered values we saved off
+                          ; at the start.
   rts
 \end{lstlisting}
 
@@ -476,6 +480,7 @@ To recap, at this point we have set up our registers as follows:
     \end{adjustbox}
   }
 \end{figure}
+\vspace{-0.4cm}
 
 These are the garnish for a choice piece of mystery meat, \icode{PLAYFX2}. \icode{PLAYFX2} is a
 library routine provided to Atari by a crowd called 'Imagitec Designs'. It is not something we have the source
@@ -515,7 +520,7 @@ tooling, it is possible for us to recreate \icode{moomoo.dat} by partially disas
 This will more or less re-enact the build steps Minter would have followed to generate it.
 
 The initial bytes of \icode{moomoo.dat} can be disassembled as follows into a file we'll call \icode{moomoo\_header.s}. 
-\begin{lstlisting}[caption=The contents of \icode{moomoo\_header.s}.]
+\begin{lstlisting}
 ; Header for moomoo.s
 ;.org $4040
 .include "jaguar.inc"
@@ -551,6 +556,8 @@ DISABLE_FX:    jmp     (disable_fx).l
 CHANGEFX:      jmp     (disable_fx).l
 HALT_DSP:      jmp     (disable_fx).l
 RESUME_DSP:    jmp     (resume_dsp).l
+\end{lstlisting}
+\begin{lstlisting}
 
 intmask:        dc.b 0
 ; Address 0x40A2

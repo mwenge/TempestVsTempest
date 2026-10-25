@@ -11,11 +11,12 @@ For example in the \icode{afont}, also known as the \textit{Atari} font, the
 letter \icode{A} is found at X position 1 and Y position 164 (\icode{\$A4}),
 while \icode{B} is at X position 20 (\icode{\$14}) and Y position 164 (\icode{\$A4}), 
 in the sprite sheet \icode{beasty4.cry}.
+\vspace{-0.2cm}
 
 \begin{minipage}[c]{0.58\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=8.6cm,center}
+    \begin{adjustbox}{width=8.05cm,center}
       \includegraphics[width=12cm]{src/cry/beasty4.png}%
     \end{adjustbox}
 \end{figure}
@@ -39,8 +40,6 @@ afont:
   dc.l $a400ac   ; J
   dc.l $a400bf   ; K
   dc.l $a400d2   ; L
-  dc.l $a400e5   ; M
-  dc.l $a400f8   ; N
 \end{lstlisting}
 \vspace*{\fill}
 \end{minipage}
@@ -126,7 +125,7 @@ messages but is also used when entering a high score.
 \begin{minipage}[c]{0.58\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=8.6cm,center}
+    \begin{adjustbox}{width=8.05cm,center}
       \includegraphics[width=12cm]{src/cry/beasty8.png}%
     \end{adjustbox}
 \end{figure}
@@ -150,8 +149,6 @@ bfont:
   dc.l $240001  ;J
   dc.l $240024  ;K
   dc.l $240047  ;L
-  dc.l $24006a  ;M
-  dc.l $24008d  ;N
 \end{lstlisting}
 \vspace*{\fill}
 \end{minipage}
@@ -163,12 +160,14 @@ Here's how it looks during the 'Pause' screen.
       \includegraphics[width=12cm]{src/t2k_strings/paused.png}%
     \end{adjustbox}
 \end{figure}
-\vspace{-0.6cm}
+\vspace{-0.4cm}
+Here's the clip of code inside the routine \icode{paustuff} that displays the text during the 'Pause' screen. 
+\clearpage
 \begin{lstlisting}
-jsr text2_setup
-; Display the 'paused' text.
+jsr text2_setup         ; Select 'bfont'.
+                        ; Display the 'paused' text.
 lea in_buf,a0           ; Point our GPU RAM input buffer at a0.
-move.l #$490074,32(a0)  ; was 35
+move.l #$490074,32(a0)  ; The X and Y co-ordinates to place the text.
 move.l #pautext,(a0)    ; Point a0 at "paused" string.
 lea texter,a0           ; Load the GPU module in stoat.gas.
 jsr gpurun              ; Run the selected GPU module.
@@ -189,12 +188,30 @@ builds were American.
 \end{figure}
 \vspace{-0.6cm}
 \begin{lstlisting}
-jsr text2_setup ; Select 'bfont'.
-move.l #$400040,32(a0) ; Set position.
-move.l #vertext,(a0) ; Select version string.
-lea texter,a0   ; Load GPU module in stoat.gas.
-jsr gpurun      ; Run selected GPU module.
-jsr gpuwait     ; Wait for GPU to finish.
+jsr text2_setup          ; Select 'bfont'.
+move.l #$400040,32(a0)   ; Set position.
+move.l #vertext,(a0)     ; Select version string.
+lea texter,a0            ; Load GPU module in stoat.gas.
+jsr gpurun               ; Run selected GPU module.
+jsr gpuwait              ; Wait for GPU to finish.
+\end{lstlisting}
+
+Notice the \icode{text2\_setup} routine in each example above does quite a bit of work
+in setting up the appearance of the text.
+
+\begin{lstlisting}
+text2_setup:
+        lea in_buf,a0              ; Point our GPU RAM input buffer at a0.
+        move.l #bfont,4(a0)        ; Load 'Pause' font data structure
+        move.l #0,8(a0)            ; Start of font data structure.
+        move.l #0,12(a0)           ; Drop-shadow in X direction.
+        move.l #$10000,d0          ; Store 10000 in d0.
+        move.l d0,16(a0)           ; Drop-shadow in Y direction.
+        move.l d0,20(a0)           ; Scale factor in X direction.
+        move.l #0,24(a0)           ; Scale factor in Y direction.
+        move.l #0,28(a0)           ; Text shear in X direction.
+        move.l #0,36(a0)           ; Mode 0: Straight Draw.
+        rts
 \end{lstlisting}
 
 \subsection*{cfont - the 'Arcade' font}
@@ -204,7 +221,7 @@ version of the font, while lower case strings are mapped to a blue/white version
 \begin{minipage}[c]{0.58\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=8.6cm,center}
+    \begin{adjustbox}{width=8.05cm,center}
       \includegraphics[width=12cm]{src/cry/beasty3.png}%
     \end{adjustbox}
 \end{figure}
@@ -228,8 +245,6 @@ cfont:
   dc.l $bf0031  ;c
   dc.l $bf003c  ;d
   dc.l $bf0047  ;e
-  dc.l $bf0052  ;f
-  dc.l $bf005d  ;g
 \end{lstlisting}
 \vspace*{\fill}
 \end{minipage}
@@ -253,6 +268,8 @@ move #180,d0   ; Set y position
 jsr centext    ; Draw the text in the centre.
 \end{lstlisting}
 
+And again in the example below, where specifying 'egotistical' in upper-case renders it with a 
+green/orange finish:
 
 \begin{figure}[H]
     \centering
@@ -266,25 +283,5 @@ lea cfont,a1         ; Load the small regular font to a1.
 move.l enl3,a0       ; "enter something EGOTISTICAL!"
 move #80,d0          ; Set Y position of text.
 jsr centext          ; Display horizontally centred text.
-\end{lstlisting}
-
-\begin{lstlisting}
-; *******************************************************************
-; text_setup
-; Set up text in the 'Atari' font.
-; *******************************************************************
-text_setup:
-        lea in_buf,a0              ; Point our GPU RAM input buffer at a0.
-        move.l #afont,4(a0)        ; 'Atari' font data structure
-tsu:
-        move.l #0,8(a0)            ; Start of font data structure.
-        move.l #0,12(a0)           ; Drop-shadow in X direction.
-        move.l #$10000,d0          ; Store 10000 in d0.
-        move.l d0,16(a0)           ; Drop-shadow in Y direction.
-        move.l d0,20(a0)           ; Scale factor in X direction.
-        move.l #0,24(a0)           ; Scale factor in Y direction.
-        move.l #0,28(a0)           ; Text shear in X direction.
-        move.l #0,36(a0)           ; Mode 0: Straight Draw.
-        rts
 \end{lstlisting}
 

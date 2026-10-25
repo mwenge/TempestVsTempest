@@ -10,7 +10,7 @@ of our choice using a bunch of x/y co-ordinates as points.
     \begin{adjustbox}{width=7cm,center}
       \includegraphics[width=12cm]{src/webs/sine_wave_dots_no_title.png}%
     \end{adjustbox}
-  \caption{Make our dots.}
+  \caption*{Make our dots.}
 \end{figure}
 
 Next we can join these together to give us a 2d shape.
@@ -19,7 +19,7 @@ Next we can join these together to give us a 2d shape.
     \begin{adjustbox}{width=8cm,center}
       \includegraphics[width=12cm]{src/webs/sine_wave_2d_no_title.png}%
     \end{adjustbox}
-  \caption{Start with a 2d shape..}
+  \caption*{Start with a 2d shape..}
 \end{figure}
 
 To make this thing three dimensional all we have to do is project our shape onto
@@ -30,7 +30,7 @@ some chosen distant position along the Z plane.
     \begin{adjustbox}{width=8cm,center}
       \includegraphics[width=12cm]{src/webs/sine_wave_no_title.png}%
     \end{adjustbox}
-  \caption{..then make it three dimensional.}
+  \caption*{..then make it three dimensional.}
 \end{figure}
 
 Seems simple enough. With this as our objective the data structure below gives us
@@ -70,17 +70,18 @@ the object to the right, while positive values rotate it to the left.
     \begin{adjustbox}{width=6cm,center}
       \includegraphics[width=12cm]{src/webs/sine_wave_dots_claws_no_title.png}%
     \end{adjustbox}
-  \caption{The rotation table applied to the claw in each lane of the web.}
+  \caption*{The rotation table applied to the claw in each lane of the web.}
 \end{figure}
 
 This is the important part of the routine that converts the web data structure into a list of vertices and lines between vertices
 that will make up the web itself:
 
 \begin{lstlisting}
+xweb:
   ; Read in the x/y pairs from our data structure. We create an interleaved
   ; list of near and far points in a2 and a 'connlist' in a3 that describes
   ; how each point is connected to the others.
-xweb:
+
   ; Get the current x and y pair
   move (a1)+,d0    ; Store the Y value in d0.
   move (a1)+,d1    ; Store the X value in d1.
@@ -124,6 +125,8 @@ xweb2:
   addq #2,d4      ; Add 2 to d4 so it's an index for the next 'far' point.
   move d4,(a3)+   ; Store this as the connected point in the entry.
   move #0,(a3)+   ; Mark the end of the entry with a zero.
+\end{lstlisting}
+\begin{lstlisting}
   move.l a3,(a5)+ ; Add our entries to the overall connlist list of lists.
   add #2,d3       ; Point d3 to the next X/Y pair.
 
@@ -166,6 +169,7 @@ how each of the points in the web are connected to each other. Let's take a look
     \end{adjustbox}
   }
 \end{figure}
+\vspace{-0.4cm}
 
 In this first iteration through \icode{xweb} we've managed to construct the first three
 lines of our web. On the near and far side we've connected the first two points in the web,

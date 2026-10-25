@@ -92,6 +92,8 @@ gofeed:
         move.l d1,8(a0)            ; Store height in GPU input buffer.
         move.l #$1f4,12(a0)        ; Store X scale in GPU input buffer.
         move.l #$1f4,16(a0)        ; Store Y scale in GPU input buffer.
+\end{lstlisting}
+\begin{lstlisting}
         move.l d0,20(a0)           ; Store initial angle in brads (d0).
         move.l #$c00000,24(a0)     ; source x centre in 16:16
         move.l #$780000,d0         ; Source Y centre
@@ -153,6 +155,8 @@ values for the degree to which we will expand or contract the graphic.
         move.l #4,gpu_mode         ; Select 'rex' in camel.gas.
         lea p_sines,a0             ; Load the positive sine table to a0.
         move pongx,d0              ; Store pongx in d0.
+\end{lstlisting}
+\begin{lstlisting}
         move pongy,d3              ; Store pongy in d3.
         add #15,pongx              ; Increment pongx for next time.
         add #17,pongy              ; Increment pongy for next time.

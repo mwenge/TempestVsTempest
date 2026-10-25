@@ -2,6 +2,7 @@
 \label{sec:activeobjects}
 \lstset{style=68KStyle}
 \lhead[tempest 2000]{}
+\vspace{-0.4cm}
 
 \icode{activeobjects} is a master list of every in-game object on the screen at a given time, with the
 exception of the player's claw. It makes sense to keep everything in a list like this and have each
@@ -72,8 +73,8 @@ So let's take a look at a random game screen and enumerate the \icode{activeobje
 We've chosen a rather busy screen:
 \begin{figure}[H]
     \centering
-    \frame{\includegraphics[width=11cm]{src/activeobjects/data_1_raw.png}}%
-  \caption{Our random screen.}
+    \frame{\includegraphics[width=13cm]{src/activeobjects/data_1_raw.png}}%
+  \caption*{Our random screen.}
 \end{figure}
 
 Let's enumerate the entire \icode{activeobjects} list for this screen to give us an idea of how much is being managed 

@@ -33,8 +33,9 @@ claw3:  dc.b 4,5,1                 ; Co-ordinate 1
         dc.b 2,8,0                 ; Draw line to co-ords 2 and 8.
 \end{lstlisting}
 
+\clearpage
 This is telling us to connect our first trio \icode{4,5,1} to co-ordinates
-'2' (\icode{4,11,1})..
+'2' (\icode{4,11,1}):
 \begin{figure}[H]
     \centering
     \begin{adjustbox}{width=7cm,center}
@@ -42,6 +43,8 @@ This is telling us to connect our first trio \icode{4,5,1} to co-ordinates
     \end{adjustbox}
   \caption*{Draw a line from \icode{(4,5,1)} to \icode{(4,11,1)}.}
 \end{figure}
+\vspace{-0.4cm}
+
 .. and '8' (\icode{2,12,1}).
 \begin{figure}[H]
     \centering
@@ -50,6 +53,7 @@ This is telling us to connect our first trio \icode{4,5,1} to co-ordinates
     \end{adjustbox}
   \caption*{Draw a line from \icode{(4,5,1)} to \icode{(2,12,1)}.}
 \end{figure}
+\vspace{-0.4cm}
 
 
 With this as our method, we can start building up our complete image, adding each point in

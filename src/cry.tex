@@ -35,7 +35,7 @@ anymore, we ought to thinking in three dimensions and throw in a Z axis while we
     \begin{adjustbox}{width=7cm,center}
       \frame{\includegraphics[width=12cm]{src/cry/axes.png}}%
     \end{adjustbox}
-\caption{This kind of thing. This is what we want.}
+\caption*{This kind of thing. This is what we want.}
 \end{figure}
 
 With just two bytes (or 16 bits) to work with we have to come up with a way that is suitably complicated for representing all our colours 
@@ -47,7 +47,7 @@ the spectrum radiating out of it.
     \begin{adjustbox}{width=7cm,center}
       \includegraphics[width=12cm]{src/cry/cube.png}%
     \end{adjustbox}
-\caption{This is not quite right, but you get the idea.}
+\caption*{This is not quite right, but you get the idea.}
 \end{figure}
 
 Now if we project this three dimensional object onto a flat surface, with our white top corner at the centre, we will have a 16x16 square
@@ -58,7 +58,7 @@ with 256 different colours:
     \begin{adjustbox}{width=4cm,center}
       \frame{\includegraphics[width=12cm]{src/cry/2dcube.png}}%
     \end{adjustbox}
-\caption{3d, but in 2d: it's the 1990s.}
+\caption*{3d, but in 2d: it's the 1990s.}
 \end{figure}
 
 Since 256 is exactly the number of permutations in a single byte we have lit upon a use-case for the first of our two bytes.
@@ -88,7 +88,7 @@ Since 256 is exactly the number of permutations in a single byte we have lit upo
         };
       \end{tikzpicture}
     \end{adjustbox}
-  }\caption{The first 8 bits now have a purpose. The first four are our X axis on the square, the second our Y axis.}
+  }\caption*{The first 8 bits now have a purpose. The first four are our X axis on the square, the second our Y axis.}
 \end{figure}
 
 This is all very nice, we have 256 colors going on and a whole other 8 bits to do something with. After thinking about it a bit, we don't
@@ -119,7 +119,7 @@ the color in question we can use our final 8 bits to dial its brightness up or d
         };
       \end{tikzpicture}
     \end{adjustbox}
-  }\caption{The 8 bits representing the luminosity/intensity of the color chosen by the first 8 bits.}
+  }\caption*{The 8 bits representing the luminosity/intensity of the color chosen by the first 8 bits.}
 \end{figure}
 
 To get an idea of the effect this has in practice we can visualize our little color square repeating across a much

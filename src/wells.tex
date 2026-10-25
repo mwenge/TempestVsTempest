@@ -10,7 +10,7 @@ of our choice using a bunch of x/y co-ordinates as points.
     \begin{adjustbox}{width=7cm,center}
       \includegraphics[width=12cm]{src/wells/HEART_dots_no_title.png}%
     \end{adjustbox}
-  \caption{Make our dots.}
+  \caption*{Make our dots.}
 \end{figure}
 
 Next we can join these together to give us a 2d shape.
@@ -19,7 +19,7 @@ Next we can join these together to give us a 2d shape.
     \begin{adjustbox}{width=8cm,center}
       \includegraphics[width=12cm]{src/wells/HEART_2d.png}%
     \end{adjustbox}
-  \caption{Start with a 2d shape..}
+  \caption*{Start with a 2d shape..}
 \end{figure}
 
 To make this thing three dimensional all we have to do is project our shape onto
@@ -30,7 +30,7 @@ some chosen distant position along the Z plane.
     \begin{adjustbox}{width=8cm,center}
       \includegraphics[width=12cm]{src/wells/HEART_3d.png}%
     \end{adjustbox}
-  \caption{..then make it three dimensional.}
+  \caption*{..then make it three dimensional.}
 \end{figure}
 
 Seems simple enough. With this as our objective the data structure below gives us
@@ -40,10 +40,10 @@ make up the web's shape in two dimensions.
 \begin{lstlisting}
 ; Data structure for the 'HEART' well. 
 ; X Co-Ordinates
-    .BYTE 0DA,0A4, 87, 80, 79, 5C, 26, 10    ; HEART
+    .BYTE 0DA,0A4, 87, 80, 79, 5C, 26, 10
     .BYTE  10, 20, 48, 80,0B8,0E0,0F0,0F0
 ; Y Co-Ordinates
-    .BYTE 0E4,0E8,0B7, 80,0B7,0E8,0E4,0B2    ; HEART
+    .BYTE 0E4,0E8,0B7, 80,0B7,0E8,0E4,0B2
     .BYTE  7A, 47, 20, 10, 20, 47, 7A,0B2
 \end{lstlisting}
 
@@ -52,14 +52,14 @@ it in decimal instead:
 \begin{lstlisting}
 ; Data structure for the 'HEART' well. 
 ; X Co-Ordinates
-    .BYTE 218,164,135,128,121, 92, 38, 16    ; HEART
+    .BYTE 218,164,135,128,121, 92, 38, 16
     .BYTE  16, 32, 72,128,184,224,240,240
 ; Y Co-Ordinates
-    .BYTE 228,232,183,128,183,232,228,178    ; HEART
+    .BYTE 228,232,183,128,183,232,228,178
     .BYTE 122, 71, 32, 16, 32, 71,122,178
 \end{lstlisting}
 
-To understand how we turn this list of numbers into a well, we're goint to look
+To understand how we turn this list of numbers into a well, we're going to look
 at the routine that is used to draw a miniature version on the level selection screen.
 The procedure consists of reading each X and Y co-ordinate pair in the order that they're
 given, starting with \icode{218} for X and \icode{228} for Y, and drawing a line to the 
@@ -86,6 +86,8 @@ DSPHOL:
         LDA Y,NEWLIZ     ; STORE CURRENT Y CO-ORD IN A.
         TAY              ; MOVE IT TO Y
         SEC              ; SET THE CARRY BIT.
+\end{lstlisting}
+\begin{lstlisting}
         SBC PYL          ; SUBTRACT THE LAST Y POSITION.
         TAX              ; STORE THE Y MOVEMENT IN X.
         STY PYL          ; STORE THE CURRENT VALUE AS THE LAST Y POSITION.

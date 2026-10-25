@@ -230,11 +230,11 @@ the spike line we are about to draw, indicated by the green dot below.
 \vspace{-1cm}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=9cm,center}
+    \begin{adjustbox}{width=11cm,center}
       \includegraphics{src/spikes/spike_evolution_spike_origin.png}%
     \end{adjustbox}
 \end{figure}
-\vspace{-0.4cm}
+\vspace{-1.5cm}
 
 So our next step is to draw a line from this origin. The routine \icode{TIPACT}, which is responsible
 for drawing both the line and the item at its tip, starts out by figuring out the midway point between
@@ -390,31 +390,42 @@ WORSCR: LDA PYL
 \end{minipage}
 
 With these in hand, i.e. the co-ordinates of our near point, we can now draw our line vector. 
-As before, this means calculating the values for our \textit{Draw Relative Vector} instruction.
+As before, this means computing and storing the values for our \textit{Draw Relative Vector} instruction.
+The routine that looks after this is \icode{FCONNEC}. Below we add the calculated Y and X position (each
+taking up two bytes) to a \textit{Draw Relative Vector} instruction in the vector generator list (the \icode{VGLIST}).
 \clearpage
 
 \begin{lstlisting}
-FCONNEC:LDY VGY        ; STORE THE CURRENT POS IN VGLIST IN Y.
+FCONNEC:
+        ; ADD THE LOW BYTE FOR THE Y POSITION.
+        LDY VGY        ; STORE THE CURRENT POS IN VGLIST IN Y.
         LDA SZL        ; GET THE LOW BYTE OF THE CALCULATED Y POSITION.
         SEC            ; SET CARRY.
         SBC CURNTY     ; SUBTRACT THE LOW BYTE OF THE ORIGIN.
         STA NY,VGLIST  ; STORE IN THE VGLIST.
+
+        ; ADD THE HIGH BYTE FOR THE Y POSITION.
         INY            ; INCREMENT POSITION IN THE VGLIST.
         LDA SZH        ; GET THE HIGH BYTE OF THE CALCULATED Y POSITION.
         SBC CURNTY+1   ; SUBTRACT THE HIGH BYTE OF THE ORIGIN.
         AND I,1F       ; CLAMP TO THE LOWER 5 BITS (SO INTENSITY NOT SET).
         STA NY,VGLIST  ; STORE IN THE VGLIST.
+
+        ; ADD THE LOW BYTE FOR THE X POSITION.
         INY            ; INCREMENT POSITION IN THE VGLIST.
         LDA SXL        ; GET THE LOW BYTE OF THE CALCULATED X POSITION.
         SEC            ; SET CARRY.
         SBC CURNTX     ; SUBTRACT THE LOW BYTE OF THE ORIGIN.
         STA NY,VGLIST  ; STORE IN THE VGLIST.
+
+        ; ADD THE HIGH BYTE FOR THE X POSITION.
         INY            ; INCREMENT POSITION IN THE VGLIST.
         LDA SXH        ; GET THE HIGH BYTE OF THE CALCULATED Y POSITION.
         SBC CURNTX+1   ; SUBTRACT THE HIGH BYTE OF THE ORIGIN.
         AND I,1F       ; CLAMP TO THE LOWER 5 BITS (SO INTENSITY NOT SET).
-        ORA I,0A0      ; MAKE SURE THE LINE IS VISIBLE BY SETTING INTENSITY TO A0..
+        ORA I,0A0      ; MAKE SURE LINE VISIBLE BY SETTING INTENSITY TO A0..
         STA NY,VGLIST  ; STORE IN THE VGLIST.
+
         INY            ; INCREMENT THE POSITION IN THE VGLIST.
         STY VGY        ; STORE THE NEW CURRENT POSITION IN THE VGLIST.
         RTS

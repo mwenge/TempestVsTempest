@@ -2,6 +2,7 @@
 \label{sec:ntsc_pal}
 \lhead[tempest 2000]{}
 \lstset{style=68KStyle}
+\vspace{0.8cm}
 
 In the 1980s and 1990s games were played on cathode ray tube televisions. Like
 with everything, there were competing standards. And like with everything, Americans
@@ -24,6 +25,7 @@ reading it gets, and most importantly for the rest of the game, setting a global
 \icode{pal} that can be used to perform any adhoc fiddling during gameplay to ensure a display
 consistent with the player's ageing television hardware.
 
+\clearpage
 \begin{lstlisting}
 VideoIni:
         movem.l d0-d6,-(sp)        ; Store d0-d6 in the stack.
@@ -81,6 +83,7 @@ Here's an example where we're going to display some text on the screen
 ("Press Option for Beastly Mode!") and need to figure out whether we're on
 a PAL or NTSC screen to decide where to place the text so that it's vertically
 centred.
+\clearpage
 \begin{lstlisting}
 draw_oo:
         bsr draw_o                 ; Call the common draw_o rotuine first.
@@ -152,8 +155,9 @@ find a bar of pleasing junk pixels.
         \bottomrule
       \end{tabular}
     \end{adjustbox}
-  }\caption{First Bit Mapped Object in the Object List}
+  }
 \end{figure}
+\vspace{-0.4cm}
 
 On PAL this field of colourful noise would be written to properly and the full game field would
 extend for the whole 287 pixels of screen height. The solution when playing on an NTSC television

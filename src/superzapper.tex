@@ -277,15 +277,9 @@ This means that our full instruction \icode{AND I,\string^C<INVCAR>} will perfor
 value we've stored in the \icode{A} register and this flipped value to give us a new value with just the 'carrier' bits
 reset to zero, as desired.
 
-One final note, the web flashes while we're superzapping. How is that achieved? It turns out very simply: we take
-the frame counter in \icode{QFRAME} and use that to give us a value between 0 and 7. We ignore 7, because that's the
-color value for black, and use white instead. This means that every time we draw the web while a superzap is active
-we effectively get a 'random' value for the color of the web, resulting in the flashing effect.
+One final note, the web flashes while we're superzapping. How is that achieved? 
 
 \begin{lstlisting}
-        .SBTTL DISPLAY-WELL
-DSPWEL:
-        ..
         LDY SUZTIM   ; GET THE SUPERZAP TIMER.
         IFNE         ; IS IT NON-ZERO?
           IFPL       ; IF SO IS IT POSITIVE?
@@ -297,6 +291,10 @@ DSPWEL:
             ENDIF
           ENDIF
         ENDIF
-        STA TEMP0   ; STORE OUR CHOSEN COLOR.
+        STA TEMP0    ; STORE OUR CHOSEN COLOR.
 \end{lstlisting}
 
+It turns out very simply: we take
+the frame counter in \icode{QFRAME} and use that to give us a value between 0 and 7. We ignore 7, because that's the
+color value for black, and use white instead. This means that every time we draw the web while a superzap is active
+we effectively get a 'random' value for the color of the web, resulting in the flashing effect.

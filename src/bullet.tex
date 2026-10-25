@@ -12,7 +12,7 @@ spot the bullet:
     \begin{adjustbox}{width=12cm,center}
       \frame{\includegraphics[width=12cm]{src/cry/beasty3.png}}%
     \end{adjustbox}
-\caption{\icode{beasty3.cry}, with a bullet in there somewhere - can you find it?}
+\caption*{\icode{beasty3.cry}, with a bullet in there somewhere - can you find it?}
 \end{figure}
 
 \begin{lstlisting}
@@ -74,7 +74,7 @@ Look closely below, in the bottom left hand of the sheet and you can see it in a
     \begin{adjustbox}{width=9.5cm,center}
       \includegraphics[width=12cm]{src/bullet/plot_detail.png}%
     \end{adjustbox}
-\caption{The 'bullet' glyph located in the lower left in a red box.}
+\caption*{The 'bullet' glyph located in the lower left in a red box.}
 \end{figure}
 
 
@@ -117,11 +117,11 @@ Notice how the Y and X values are encoded in a single 4-byte value:
         nodes={draw,minimum size=1cm,anchor=center},
         column sep=-\pgflinewidth,row sep=-\pgflinewidth,font=\huge\ttfamily]
         {
-          00 & b6  & 00 & 0a \\
+          \icode{00} & \icode{b6}  & \icode{00} & \icode{0a} \\
         };
       \end{tikzpicture}
     \end{adjustbox}
-  \caption{Y of 182 (\icode{b6}) and X of 10 (\icode{0a}) encoded in a 4 byte long.}
+  \caption*{Y of 182 (\icode{b6}) and X of 10 (\icode{0a}) encoded in a 4 byte long.}
   }
 \end{figure}
 
@@ -146,11 +146,11 @@ Likewise the width and height:
         nodes={draw,minimum size=1cm,anchor=center},
         column sep=-\pgflinewidth,row sep=-\pgflinewidth,font=\huge\ttfamily]
         {
-          00 & 07  & 00 & 07 \\
+          \icode{00} & \icode{07}  & \icode{00} & \icode{07} \\
         };
       \end{tikzpicture}
     \end{adjustbox}
-  \caption{Width of 7 (\icode{07}) and height of 07 (\icode{07}) encoded in a 4 byte long.}
+  \caption*{Width of 7 (\icode{07}) and height of 07 (\icode{07}) encoded in a 4 byte long.}
   }
 \end{figure}
 
@@ -200,11 +200,11 @@ and width/height are subtly altered for this version of the bullet.
         nodes={draw,minimum size=1cm,anchor=center},
         column sep=-\pgflinewidth,row sep=-\pgflinewidth,font=\huge\ttfamily]
         {
-          00 & b6  & 00 & 00 \\
+          \icode{00} & \icode{b6}  & \icode{00} & \icode{00} \\
         };
       \end{tikzpicture}
     \end{adjustbox}
-  \caption{Y of 182 (\icode{b6}) and X of 00 (\icode{00}) encoded in a 4 byte long.}
+  \caption*{Y of 182 (\icode{b6}) and X of 00 (\icode{00}) encoded in a 4 byte long.}
   }
 \end{figure}
 
@@ -228,11 +228,11 @@ and width/height are subtly altered for this version of the bullet.
         nodes={draw,minimum size=1cm,anchor=center},
         column sep=-\pgflinewidth,row sep=-\pgflinewidth,font=\huge\ttfamily]
         {
-          00 & 09  & 00 & 09 \\
+          \icode{00} & \icode{09}  & \icode{00} & \icode{09} \\
         };
       \end{tikzpicture}
     \end{adjustbox}
-  \caption{Width of 9 (\icode{09}) and height of 09 (\icode{09}) encoded in a 4 byte long.}
+  \caption*{Width of 9 (\icode{09}) and height of 09 (\icode{09}) encoded in a 4 byte long.}
   }
 \end{figure}
 
@@ -242,6 +242,6 @@ The result is that we instead select the bullet sprite to the left of our origin
     \begin{adjustbox}{width=9.5cm,center}
       \includegraphics[width=12cm]{src/bullet/plot2_detail.png}%
     \end{adjustbox}
-\caption{The alternate 'bullet' glyph located in the lower left in a red box.}
+\caption*{The alternate 'bullet' glyph located in the lower left in a red box.}
 \end{figure}
 

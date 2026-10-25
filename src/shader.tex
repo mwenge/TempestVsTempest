@@ -26,11 +26,17 @@ textloop:
 In this instance \icode{textptr} is pointing to \icode{ataricop1}. As soon as we hit the \icode{0} at the very end we will
 \icode{jump} to \icode{ntxt}, which still stop the shader and bail out - unless 'drop shadow' mode was selected: in which
 case it will paint the string a second time (slightly offset) to achieve the dropshadow effect:
+\footnote{
+In fact there is no offset for drop-shadow mode implemented, so the feature is
+unused.  I suspect this is because the code is copy-pasted from elsewhere, as
+we shall encounter a cousin of this routine later on.
+}
 
-\begin{lstlisting}[caption=In fact there is no offset for drop-shadow mode implemented\, so the feature is unused.  I suspect this is because the code is copy-pasted from elsewhere\,
-as we shall encounter a cousin of this routine later on.]
+\begin{lstlisting}
 ntxt:
   cmpq #1,mode       ; In drop-shadow mode?
+\end{lstlisting}
+\begin{lstlisting}
   jr ne,StopGPU      ; No, bail.
   nop
   moveq #0,mode      ; Turn off drop-shadow flag so we bail next time.
@@ -40,7 +46,7 @@ ntxt:
   jump (r0)          ; Jump to r0 (textloop)
 \end{lstlisting}
 
-Actually stopping the GPU involves clearing its command set to zero and loading that to the command register:
+Getting the GPU to stop involves clearing its command set to zero and loading that to the command register:
 \begin{lstlisting}
 StopGPU:
   movei #G_CTRL,r1   ; Get our GPU commands.
@@ -100,6 +106,7 @@ writes them:
     \end{adjustbox}
   }\caption*{The GPU blitter registers in the order in which \icode{texter} populates them in the listing below.}
 \end{figure}
+\vspace{-0.4cm}
 
 And here is the relevant code in the \icode{texter} populating the registers:
 
@@ -198,9 +205,11 @@ textloop:
   addq #1,textptr    ; Move to the next character in textptr
   cmpq #0,r0         ; Check if it's $00
   jump eq,(r1)       ; If it is, jump to our cleanup-and-exit routine.
-  nop                ; It's no zero so we can get the x/y value for it from afont.
-  subq #32,r0        ;ASCII 0-31 do NOT print
-  shlq #2,r0
+\end{lstlisting}
+\begin{lstlisting}
+  nop                ; It's not zero so get the x/y value for it from afont.
+  subq #32,r0        ; ASCII 0-31 do NOT print
+  shlq #2,r0         ; Multiply by 4 (shift left twice)
   add fontbase,r0    ; Add the fontbase address to our offset so we get the
                      ; actual address afont
   load (r0),spixel   ; Write the actual address to spixel.

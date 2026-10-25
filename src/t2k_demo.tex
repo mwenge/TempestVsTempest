@@ -6,7 +6,7 @@
 \begin{minipage}[c]{0.48\linewidth}
 \begin{figure}[H]
     \centering
-    \begin{adjustbox}{width=5cm,center}
+    \begin{adjustbox}{width=6.4cm,center}
       \includegraphics[width=12cm]{src/t2kdemo/demo.png}%
     \end{adjustbox}
 \end{figure}
@@ -47,6 +47,8 @@ claw_con1:
         ; Otherwise we're in demo mode, so decide what to do. 
         move.l pad_now,-(a7) ; Stash any player input on the stack.
         move droid_data,d0   ; droid_data has the lane of enemy nearest top.
+\end{lstlisting}
+\begin{lstlisting}
         bsr lor              ; Decide whether to move left or right.
 
         bpl moveme           ; If movement selected, perform the movement.
@@ -107,7 +109,6 @@ So what we do instead is split the closed plane
 into two halves. If the target is in a lower-numbered lane than the claw, then
 the claw will move left if is in the 'lower' half of the web:
 
-\clearpage
 \begin{lstlisting}
 ; *******************************************************************
 ; lor: select whether to move left or right
