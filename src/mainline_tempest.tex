@@ -92,7 +92,6 @@ EXSTAT: LDA INOP0        ; READ THE OPTION SWITCHES
         LDA AX,ROUTAD    ; USE QSTATE TO GET BYTE 1 OF SELECTED ROUTINE
         PHA              ; PUSH IT TO THE STACK
         ENDIF            ; END IF
-NOOPR:  RTS
 \end{lstlisting}
 
 The answer is in these lines:
