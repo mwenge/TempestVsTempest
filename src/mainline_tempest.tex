@@ -75,6 +75,8 @@ Once we've decided to execute a frame we are down to just three lines orchestrat
 The first routine we call is \icode{EXSTAT}. It always updates the starfield (\icode{PRSTAR}) but what it
 does next is dependent on the value contained in \icode{QSTATE}. Take a brief look at the routine to see if
 you can identify how it uses \icode{QSTATE}:
+\clearpage
+
 \begin{lstlisting}
 EXSTAT: LDA INOP0        ; READ THE OPTION SWITCHES
         AND I,83         ; GET THE BITS WE'RE INTERESTED IN
